@@ -18,6 +18,7 @@ import auto.qinglong.R;
 import auto.qinglong.activity.BaseActivity;
 import auto.qinglong.activity.BaseFragment;
 import auto.qinglong.activity.plugin.web.PluginWebActivity;
+import auto.qinglong.activity.ql.CodeWebActivity;
 import auto.qinglong.activity.ql.config.ConfigFragment;
 import auto.qinglong.activity.ql.dependence.DepFragment;
 import auto.qinglong.activity.ql.environment.EnvFragment;
@@ -138,7 +139,13 @@ public class HomeActivity extends BaseActivity {
 
         menu_log.setOnClickListener(v -> showFragment(LogFragment.TAG));
 
-        menu_config.setOnClickListener(v -> showFragment(ConfigFragment.TAG));
+        menu_config.setOnClickListener(v -> {
+            Intent intent = new Intent(this, CodeWebActivity.class);
+            intent.putExtra(CodeWebActivity.EXTRA_TYPE, CodeWebActivity.TYPE_CONFIG);
+            intent.putExtra(CodeWebActivity.EXTRA_TITLE, "config.sh");
+            intent.putExtra(CodeWebActivity.EXTRA_CAN_EDIT, true);
+            startActivity(intent);
+        });
 
         menu_script.setOnClickListener(v -> showFragment(ScriptFragment.TAG));
 

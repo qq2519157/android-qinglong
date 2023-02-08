@@ -175,9 +175,9 @@ public class LoginActivity extends BaseActivity {
     }
 
     protected void netCheckToken(Account account) {
-        QLApiController.checkToken(this.getNetRequestID(), account, new QLApiController.NetLoginCallback() {
+        QLApiController.checkToken(this.getNetRequestID(), account, new QLApiController.NetBaseCallback() {
             @Override
-            public void onSuccess(Account account) {
+            public void onSuccess() {
                 enterHome();
             }
 

@@ -1,18 +1,19 @@
 package auto.qinglong.network.http;
 
 import auto.qinglong.bean.ql.network.QLBaseRes;
-import auto.qinglong.bean.ql.network.QLConfigRes;
 import auto.qinglong.bean.ql.network.QLDependenceRes;
-import auto.qinglong.bean.ql.network.QLEditEnvRes;
-import auto.qinglong.bean.ql.network.QLEditTaskRes;
+import auto.qinglong.bean.ql.network.QLDependenciesRes;
+import auto.qinglong.bean.ql.network.QLEnvEditRes;
 import auto.qinglong.bean.ql.network.QLEnvironmentRes;
 import auto.qinglong.bean.ql.network.QLLogRemoveRes;
-import auto.qinglong.bean.ql.network.QLLogRes;
-import auto.qinglong.bean.ql.network.QLLoginLogRes;
+import auto.qinglong.bean.ql.network.QLLoginLogsRes;
 import auto.qinglong.bean.ql.network.QLLoginRes;
-import auto.qinglong.bean.ql.network.QLScriptRes;
+import auto.qinglong.bean.ql.network.QLLogsRes;
+import auto.qinglong.bean.ql.network.QLScriptsRes;
 import auto.qinglong.bean.ql.network.QLSystemRes;
+import auto.qinglong.bean.ql.network.QLTaskEditRes;
 import auto.qinglong.bean.ql.network.QLTasksRes;
+import auto.qinglong.bean.ql.network.QLTextRes;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -133,7 +134,7 @@ public interface QLApi {
      * @return the call
      */
     @PUT("api/crons")
-    Call<QLEditTaskRes> updateTask(@Header("Authorization") String authorization, @Body RequestBody body);
+    Call<QLTaskEditRes> updateTask(@Header("Authorization") String authorization, @Body RequestBody body);
 
     /**
      * 新建任务.
@@ -143,7 +144,7 @@ public interface QLApi {
      * @return the call
      */
     @POST("api/crons")
-    Call<QLEditTaskRes> addTask(@Header("Authorization") String authorization, @Body RequestBody body);
+    Call<QLTaskEditRes> addTask(@Header("Authorization") String authorization, @Body RequestBody body);
 
     /**
      * 获取环境变量.
@@ -163,7 +164,7 @@ public interface QLApi {
      * @return the call
      */
     @PUT("api/envs")
-    Call<QLEditEnvRes> updateEnvironment(@Header("Authorization") String authorization, @Body RequestBody body);
+    Call<QLEnvEditRes> updateEnvironment(@Header("Authorization") String authorization, @Body RequestBody body);
 
     /**
      * 新建环境变量.
@@ -212,7 +213,7 @@ public interface QLApi {
      * @return the config
      */
     @GET("api/configs/config.sh")
-    Call<QLConfigRes> getConfig(@Header("Authorization") String authorization);
+    Call<QLTextRes> getConfig(@Header("Authorization") String authorization);
 
     /**
      * 保存配置文件.
@@ -231,7 +232,7 @@ public interface QLApi {
      * @return the scripts
      */
     @GET("api/scripts/files")
-    Call<QLScriptRes> getScripts(@Header("Authorization") String authorization);
+    Call<QLScriptsRes> getScripts(@Header("Authorization") String authorization);
 
     /**
      * 获取脚本详细.
@@ -241,7 +242,7 @@ public interface QLApi {
      * @return the script detail
      */
     @GET
-    Call<QLBaseRes> getScriptDetail(@Url String url, @Header("Authorization") String authorization);
+    Call<QLTextRes> getScriptDetail(@Url String url, @Header("Authorization") String authorization);
 
     /**
      * 保存脚本.
@@ -254,7 +255,7 @@ public interface QLApi {
     Call<QLBaseRes> updateScript(@Header("Authorization") String authorization, @Body RequestBody body);
 
     /**
-     * 获取依赖.
+     * 获取依赖列表.
      *
      * @param authorization the authorization
      * @param searchValue   the search value
@@ -262,7 +263,17 @@ public interface QLApi {
      * @return the dependencies
      */
     @GET("api/dependencies")
-    Call<QLDependenceRes> getDependencies(@Header("Authorization") String authorization, @Query("searchValue") String searchValue, @Query("type") String type);
+    Call<QLDependenciesRes> getDependencies(@Header("Authorization") String authorization, @Query("searchValue") String searchValue, @Query("type") String type);
+
+    /**
+     * 读取依赖安装日志信息.
+     *
+     * @param url           the url
+     * @param authorization the authorization
+     * @return the log detail
+     */
+    @GET
+    Call<QLDependenceRes> getDependence(@Url String url, @Header("Authorization") String authorization);
 
     /**
      * 新建依赖.
@@ -294,6 +305,7 @@ public interface QLApi {
     @PUT("api/dependencies/reinstall")
     Call<QLBaseRes> reinstallDependencies(@Header("Authorization") String authorization, @Body RequestBody body);
 
+
     /**
      * 获取日志列表.
      *
@@ -301,17 +313,17 @@ public interface QLApi {
      * @return the logs
      */
     @GET("api/logs")
-    Call<QLLogRes> getLogs(@Header("Authorization") String authorization);
+    Call<QLLogsRes> getLogs(@Header("Authorization") String authorization);
 
     /**
-     * 读取日志信息.
+     * 获取日志信息.
      *
      * @param url           the url
      * @param authorization the authorization
      * @return the log detail
      */
     @GET
-    Call<QLBaseRes> getLogDetail(@Url String url, @Header("Authorization") String authorization);
+    Call<QLTextRes> getLogDetail(@Url String url, @Header("Authorization") String authorization);
 
     /**
      * 获取登录日志.
@@ -320,7 +332,7 @@ public interface QLApi {
      * @return the login logs
      */
     @GET("api/user/login-log")
-    Call<QLLoginLogRes> getLoginLogs(@Header("Authorization") String authorization);
+    Call<QLLoginLogsRes> getLoginLogs(@Header("Authorization") String authorization);
 
     /**
      * 获取日志删除频率.

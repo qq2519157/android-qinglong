@@ -668,9 +668,9 @@ public class TaskFragment extends BaseFragment {
         if (RequestManager.isRequesting(getNetRequestID())) {
             return;
         }
-        QLApiController.runTasks(getNetRequestID(), ids, new QLApiController.NetRunTaskCallback() {
+        QLApiController.runTasks(getNetRequestID(), ids, new QLApiController.NetBaseCallback() {
             @Override
-            public void onSuccess(String msg) {
+            public void onSuccess() {
                 if (isFromBar && ui_bar_actions.getVisibility() == View.VISIBLE) {
                     ui_actions_back.performClick();
                 }
@@ -687,9 +687,9 @@ public class TaskFragment extends BaseFragment {
     }
 
     private void netStopTasks(List<String> ids, boolean isFromBar) {
-        QLApiController.stopTasks(getNetRequestID(), ids, new QLApiController.NetRunTaskCallback() {
+        QLApiController.stopTasks(getNetRequestID(), ids, new QLApiController.NetBaseCallback() {
             @Override
-            public void onSuccess(String msg) {
+            public void onSuccess() {
                 if (isFromBar && ui_bar_actions.getVisibility() == View.VISIBLE) {
                     ui_actions_back.performClick();
                 }
@@ -705,9 +705,9 @@ public class TaskFragment extends BaseFragment {
     }
 
     private void netEnableTasks(List<String> ids) {
-        QLApiController.enableTasks(getNetRequestID(), ids, new QLApiController.NetRunTaskCallback() {
+        QLApiController.enableTasks(getNetRequestID(), ids, new QLApiController.NetBaseCallback() {
             @Override
-            public void onSuccess(String msg) {
+            public void onSuccess() {
                 if (ui_actions_back.getVisibility() == View.VISIBLE) {
                     ui_actions_back.performClick();
                 }
@@ -723,9 +723,9 @@ public class TaskFragment extends BaseFragment {
     }
 
     private void netDisableTasks(List<String> ids) {
-        QLApiController.disableTasks(getNetRequestID(), ids, new QLApiController.NetRunTaskCallback() {
+        QLApiController.disableTasks(getNetRequestID(), ids, new QLApiController.NetBaseCallback() {
             @Override
-            public void onSuccess(String msg) {
+            public void onSuccess() {
                 if (ui_actions_back.getVisibility() == View.VISIBLE) {
                     ui_actions_back.performClick();
                 }
@@ -741,9 +741,9 @@ public class TaskFragment extends BaseFragment {
     }
 
     private void netPinTasks(List<String> ids) {
-        QLApiController.pinTasks(getNetRequestID(), ids, new QLApiController.NetRunTaskCallback() {
+        QLApiController.pinTasks(getNetRequestID(), ids, new QLApiController.NetBaseCallback() {
             @Override
-            public void onSuccess(String msg) {
+            public void onSuccess() {
                 if (ui_actions_back.getVisibility() == View.VISIBLE) {
                     ui_actions_back.performClick();
                 }
@@ -759,9 +759,9 @@ public class TaskFragment extends BaseFragment {
     }
 
     private void netUnpinTasks(List<String> ids) {
-        QLApiController.unpinTasks(getNetRequestID(), ids, new QLApiController.NetRunTaskCallback() {
+        QLApiController.unpinTasks(getNetRequestID(), ids, new QLApiController.NetBaseCallback() {
             @Override
-            public void onSuccess(String msg) {
+            public void onSuccess() {
                 if (ui_actions_back.getVisibility() == View.VISIBLE) {
                     ui_actions_back.performClick();
                 }

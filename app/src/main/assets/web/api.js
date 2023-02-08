@@ -49,11 +49,16 @@ function initEditor() {
 }
 
 function setCode(code) {
+    code = decodeURIComponent(code)
     if (code == editor.getValue()) {
         return
     }
     editor.setValue(code)
     editor.refresh()
+}
+
+function getContent(){
+     return encodeURIComponent(editor.getValue())
 }
 
 function setEditable(editable) {

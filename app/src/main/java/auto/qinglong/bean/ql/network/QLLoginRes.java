@@ -2,7 +2,7 @@ package auto.qinglong.bean.ql.network;
 
 import auto.qinglong.bean.ql.QLLoginData;
 
-public class QLLoginRes extends QLBaseRes{
+public class QLLoginRes extends QLBaseRes {
     private QLLoginData data;
 
     public QLLoginData getData() {

@@ -44,7 +44,6 @@ public class CronUnit {
             }
             return true;
         } catch (Exception e) {
-            LogUnit.log(TAG, e.getMessage());
             return false;
         }
     }
@@ -63,7 +62,6 @@ public class CronUnit {
             Optional<ZonedDateTime> nextExecutionTime = executionTime.nextExecution(ZonedDateTime.now());
             return nextExecutionTime.get().format(dateTimeFormatter);
         } catch (Exception e) {
-            LogUnit.log(TAG, e.getMessage());
             return null;
         }
     }

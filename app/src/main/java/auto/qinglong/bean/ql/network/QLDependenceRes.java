@@ -1,17 +1,15 @@
 package auto.qinglong.bean.ql.network;
 
-import java.util.List;
-
 import auto.qinglong.bean.ql.QLDependence;
 
-public class QLDependenceRes extends QLBaseRes{
-    private List<QLDependence> data;
+public class QLDependenceRes extends QLBaseRes {
+    private QLDependence data;
 
-    public List<QLDependence> getData() {
+    public QLDependence getData() {
         return data;
     }
 
-    public void setData(List<QLDependence> data) {
+    public void setData(QLDependence data) {
         this.data = data;
     }
 }

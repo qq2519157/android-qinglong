@@ -53,9 +53,9 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void checkAccountValid(Account account) {
-        QLApiController.checkToken(getNetRequestID(), account, new QLApiController.NetLoginCallback() {
+        QLApiController.checkToken(getNetRequestID(), account, new QLApiController.NetBaseCallback() {
             @Override
-            public void onSuccess(Account account) {
+            public void onSuccess() {
                 enterActivity(true);
             }
 
@@ -79,7 +79,6 @@ public class SplashActivity extends BaseActivity {
             finish();
         }, 1000);
     }
-
 
 
 }

@@ -70,6 +70,11 @@ public class AccountSP {
         }
     }
 
+    /**
+     * Gets base url.
+     *
+     * @return http://ip:port/
+     */
     public static String getBaseUrl() {
         if (mBaseUrl == null) {
             mBaseUrl = "http://" + sp.getString(FIELD_ADDRESS, DEFAULT_VALUE) + "/";

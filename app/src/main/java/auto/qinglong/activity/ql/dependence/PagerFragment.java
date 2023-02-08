@@ -20,7 +20,7 @@ import auto.qinglong.R;
 import auto.qinglong.activity.BaseFragment;
 import auto.qinglong.activity.ql.CodeWebActivity;
 import auto.qinglong.bean.ql.QLDependence;
-import auto.qinglong.bean.ql.network.QLDependenceRes;
+import auto.qinglong.bean.ql.network.QLDependenciesRes;
 import auto.qinglong.network.http.QLApiController;
 import auto.qinglong.network.http.RequestManager;
 import auto.qinglong.utils.ToastUnit;
@@ -137,7 +137,7 @@ public class PagerFragment extends BaseFragment {
     private void netGetDependencies() {
         QLApiController.getDependencies(getNetRequestID(), "", this.type, new QLApiController.NetGetDependenciesCallback() {
             @Override
-            public void onSuccess(QLDependenceRes res) {
+            public void onSuccess(QLDependenciesRes res) {
                 depItemAdapter.setData(res.getData());
                 initDataFlag = true;
                 ToastUnit.showShort("加载成功：" + res.getData().size());

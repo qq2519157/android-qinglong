@@ -59,15 +59,15 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/script_edit_bar"
+            android:id="@+id/code_bar_edit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:visibility="invisible">
+            android:visibility="gone">
 
             <ImageView
-                android:id="@+id/script_edit_back"
+                android:id="@+id/code_bar_edit_back"
                 android:layout_width="@dimen/action_bar_icon_size"
                 android:layout_height="@dimen/action_bar_icon_size"
                 android:background="@drawable/style_button_ripple"
@@ -81,7 +81,7 @@
                 android:visibility="invisible" />
 
             <ImageView
-                android:id="@+id/script_edit_save"
+                android:id="@+id/code_bar_edit_save"
                 android:layout_width="@dimen/action_bar_icon_size"
                 android:layout_height="@dimen/action_bar_icon_size"
                 android:background="@drawable/style_button_ripple"

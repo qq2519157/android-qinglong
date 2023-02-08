@@ -4,7 +4,7 @@ import java.util.List;
 
 import auto.qinglong.bean.ql.QLScript;
 
-public class QLScriptRes extends QLBaseRes {
+public class QLScriptsRes extends QLBaseRes {
     private List<QLScript> data;
 
     public List<QLScript> getData() {

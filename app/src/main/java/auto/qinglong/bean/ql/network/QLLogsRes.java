@@ -4,7 +4,7 @@ import java.util.List;
 
 import auto.qinglong.bean.ql.QLLog;
 
-public class QLLogRes extends QLBaseRes{
+public class QLLogsRes extends QLBaseRes{
     List<QLLog> dirs;
 
     public List<QLLog> getDirs() {

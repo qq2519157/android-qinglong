@@ -1,6 +1,14 @@
 package auto.qinglong.network.web;
 
+import android.webkit.ValueCallback;
 import android.webkit.WebView;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+
+import auto.qinglong.utils.LogUnit;
+import auto.qinglong.utils.ToastUnit;
 
 /**
  * WebView与JS交互辅助类 实现代码显示和编辑功能.
@@ -27,8 +35,31 @@ public class QLWebJsManager {
         if (webView == null) {
             return;
         }
-        String script = String.format("javascript:setCode('%1$s')", content);
-        webView.evaluateJavascript(script, null);
+        try {
+            content = URLEncoder.encode(content, "UTF-8").replaceAll("\\+", "%20");
+            String script = String.format("javascript:setCode('%1$s')", content);
+            webView.evaluateJavascript(script, null);
+        } catch (UnsupportedEncodingException e) {
+            ToastUnit.showShort(e.getMessage());
+        }
+    }
+
+    public static void getContent(WebView webView) {
+        if (webView == null) {
+            return;
+        }
+        String script = "javascript:getContent()";
+        webView.evaluateJavascript(script, new ValueCallback<String>() {
+            @Override
+            public void onReceiveValue(String value) {
+                try {
+                    value = URLDecoder.decode(value, "UTF-8");
+                    LogUnit.log(value);
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     public static void initConfig(WebView webView, String host, String authorization) {

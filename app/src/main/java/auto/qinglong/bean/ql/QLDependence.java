@@ -2,6 +2,8 @@ package auto.qinglong.bean.ql;
 
 import java.util.List;
 
+import auto.qinglong.utils.TextUnit;
+
 public class QLDependence {
     private String _id;//ID
     private String remark;//备注
@@ -74,5 +76,9 @@ public class QLDependence {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public String getLogStr() {
+        return TextUnit.join(this.log, "\n");
     }
 }

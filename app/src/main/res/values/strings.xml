@@ -84,4 +84,5 @@
     <string name="environment">变量</string>
     <string name="url_input_hint">请输入网址</string>
     <string name="app_setting_donate">支持应用</string>
+    <string name="load_success">加载成功</string>
 </resources>
