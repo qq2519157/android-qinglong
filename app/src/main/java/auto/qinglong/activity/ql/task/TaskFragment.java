@@ -618,10 +618,10 @@ public class TaskFragment extends BaseFragment {
             jsonArray.add(jsonObject);
         }
 
-        if (fileName == null) {
-            fileName = TimeUnit.formatCurrentTime() + ".json";
-        } else {
+        if (TextUnit.isFull(fileName)) {
             fileName += ".json";
+        } else {
+            fileName = TimeUnit.formatCurrentTime() + ".json";
         }
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();

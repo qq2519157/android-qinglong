@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_gray"
@@ -34,7 +35,8 @@
         android:paddingStart="15dp"
         android:text="@string/char_path_split"
         android:textColor="@color/theme_color_shadow"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        tools:ignore="RtlSymmetry" />
 
     <com.scwang.smart.refresh.layout.SmartRefreshLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/refresh_layout"

@@ -5,7 +5,6 @@
     android:layout_marginHorizontal="@dimen/common_item_margin_horizontal"
     android:layout_marginTop="@dimen/common_item_margin_top"
     android:background="@color/white"
-    android:elevation="@dimen/common_item_elevation"
     android:orientation="vertical"
     android:paddingHorizontal="@dimen/common_item_padding_horizontal"
     android:paddingTop="@dimen/common_item_padding_top"

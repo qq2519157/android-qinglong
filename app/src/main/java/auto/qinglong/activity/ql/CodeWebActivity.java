@@ -15,7 +15,6 @@ import auto.qinglong.R;
 import auto.qinglong.activity.BaseActivity;
 import auto.qinglong.bean.ql.QLDependence;
 import auto.qinglong.network.http.QLApiController;
-import auto.qinglong.network.web.CommonJSInterface;
 import auto.qinglong.network.web.QLWebJsManager;
 import auto.qinglong.utils.ToastUnit;
 import auto.qinglong.utils.WindowUnit;
@@ -129,6 +128,8 @@ public class CodeWebActivity extends BaseActivity {
             ui_edit.setOnClickListener(v -> {
                 ui_nav_bar.setVisibility(View.INVISIBLE);
                 ui_edit_bar.setVisibility(View.VISIBLE);
+                ui_webView.setFocusable(true);
+                ui_webView.setFocusableInTouchMode(true);
                 QLWebJsManager.setEditable(ui_webView, true);
             });
 
@@ -136,17 +137,14 @@ public class CodeWebActivity extends BaseActivity {
                 ui_edit_bar.setVisibility(View.INVISIBLE);
                 ui_nav_bar.setVisibility(View.VISIBLE);
                 WindowUnit.hideKeyboard(ui_webView);
+                ui_webView.clearFocus();
+                ui_webView.setFocusable(false);
+                ui_webView.setFocusableInTouchMode(false);
                 QLWebJsManager.setEditable(ui_webView, false);
-
-                if (TYPE_SCRIPT.equals(mType)) {
-                    QLWebJsManager.backScript(ui_webView);
-                }
+                QLWebJsManager.setContent(ui_webView, mContent);
             });
 
             ui_edit_save.setOnClickListener(v -> {
-                if (TYPE_SCRIPT.equals(mType)) {
-                    QLWebJsManager.saveScript(ui_webView);
-                }
             });
         }
     }
@@ -173,13 +171,11 @@ public class CodeWebActivity extends BaseActivity {
         ui_webView = WebViewBuilder.build(getBaseContext(), ui_web_container, new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
-                if (mCanEdit) {
-                    ui_edit.setVisibility(View.VISIBLE);
-                }
                 load(mType);
             }
-        }, new CommonJSInterface());
+        }, null);
 
+        ui_webView.setFocusable(false);
         ui_webView.loadUrl("file:///android_asset/web/editor.html");
 
         mInitFlag = true;
@@ -202,32 +198,27 @@ public class CodeWebActivity extends BaseActivity {
         }
     }
 
+    private void finishLoad() {
+        if (ui_refresh.getAnimation() != null) {
+            ui_refresh.getAnimation().cancel();
+        }
+    }
+
     private void netGetConfig() {
         QLApiController.getConfigDetail(getNetRequestID(), new QLApiController.NetConfigCallback() {
             @Override
             public void onSuccess(String content) {
-                ToastUnit.showShort(getString(R.string.load_success));
                 mContent = content;
+                ui_edit.setVisibility(View.VISIBLE);
                 QLWebJsManager.setContent(ui_webView, content);
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                ToastUnit.showShort(msg);
-            }
-        });
-    }
-
-    private void netGetLogDetail(String path) {
-        QLApiController.getLogDetail(getNetRequestID(), path, new QLApiController.NetTextCallBack() {
-            @Override
-            public void onSuccess(String content) {
+                finishLoad();
                 ToastUnit.showShort(getString(R.string.load_success));
-                QLWebJsManager.setContent(ui_webView, content);
             }
 
             @Override
             public void onFailure(String msg) {
+                ui_edit.setVisibility(View.INVISIBLE);
+                finishLoad();
                 ToastUnit.showShort(msg);
             }
         });
@@ -237,13 +228,34 @@ public class CodeWebActivity extends BaseActivity {
         QLApiController.getScriptDetail(getNetRequestID(), path, new QLApiController.NetTextCallBack() {
             @Override
             public void onSuccess(String content) {
-                ToastUnit.showShort(getString(R.string.load_success));
                 mContent = content;
+                ui_edit.setVisibility(View.VISIBLE);
                 QLWebJsManager.setContent(ui_webView, content);
+                finishLoad();
+                ToastUnit.showShort(getString(R.string.load_success));
             }
 
             @Override
             public void onFailure(String msg) {
+                ui_edit.setVisibility(View.INVISIBLE);
+                finishLoad();
+                ToastUnit.showShort(msg);
+            }
+        });
+    }
+
+    private void netGetLogDetail(String path) {
+        QLApiController.getLogDetail(getNetRequestID(), path, new QLApiController.NetTextCallBack() {
+            @Override
+            public void onSuccess(String content) {
+                QLWebJsManager.setContent(ui_webView, content);
+                finishLoad();
+                ToastUnit.showShort(getString(R.string.load_success));
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                finishLoad();
                 ToastUnit.showShort(msg);
             }
         });
@@ -253,12 +265,14 @@ public class CodeWebActivity extends BaseActivity {
         QLApiController.getDependence(getNetRequestID(), path, new QLApiController.NetGetDependenceCallback() {
             @Override
             public void onSuccess(QLDependence dependence) {
-                ToastUnit.showShort(getString(R.string.load_success));
                 QLWebJsManager.setContent(ui_webView, dependence.getLogStr());
+                finishLoad();
+                ToastUnit.showShort(getString(R.string.load_success));
             }
 
             @Override
             public void onFailure(String msg) {
+                finishLoad();
                 ToastUnit.showShort(msg);
             }
         });

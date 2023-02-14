@@ -32,7 +32,7 @@
     <string name="action_pin">顶置</string>
     <string name="action_pin_success">顶置</string>
     <string name="action_pin_failure">顶置</string>
-    <string name="action_pin_cancel">下置</string>
+    <string name="action_unpin">下置</string>
     <string name="action_enable">启用</string>
     <string name="action_disable">禁用</string>
     <string name="action_delete">删除</string>
@@ -57,7 +57,6 @@
     <string name="app_setting_share">分享应用</string>
     <string name="app_share_description">我正在使用这个APP来管理青龙面板，方便快捷，你也来试试吧！下载地址：https://gitee.com/wsfsp4/QingLong</string>
     <string name="app_setting_notify">更新推送</string>
-
     <string name="action_title_plugin_web">Web助手</string>
     <string name="action_bar_title_app_setting">应用设置</string>
     <string name="action_bar_title_plugin_web_rule">规则配置</string>
@@ -85,4 +84,7 @@
     <string name="url_input_hint">请输入网址</string>
     <string name="app_setting_donate">支持应用</string>
     <string name="load_success">加载成功</string>
+    <string name="back">返回</string>
+    <string name="edit">编辑</string>
+    <string name="refresh">刷新</string>
 </resources>
