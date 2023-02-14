@@ -14,14 +14,14 @@ import auto.qinglong.utils.ToastUnit;
 
 public abstract class BaseActivity extends AppCompatActivity {
     public static final String TAG = "BaseActivity";
-    protected Activity self;
+    protected Activity mSelf;
     protected Context mContext;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = getBaseContext();
-        self = this;
+        mSelf = this;
     }
 
     @Override

@@ -24,7 +24,7 @@ import auto.qinglong.views.popup.PopupWindowBuilder;
 import auto.qinglong.views.popup.ProgressWindow;
 
 public class LoginActivity extends BaseActivity {
-
+    public static final String TAG = "LoginActivity";
     private ImageView ui_logo;
     private Button ui_confirm;
     private EditText ui_address;

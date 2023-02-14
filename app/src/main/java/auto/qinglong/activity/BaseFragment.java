@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment;
 import auto.qinglong.network.http.RequestManager;
 
 public abstract class BaseFragment extends Fragment {
+    public static final String TAG = "BaseFragment";
     //是否已经加载成功过数据标志
     protected boolean initDataFlag = false;
 

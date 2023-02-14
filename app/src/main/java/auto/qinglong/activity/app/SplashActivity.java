@@ -17,14 +17,13 @@ import auto.qinglong.utils.ToastUnit;
 
 @SuppressLint("CustomSplashScreen")
 public class SplashActivity extends BaseActivity {
+    public static final String TAG = "SplashActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_splash);
-
-        init();
     }
 
     @Override

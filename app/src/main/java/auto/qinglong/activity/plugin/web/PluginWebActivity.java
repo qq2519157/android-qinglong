@@ -42,7 +42,6 @@ import auto.qinglong.views.popup.PopupWindowBuilder;
 public class PluginWebActivity extends BaseActivity {
     public static final String TAG = "PluginWebActivity";
 
-    private String urlLoaded = "";
     private CookieManager cookieManager;
 
     private LinearLayout ui_bar;
@@ -105,7 +104,6 @@ public class PluginWebActivity extends BaseActivity {
             if (TextUnit.isFull(url)) {
                 ui_et_url.clearFocus();
                 WindowUnit.hideKeyboard(ui_et_url);
-                urlLoaded = url;
                 ui_webView.loadUrl(url);
             } else {
                 ToastUnit.showShort("请输入网页地址");

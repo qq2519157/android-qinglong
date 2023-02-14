@@ -33,7 +33,7 @@ public class ApiController {
 
         call.enqueue(new Callback<Version>() {
             @Override
-            public void onResponse(Call<Version> call, Response<Version> response) {
+            public void onResponse(@NonNull Call<Version> call, @NonNull Response<Version> response) {
                 RequestManager.finishCall(requestId);
                 Version version = response.body();
                 if (version != null) {
@@ -44,7 +44,7 @@ public class ApiController {
             }
 
             @Override
-            public void onFailure(Call<Version> call, Throwable t) {
+            public void onFailure(@NonNull Call<Version> call, @NonNull Throwable t) {
                 RequestManager.finishCall(requestId);
                 if (call.isCanceled()) {
                     return;
@@ -66,12 +66,12 @@ public class ApiController {
 
         call.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
                 RequestManager.finishCall(requestId);
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
                 RequestManager.finishCall(requestId);
             }
         });
@@ -89,14 +89,14 @@ public class ApiController {
 
         call.enqueue(new Callback<List<QLEnvironment>>() {
             @Override
-            public void onResponse(Call<List<QLEnvironment>> call, Response<List<QLEnvironment>> response) {
+            public void onResponse(@NonNull Call<List<QLEnvironment>> call, @NonNull Response<List<QLEnvironment>> response) {
                 RequestManager.finishCall(requestId);
                 List<QLEnvironment> res = response.body();
                 callback.onSuccess(res);
             }
 
             @Override
-            public void onFailure(Call<List<QLEnvironment>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<QLEnvironment>> call, @NonNull Throwable t) {
                 RequestManager.finishCall(requestId);
                 if (call.isCanceled()) {
                     return;
@@ -118,14 +118,14 @@ public class ApiController {
 
         call.enqueue(new Callback<List<WebRule>>() {
             @Override
-            public void onResponse(Call<List<WebRule>> call, Response<List<WebRule>> response) {
+            public void onResponse(@NonNull Call<List<WebRule>> call, @NonNull Response<List<WebRule>> response) {
                 RequestManager.finishCall(requestId);
                 List<WebRule> res = response.body();
                 callback.onSuccess(res);
             }
 
             @Override
-            public void onFailure(Call<List<WebRule>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<WebRule>> call, @NonNull Throwable t) {
                 RequestManager.finishCall(requestId);
                 if (call.isCanceled()) {
                     return;
@@ -147,14 +147,14 @@ public class ApiController {
 
         call.enqueue(new Callback<List<Link>>() {
             @Override
-            public void onResponse(Call<List<Link>> call, Response<List<Link>> response) {
+            public void onResponse(@NonNull Call<List<Link>> call, @NonNull Response<List<Link>> response) {
                 RequestManager.finishCall(requestId);
                 List<Link> res = response.body();
                 callback.onSuccess(res);
             }
 
             @Override
-            public void onFailure(Call<List<Link>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<Link>> call, @NonNull Throwable t) {
                 RequestManager.finishCall(requestId);
                 if (call.isCanceled()) {
                     return;

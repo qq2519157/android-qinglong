@@ -41,6 +41,7 @@ import auto.qinglong.views.popup.PopupWindowBuilder;
 
 public class HomeActivity extends BaseActivity {
     public static final String TAG = "HomeActivity";
+
     private long mLastBackPressedTime = 0;
     private BaseFragment mCurrentFragment;
     private String mCurrentMenu = "";
