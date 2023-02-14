@@ -150,9 +150,9 @@ public class ScriptFragment extends BaseFragment {
     private void netGetScripts() {
         QLApiController.getScripts(getNetRequestID(), new QLApiController.NetGetScriptsCallback() {
             @Override
-            public void onSuccess(List<QLScript> QLScripts) {
-                sortAndSetData(QLScripts, "");
-                oData = QLScripts;
+            public void onSuccess(List<QLScript> scripts) {
+                sortAndSetData(scripts, "");
+                oData = scripts;
                 canBack = false;
                 initDataFlag = true;
                 this.onEnd(true);

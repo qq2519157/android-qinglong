@@ -225,7 +225,7 @@ public class CodeWebActivity extends BaseActivity {
     }
 
     private void netGetScriptDetail(String path) {
-        QLApiController.getScriptDetail(getNetRequestID(), path, new QLApiController.NetTextCallBack() {
+        QLApiController.getScriptDetail(getNetRequestID(), path, new QLApiController.NetSimpleCallBack() {
             @Override
             public void onSuccess(String content) {
                 mContent = content;
@@ -245,7 +245,7 @@ public class CodeWebActivity extends BaseActivity {
     }
 
     private void netGetLogDetail(String path) {
-        QLApiController.getLogDetail(getNetRequestID(), path, new QLApiController.NetTextCallBack() {
+        QLApiController.getLogDetail(getNetRequestID(), path, new QLApiController.NetSimpleCallBack() {
             @Override
             public void onSuccess(String content) {
                 QLWebJsManager.setContent(ui_webView, content);

@@ -1,6 +1,6 @@
 package auto.qinglong.bean.ql;
 
-public class QLSystemData {
+public class QLSystem {
     private boolean isInitialized;
 
     private String version;

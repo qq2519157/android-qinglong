@@ -44,7 +44,6 @@ import auto.qinglong.activity.BaseFragment;
 import auto.qinglong.activity.ql.CodeWebActivity;
 import auto.qinglong.activity.ql.LocalFileAdapter;
 import auto.qinglong.bean.ql.QLTask;
-import auto.qinglong.bean.ql.network.QLTasksRes;
 import auto.qinglong.network.http.QLApiController;
 import auto.qinglong.network.http.RequestManager;
 import auto.qinglong.utils.CronUnit;
@@ -642,16 +641,15 @@ public class TaskFragment extends BaseFragment {
     private void netGetTasks(String searchValue, boolean needTip) {
         QLApiController.getTasks(getNetRequestID(), searchValue, new QLApiController.NetGetTasksCallback() {
             @Override
-            public void onSuccess(QLTasksRes res) {
+            public void onSuccess(List<QLTask> tasks) {
                 initDataFlag = true;
-                List<QLTask> data = res.getData();
-                Collections.sort(data);
-                for (int k = 0; k < data.size(); k++) {
-                    data.get(k).setIndex(k + 1);
+                Collections.sort(tasks);
+                for (int k = 0; k < tasks.size(); k++) {
+                    tasks.get(k).setIndex(k + 1);
                 }
-                mTaskAdapter.setData(data);
+                mTaskAdapter.setData(tasks);
                 if (needTip) {
-                    ToastUnit.showShort("加载成功：" + data.size());
+                    ToastUnit.showShort("加载成功：" + tasks.size());
                 }
                 ui_refresh.finishRefresh(true);
             }

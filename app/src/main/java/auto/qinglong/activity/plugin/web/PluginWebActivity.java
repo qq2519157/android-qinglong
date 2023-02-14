@@ -27,7 +27,6 @@ import auto.qinglong.R;
 import auto.qinglong.activity.BaseActivity;
 import auto.qinglong.bean.app.WebRule;
 import auto.qinglong.bean.ql.QLEnvironment;
-import auto.qinglong.bean.ql.network.QLEnvironmentRes;
 import auto.qinglong.database.db.WebRuleDBHelper;
 import auto.qinglong.network.http.QLApiController;
 import auto.qinglong.utils.TextUnit;
@@ -250,9 +249,8 @@ public class PluginWebActivity extends BaseActivity {
     private void netGetEnvironments(QLEnvironment environment) {
         QLApiController.getEnvironments(getNetRequestID(), "", new QLApiController.NetGetEnvironmentsCallback() {
             @Override
-            public void onSuccess(QLEnvironmentRes res) {
-                List<QLEnvironment> qlEnvironments = res.getData();
-                for (QLEnvironment qlEnvironment : qlEnvironments) {
+            public void onSuccess(List<QLEnvironment> environments) {
+                for (QLEnvironment qlEnvironment : environments) {
                     if (environment.getName().equals(qlEnvironment.getName()) && environment.getRemarks().equals(qlEnvironment.getRemarks())) {
                         qlEnvironment.setValue(environment.getValue());
                         netUpdateEnvironment(qlEnvironment);
@@ -274,7 +272,7 @@ public class PluginWebActivity extends BaseActivity {
     public void netUpdateEnvironment(QLEnvironment environment) {
         QLApiController.updateEnvironment(getNetRequestID(), environment, new QLApiController.NetEditEnvCallback() {
             @Override
-            public void onSuccess(QLEnvironment data) {
+            public void onSuccess(QLEnvironment environment) {
                 ToastUnit.showShort("导入成功");
             }
 
@@ -288,7 +286,7 @@ public class PluginWebActivity extends BaseActivity {
     public void netAddEnvironments(List<QLEnvironment> environments) {
         QLApiController.addEnvironment(getNetRequestID(), environments, new QLApiController.NetGetEnvironmentsCallback() {
             @Override
-            public void onSuccess(QLEnvironmentRes res) {
+            public void onSuccess(List<QLEnvironment> qlEnvironments) {
                 ToastUnit.showShort("导入成功");
             }
 

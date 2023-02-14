@@ -10,10 +10,10 @@ import auto.qinglong.bean.ql.network.QLLoginLogsRes;
 import auto.qinglong.bean.ql.network.QLLoginRes;
 import auto.qinglong.bean.ql.network.QLLogsRes;
 import auto.qinglong.bean.ql.network.QLScriptsRes;
+import auto.qinglong.bean.ql.network.QLSimpleRes;
 import auto.qinglong.bean.ql.network.QLSystemRes;
 import auto.qinglong.bean.ql.network.QLTaskEditRes;
 import auto.qinglong.bean.ql.network.QLTasksRes;
-import auto.qinglong.bean.ql.network.QLTextRes;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -213,7 +213,7 @@ public interface QLApi {
      * @return the config
      */
     @GET("api/configs/config.sh")
-    Call<QLTextRes> getConfig(@Header("Authorization") String authorization);
+    Call<QLSimpleRes> getConfig(@Header("Authorization") String authorization);
 
     /**
      * 保存配置文件.
@@ -242,7 +242,7 @@ public interface QLApi {
      * @return the script detail
      */
     @GET
-    Call<QLTextRes> getScriptDetail(@Url String url, @Header("Authorization") String authorization);
+    Call<QLSimpleRes> getScriptDetail(@Url String url, @Header("Authorization") String authorization);
 
     /**
      * 保存脚本.
@@ -323,7 +323,7 @@ public interface QLApi {
      * @return the log detail
      */
     @GET
-    Call<QLTextRes> getLogDetail(@Url String url, @Header("Authorization") String authorization);
+    Call<QLSimpleRes> getLogDetail(@Url String url, @Header("Authorization") String authorization);
 
     /**
      * 获取登录日志.

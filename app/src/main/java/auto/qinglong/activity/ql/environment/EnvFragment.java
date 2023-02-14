@@ -41,7 +41,6 @@ import auto.qinglong.R;
 import auto.qinglong.activity.BaseFragment;
 import auto.qinglong.activity.ql.LocalFileAdapter;
 import auto.qinglong.bean.ql.QLEnvironment;
-import auto.qinglong.bean.ql.network.QLEnvironmentRes;
 import auto.qinglong.network.http.ApiController;
 import auto.qinglong.network.http.QLApiController;
 import auto.qinglong.network.http.RequestManager;
@@ -638,12 +637,12 @@ public class EnvFragment extends BaseFragment {
         }
         QLApiController.getEnvironments(getNetRequestID(), searchValue, new QLApiController.NetGetEnvironmentsCallback() {
             @Override
-            public void onSuccess(QLEnvironmentRes res) {
+            public void onSuccess(List<QLEnvironment> environments) {
                 initDataFlag = true;
                 if (needTip) {
-                    ToastUnit.showShort("加载成功：" + res.getData().size());
+                    ToastUnit.showShort("加载成功：" + environments.size());
                 }
-                sortAndSetData(res.getData());
+                sortAndSetData(environments);
                 ui_refresh.finishRefresh(true);
             }
 
@@ -661,7 +660,7 @@ public class EnvFragment extends BaseFragment {
         }
         QLApiController.updateEnvironment(getNetRequestID(), environment, new QLApiController.NetEditEnvCallback() {
             @Override
-            public void onSuccess(QLEnvironment data) {
+            public void onSuccess(QLEnvironment environment) {
                 ui_pop_edit.dismiss();
                 ToastUnit.showShort("更新成功");
                 netGetEnvironments(currentSearchValue, false);
@@ -680,7 +679,7 @@ public class EnvFragment extends BaseFragment {
         }
         QLApiController.addEnvironment(getNetRequestID(), environments, new QLApiController.NetGetEnvironmentsCallback() {
             @Override
-            public void onSuccess(QLEnvironmentRes res) {
+            public void onSuccess(List<QLEnvironment> qlEnvironments) {
                 if (ui_pop_edit != null) {
                     ui_pop_edit.dismiss();
                 }

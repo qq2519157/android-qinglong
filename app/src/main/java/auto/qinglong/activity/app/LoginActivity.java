@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseActivity;
 import auto.qinglong.bean.app.Account;
-import auto.qinglong.bean.ql.network.QLSystemRes;
+import auto.qinglong.bean.ql.QLSystem;
 import auto.qinglong.database.sp.AccountSP;
 import auto.qinglong.network.http.QLApiController;
 import auto.qinglong.network.http.RequestManager;
@@ -148,13 +148,13 @@ public class LoginActivity extends BaseActivity {
     protected void netQuerySystemInfo(Account account) {
         QLApiController.getSystemInfo(this.getNetRequestID(), account, new QLApiController.NetSystemCallback() {
             @Override
-            public void onSuccess(QLSystemRes systemRes) {
-                if (!systemRes.getData().getVersion().startsWith("2.10")) {
+            public void onSuccess(QLSystem system) {
+                if (!system.getVersion().startsWith("2.10")) {
                     ToastUnit.showShort("仅支持2.10.x面板");
                     ui_pop_progress.dismiss();
                     return;
                 }
-                if (systemRes.getData().isInitialized()) {
+                if (system.isInitialized()) {
                     if (TextUnit.isFull(account.getToken())) {
                         netCheckToken(account);
                     } else {

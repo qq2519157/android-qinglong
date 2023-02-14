@@ -1,15 +1,15 @@
 package auto.qinglong.bean.ql.network;
 
-import auto.qinglong.bean.ql.QLSystemData;
+import auto.qinglong.bean.ql.QLSystem;
 
 public class QLSystemRes extends QLBaseRes{
-    private QLSystemData data;
+    private QLSystem data;
 
-    public QLSystemData getData() {
+    public QLSystem getData() {
         return data;
     }
 
-    public void setData(QLSystemData data) {
+    public void setData(QLSystem data) {
         this.data = data;
     }
 

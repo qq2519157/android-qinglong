@@ -116,9 +116,9 @@ public class LogFragment extends BaseFragment {
     private void getLogs() {
         QLApiController.getLogs(getNetRequestID(), new QLApiController.NetGetLogsCallback() {
             @Override
-            public void onSuccess(List<QLLog> QLLogs) {
-                sortAndSetData(QLLogs, "");
-                oData = QLLogs;
+            public void onSuccess(List<QLLog> logs) {
+                sortAndSetData(logs, "");
+                oData = logs;
                 canBack = false;
                 initDataFlag = true;
                 this.onEnd(true);
