@@ -11,6 +11,7 @@ import android.os.Handler;
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseActivity;
 import auto.qinglong.bean.app.Account;
+import auto.qinglong.database.db.StatisticsDBHelper;
 import auto.qinglong.database.sp.AccountSP;
 import auto.qinglong.network.http.QLApiController;
 import auto.qinglong.utils.ToastUnit;
@@ -24,6 +25,7 @@ public class SplashActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_splash);
+        StatisticsDBHelper.increase(TAG);
     }
 
     @Override

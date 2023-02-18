@@ -25,6 +25,7 @@ import auto.qinglong.R;
 import auto.qinglong.activity.BaseFragment;
 import auto.qinglong.activity.ql.CodeWebActivity;
 import auto.qinglong.bean.ql.QLScript;
+import auto.qinglong.database.db.StatisticsDBHelper;
 import auto.qinglong.network.http.QLApiController;
 import auto.qinglong.network.http.RequestManager;
 import auto.qinglong.utils.ToastUnit;
@@ -55,7 +56,7 @@ public class ScriptFragment extends BaseFragment {
         ui_recycler = view.findViewById(R.id.recycler_view);
 
         init();
-
+        StatisticsDBHelper.increase(TAG);
         return view;
     }
 

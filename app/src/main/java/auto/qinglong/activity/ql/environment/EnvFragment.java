@@ -41,6 +41,7 @@ import auto.qinglong.R;
 import auto.qinglong.activity.BaseFragment;
 import auto.qinglong.activity.ql.LocalFileAdapter;
 import auto.qinglong.bean.ql.QLEnvironment;
+import auto.qinglong.database.db.StatisticsDBHelper;
 import auto.qinglong.network.http.ApiController;
 import auto.qinglong.network.http.QLApiController;
 import auto.qinglong.network.http.RequestManager;
@@ -119,6 +120,7 @@ public class EnvFragment extends BaseFragment {
         Objects.requireNonNull(ui_recycler.getItemAnimator()).setChangeDuration(0);
 
         init();
+        StatisticsDBHelper.increase(TAG);
 
         return view;
     }

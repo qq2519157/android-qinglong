@@ -12,6 +12,7 @@ import auto.qinglong.R;
 import auto.qinglong.activity.BaseFragment;
 import auto.qinglong.activity.app.LoginActivity;
 import auto.qinglong.bean.app.Account;
+import auto.qinglong.database.db.StatisticsDBHelper;
 import auto.qinglong.database.sp.AccountSP;
 import auto.qinglong.network.http.QLApiController;
 import auto.qinglong.utils.LogUnit;
@@ -38,7 +39,7 @@ public class CommonFragment extends BaseFragment {
         ui_security_save = view.findViewById(R.id.setting_security_save);
 
         init();
-
+        StatisticsDBHelper.increase(TAG);
         return view;
     }
 
