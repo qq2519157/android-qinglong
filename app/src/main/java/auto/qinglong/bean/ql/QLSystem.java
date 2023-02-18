@@ -5,6 +5,8 @@ public class QLSystem {
 
     private String version;
 
+    private static String VERSION;
+
     public boolean isInitialized() {
         return isInitialized;
     }
@@ -21,4 +23,11 @@ public class QLSystem {
         this.version = version;
     }
 
+    public static String getStaticVersion() {
+        return VERSION;
+    }
+
+    public static void setStaticVersion(String version) {
+        VERSION = version;
+    }
 }

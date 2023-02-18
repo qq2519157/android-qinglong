@@ -20,6 +20,7 @@ import auto.qinglong.utils.WebUnit;
 
 public class SettingActivity extends BaseActivity {
     public static final String TAG = "SettingActivity";
+
     private ImageView ui_back;
     private SwitchCompat ui_notify_switch;
     private LinearLayout ui_document;

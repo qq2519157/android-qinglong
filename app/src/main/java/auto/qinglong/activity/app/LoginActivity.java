@@ -26,6 +26,7 @@ import auto.qinglong.views.popup.ProgressWindow;
 
 public class LoginActivity extends BaseActivity {
     public static final String TAG = "LoginActivity";
+
     private ImageView ui_logo;
     private Button ui_confirm;
     private EditText ui_address;
@@ -36,7 +37,6 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //状态栏黑色字体
         WindowUnit.setStatusBarTextColor(this, false);
 
         setContentView(R.layout.activity_login);
@@ -140,8 +140,10 @@ public class LoginActivity extends BaseActivity {
         }
     }
 
+    /**
+     * 进入主界面
+     */
     private void enterHome() {
-        //进入主界面
         Intent intent = new Intent(mContext, HomeActivity.class);
         startActivity(intent);
         finish();
@@ -151,6 +153,7 @@ public class LoginActivity extends BaseActivity {
         QLApiController.getSystemInfo(this.getNetRequestID(), account, new QLApiController.NetSystemCallback() {
             @Override
             public void onSuccess(QLSystem system) {
+                QLSystem.setStaticVersion(system.getVersion());
                 if (!system.getVersion().startsWith("2.10")) {
                     ToastUnit.showShort("仅支持2.10.x面板");
                     ui_pop_progress.dismiss();

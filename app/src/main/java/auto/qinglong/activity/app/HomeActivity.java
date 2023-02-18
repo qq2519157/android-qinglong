@@ -1,6 +1,5 @@
 package auto.qinglong.activity.app;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -25,13 +24,14 @@ import auto.qinglong.activity.ql.log.LogFragment;
 import auto.qinglong.activity.ql.script.ScriptFragment;
 import auto.qinglong.activity.ql.setting.SettingFragment;
 import auto.qinglong.activity.ql.task.TaskFragment;
+import auto.qinglong.bean.app.Statistics;
 import auto.qinglong.bean.app.Version;
+import auto.qinglong.bean.ql.QLSystem;
 import auto.qinglong.database.db.StatisticsDBHelper;
 import auto.qinglong.database.sp.AccountSP;
 import auto.qinglong.database.sp.SettingSP;
 import auto.qinglong.network.http.ApiController;
 import auto.qinglong.utils.LogUnit;
-import auto.qinglong.utils.NetUnit;
 import auto.qinglong.utils.TextUnit;
 import auto.qinglong.utils.ToastUnit;
 import auto.qinglong.utils.WebUnit;
@@ -42,9 +42,9 @@ import auto.qinglong.views.popup.PopupWindowBuilder;
 public class HomeActivity extends BaseActivity {
     public static final String TAG = "HomeActivity";
 
-    private long mLastBackPressedTime = 0;
-    private BaseFragment mCurrentFragment;
-    private String mCurrentMenu = "";
+    private long mLastBackPressedTime = 0;//上次按下返回键时间
+    private BaseFragment mCurrentFragment;//当前帧
+    private String mCurrentMenu;
     private BaseFragment.MenuClickListener mMenuClickListener;
     // 碎片界面列表
     private TaskFragment fg_task;
@@ -108,20 +108,18 @@ public class HomeActivity extends BaseActivity {
         return super.dispatchTouchEvent(ev);
     }
 
-    @SuppressLint("SetTextI18n")
+
     private void initDrawerBar() {
         ui_drawer_left.setVisibility(View.INVISIBLE);
-        //用户信息
+        //用户名
         TextView ui_username = ui_drawer_left.findViewById(R.id.menu_top_info_username);
-        TextView ui_address = ui_drawer_left.findViewById(R.id.menu_top_info_address);
         ui_username.setText(Objects.requireNonNull(AccountSP.getCurrentAccount()).getUsername());
+        //面板地址
+        TextView ui_address = ui_drawer_left.findViewById(R.id.menu_top_info_address);
         ui_address.setText(AccountSP.getCurrentAccount().getAddress());
-        String ip = NetUnit.getIP();
-        if (ip != null) {
-            TextView ui_ip = ui_drawer_left.findViewById(R.id.menu_top_info_inner_ip);
-            ui_ip.setText("本地：" + ip);
-            ui_ip.setVisibility(View.VISIBLE);
-        }
+        //面板版本
+        TextView ui_version = ui_drawer_left.findViewById(R.id.menu_top_info_version);
+        ui_version.setText(String.format(getString(R.string.format_tip_version), QLSystem.getStaticVersion()));
 
         //导航监听
         LinearLayout menu_task = ui_drawer_left.findViewById(R.id.menu_task);
@@ -294,6 +292,8 @@ public class HomeActivity extends BaseActivity {
     }
 
     private void netReport() {
-        LogUnit.log(StatisticsDBHelper.getAll().size());
+        for (Statistics statistics : StatisticsDBHelper.getAll()) {
+            LogUnit.log(statistics.getModule() + "：" + statistics.getNum());
+        }
     }
 }

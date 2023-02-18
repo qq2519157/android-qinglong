@@ -56,7 +56,6 @@ public class StatisticsDBHelper {
      * @param module 模块
      */
     public static void increase(@NonNull String module) {
-        LogUnit.log(module);
         if (isExist(module)) {
             update(module);
         } else {
@@ -88,7 +87,7 @@ public class StatisticsDBHelper {
 
     private static void update(@NonNull String module) {
         try {
-            String sql = String.format(Locale.ENGLISH, "UPDATE  module = %s SET num = num + 1, endTime = %d WHERE module = %s", auto.qinglong.database.db.DBHelper.TABLE_STATISTICS, System.currentTimeMillis() / 1000, module);
+            String sql = String.format(Locale.ENGLISH, "UPDATE %s SET num = num + 1, endTime = %d WHERE module = '%s'", auto.qinglong.database.db.DBHelper.TABLE_STATISTICS, System.currentTimeMillis() / 1000, module);
             DBHelper.getWritableDatabase().execSQL(sql);
         } catch (Exception e) {
             LogUnit.log(TAG, e.getMessage());
@@ -97,8 +96,7 @@ public class StatisticsDBHelper {
 
     private static boolean isExist(String module) {
         try {
-            String where = "module = ?";
-            Cursor cursor = DBHelper.getWritableDatabase().query(auto.qinglong.database.db.DBHelper.TABLE_STATISTICS, null, where, new String[]{String.valueOf(module)}, null, null, null);
+            Cursor cursor = DBHelper.getWritableDatabase().query(auto.qinglong.database.db.DBHelper.TABLE_STATISTICS, null, "module = ?", new String[]{String.valueOf(module)}, null, null, null);
             boolean flag = cursor.moveToFirst();
             cursor.close();
             return flag;

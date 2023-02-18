@@ -88,4 +88,7 @@
     <string name="back">返回</string>
     <string name="edit">编辑</string>
     <string name="refresh">刷新</string>
+    <string name="format_tip_ip">本地：%s</string>
+    <string name="format_tip_version">v%s</string>
+    <string name="format_tip_version_full">v%s\t\tv%s</string>
 </resources>

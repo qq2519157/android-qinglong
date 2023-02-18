@@ -26,9 +26,8 @@
             android:clickable="true"
             android:gravity="center_vertical"
             android:orientation="vertical"
-            android:paddingVertical="30dp"
-            android:paddingStart="15dp"
-            android:paddingEnd="40dp">
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="24dp">
 
             <TextView
                 android:id="@+id/menu_top_info_username"
@@ -46,18 +45,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
+                android:ellipsize="end"
                 android:maxLines="1"
                 android:textColor="#FAFAFA"
                 android:textSize="11sp" />
 
             <TextView
-                android:id="@+id/menu_top_info_inner_ip"
+                android:id="@+id/menu_top_info_version"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
                 android:maxLines="1"
                 android:textColor="#FAFAFA"
-                android:textSize="11sp"
-                android:visibility="gone" />
+                android:textSize="11sp" />
         </LinearLayout>
 
         <ScrollView
