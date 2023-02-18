@@ -1,6 +1,7 @@
 package auto.qinglong.activity.ql;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
@@ -11,11 +12,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.Objects;
+
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseActivity;
 import auto.qinglong.bean.ql.QLDependence;
 import auto.qinglong.network.http.QLApiController;
 import auto.qinglong.network.web.QLWebJsManager;
+import auto.qinglong.utils.LogUnit;
 import auto.qinglong.utils.ToastUnit;
 import auto.qinglong.utils.WindowUnit;
 import auto.qinglong.views.WebViewBuilder;
@@ -144,8 +150,20 @@ public class CodeWebActivity extends BaseActivity {
                 QLWebJsManager.setContent(ui_webView, mContent);
             });
 
-            ui_edit_save.setOnClickListener(v -> {
-            });
+            ui_edit_save.setOnClickListener(v -> QLWebJsManager.getContent(ui_webView, value -> {
+                try {
+                    ui_webView.clearFocus();
+                    WindowUnit.hideKeyboard(ui_webView);
+                    StringBuilder stringBuilder = new StringBuilder(URLDecoder.decode(value, "UTF-8"));
+                    if (stringBuilder.length() >= 2) {
+                        stringBuilder.deleteCharAt(0);
+                        stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+                    }
+                    save(stringBuilder.toString());
+                } catch (UnsupportedEncodingException e) {
+                    ToastUnit.showShort(e.getMessage());
+                }
+            }));
         }
     }
 
@@ -181,6 +199,11 @@ public class CodeWebActivity extends BaseActivity {
         mInitFlag = true;
     }
 
+    /**
+     * 加载对应类型内容
+     *
+     * @param type 类型
+     */
     private void load(String type) {
         switch (type) {
             case TYPE_SCRIPT:
@@ -198,9 +221,25 @@ public class CodeWebActivity extends BaseActivity {
         }
     }
 
-    private void finishLoad() {
+    /**
+     * 网络加载结束 关闭刷新动画
+     */
+    private void loadFinish() {
         if (ui_refresh.getAnimation() != null) {
             ui_refresh.getAnimation().cancel();
+        }
+    }
+
+    /**
+     * 保存内容，当前仅支持配置文件和脚本文件
+     *
+     * @param content 内容
+     */
+    private void save(String content) {
+        if (Objects.equals(mType, TYPE_CONFIG)) {
+            netSaveConfig(content);
+        } else if (Objects.equals(mType, TYPE_SCRIPT)) {
+            netSaveScript(content);
         }
     }
 
@@ -211,14 +250,29 @@ public class CodeWebActivity extends BaseActivity {
                 mContent = content;
                 ui_edit.setVisibility(View.VISIBLE);
                 QLWebJsManager.setContent(ui_webView, content);
-                finishLoad();
+                loadFinish();
                 ToastUnit.showShort(getString(R.string.load_success));
             }
 
             @Override
             public void onFailure(String msg) {
                 ui_edit.setVisibility(View.INVISIBLE);
-                finishLoad();
+                loadFinish();
+                ToastUnit.showShort(msg);
+            }
+        });
+    }
+
+    private void netSaveConfig(String content) {
+        QLApiController.saveConfig(getNetRequestID(), content, new QLApiController.NetBaseCallback() {
+            @Override
+            public void onSuccess() {
+                mContent = content;
+                ToastUnit.showShort("保存成功");
+            }
+
+            @Override
+            public void onFailure(String msg) {
                 ToastUnit.showShort(msg);
             }
         });
@@ -231,14 +285,29 @@ public class CodeWebActivity extends BaseActivity {
                 mContent = content;
                 ui_edit.setVisibility(View.VISIBLE);
                 QLWebJsManager.setContent(ui_webView, content);
-                finishLoad();
+                loadFinish();
                 ToastUnit.showShort(getString(R.string.load_success));
             }
 
             @Override
             public void onFailure(String msg) {
                 ui_edit.setVisibility(View.INVISIBLE);
-                finishLoad();
+                loadFinish();
+                ToastUnit.showShort(msg);
+            }
+        });
+    }
+
+    private void netSaveScript(String content) {
+        QLApiController.saveScript(getNetRequestID(), content, mScriptName, mScriptParent, new QLApiController.NetBaseCallback() {
+            @Override
+            public void onSuccess() {
+                mContent = content;
+                ToastUnit.showShort("保存成功");
+            }
+
+            @Override
+            public void onFailure(String msg) {
                 ToastUnit.showShort(msg);
             }
         });
@@ -249,13 +318,13 @@ public class CodeWebActivity extends BaseActivity {
             @Override
             public void onSuccess(String content) {
                 QLWebJsManager.setContent(ui_webView, content);
-                finishLoad();
+                loadFinish();
                 ToastUnit.showShort(getString(R.string.load_success));
             }
 
             @Override
             public void onFailure(String msg) {
-                finishLoad();
+                loadFinish();
                 ToastUnit.showShort(msg);
             }
         });
@@ -266,13 +335,13 @@ public class CodeWebActivity extends BaseActivity {
             @Override
             public void onSuccess(QLDependence dependence) {
                 QLWebJsManager.setContent(ui_webView, dependence.getLogStr());
-                finishLoad();
+                loadFinish();
                 ToastUnit.showShort(getString(R.string.load_success));
             }
 
             @Override
             public void onFailure(String msg) {
-                finishLoad();
+                loadFinish();
                 ToastUnit.showShort(msg);
             }
         });

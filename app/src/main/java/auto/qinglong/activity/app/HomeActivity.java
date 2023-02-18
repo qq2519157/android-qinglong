@@ -19,7 +19,6 @@ import auto.qinglong.activity.BaseActivity;
 import auto.qinglong.activity.BaseFragment;
 import auto.qinglong.activity.plugin.web.PluginWebActivity;
 import auto.qinglong.activity.ql.CodeWebActivity;
-import auto.qinglong.activity.ql.config.ConfigFragment;
 import auto.qinglong.activity.ql.dependence.DepFragment;
 import auto.qinglong.activity.ql.environment.EnvFragment;
 import auto.qinglong.activity.ql.log.LogFragment;
@@ -49,7 +48,6 @@ public class HomeActivity extends BaseActivity {
     // 碎片界面列表
     private TaskFragment fg_task;
     private LogFragment fg_log;
-    private ConfigFragment fg_config;
     private ScriptFragment fg_script;
     private EnvFragment fg_environment;
     private DepFragment fg_dependence;
@@ -90,7 +88,7 @@ public class HomeActivity extends BaseActivity {
                 finish();
             } else {
                 mLastBackPressedTime = current;
-                ToastUnit.showShort("再按一次退出");
+                ToastUnit.showShort(getString(R.string.tip_exit_app));
             }
         }
     }
@@ -202,13 +200,6 @@ public class HomeActivity extends BaseActivity {
                 getSupportFragmentManager().beginTransaction().add(R.id.frame_layout, fg_log, LogFragment.TAG).commit();
             }
             mCurrentFragment = fg_log;
-        } else if (menu.equals(ConfigFragment.TAG)) {
-            if (fg_config == null) {
-                fg_config = new ConfigFragment();
-                fg_config.setMenuClickListener(mMenuClickListener);
-                getSupportFragmentManager().beginTransaction().add(R.id.frame_layout, fg_config, ConfigFragment.TAG).commit();
-            }
-            mCurrentFragment = fg_config;
         } else if (menu.equals(ScriptFragment.TAG)) {
             if (fg_script == null) {
                 fg_script = new ScriptFragment();

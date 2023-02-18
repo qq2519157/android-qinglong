@@ -1,3 +1,5 @@
+var editor = null
+
 function initEditor() {
     editor = CodeMirror.fromTextArea(document.getElementById("code"), {
         mode: "python",//采用python语法高亮
@@ -9,7 +11,6 @@ function initEditor() {
         maxHighlightLength: 200,//单行高亮显示的内容长度
         indentUnit: 4,//缩进大小
     });
-    editor.refresh()
 }
 
 function setCode(code) {
@@ -18,10 +19,11 @@ function setCode(code) {
         return
     }
     editor.setValue(code)
-    editor.refresh()
+    editor.save()
 }
 
 function getContent(){
+     editor.save()
      return encodeURIComponent(editor.getValue())
 }
 

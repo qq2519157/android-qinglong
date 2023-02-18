@@ -44,6 +44,7 @@
     <string name="tip_empty_select">至少选择一项</string>
     <string name="tip_copy_path_ready">已复制路径到粘贴板</string>
     <string name="tip_back">返回</string>
+    <string name="tip_exit_app">再按一次退出</string>
     <!-- 字符 -->
     <string name="char_path_split">/</string>
     <!-- 常量字符串 -->
