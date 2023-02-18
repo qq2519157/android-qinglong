@@ -7,8 +7,10 @@ public class Version {
     private String versionName;
     private String updateTime;
     private String downloadUrl;
+    private String statisticsUrl;
     private List<String> updateDetail;
     private boolean isForce;
+
 
     public int getVersionCode() {
         return versionCode;
@@ -56,5 +58,13 @@ public class Version {
 
     public void setForce(boolean force) {
         isForce = force;
+    }
+
+    public String getStatisticsUrl() {
+        return statisticsUrl;
+    }
+
+    public void setStatisticsUrl(String statisticsUrl) {
+        this.statisticsUrl = statisticsUrl;
     }
 }

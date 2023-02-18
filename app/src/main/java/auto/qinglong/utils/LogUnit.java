@@ -8,7 +8,9 @@ public class LogUnit {
     private final static boolean DEBUG = true;
 
     public static void log(Object msg) {
-        Log.e(TAG, String.valueOf(msg));
+        if (DEBUG) {
+            Log.e(TAG, String.valueOf(msg));
+        }
     }
 
     public static void log(String tag, Object msg) {

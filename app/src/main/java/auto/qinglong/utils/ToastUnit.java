@@ -23,6 +23,14 @@ public class ToastUnit {
         });
     }
 
+    public static void showShort(Object content) {
+        mHandler.post(() -> {
+            cancel();
+            mToast = Toast.makeText(MyApplication.getContext(), String.valueOf(content), Toast.LENGTH_SHORT);
+            mToast.show();
+        });
+    }
+
     /**
      * Cancel.
      * 取消toast

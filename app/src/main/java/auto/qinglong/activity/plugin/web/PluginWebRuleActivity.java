@@ -21,6 +21,7 @@ import java.util.Objects;
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseActivity;
 import auto.qinglong.bean.app.WebRule;
+import auto.qinglong.database.db.StatisticsDBHelper;
 import auto.qinglong.database.db.WebRuleDBHelper;
 import auto.qinglong.network.http.ApiController;
 import auto.qinglong.network.http.RequestManager;
@@ -53,6 +54,7 @@ public class PluginWebRuleActivity extends BaseActivity {
         ui_recycler = findViewById(R.id.plugin_web_rule_recycler);
 
         init();
+        StatisticsDBHelper.increase(TAG);
     }
 
     @Override
@@ -84,27 +86,27 @@ public class PluginWebRuleActivity extends BaseActivity {
 
         ui_bar_more.setOnClickListener(v -> showPopWindowMiniMore());
 
-        itemAdapter.setData(WebRuleDBHelper.getAllWebRule());
+        itemAdapter.setData(WebRuleDBHelper.getAll());
     }
 
     private void showPopWindowCommonEdit() {
         EditWindow editWindow = new EditWindow("新建规则", "取消", "确定");
         editWindow.setMaxHeight(WindowUnit.getWindowHeightPix(getBaseContext()) / 3);//限制最大高度
-        editWindow.addItem(new EditWindowItem(WebRuleDBHelper.key_envName, null, "环境变量", "", true, true));
+        editWindow.addItem(new EditWindowItem(WebRuleDBHelper.key_env_name, null, "环境变量", "", true, true));
         editWindow.addItem(new EditWindowItem(WebRuleDBHelper.key_name, null, "规则名称", "", true, true));
         editWindow.addItem(new EditWindowItem(WebRuleDBHelper.key_url, null, "网址", "", true, true));
         editWindow.addItem(new EditWindowItem(WebRuleDBHelper.key_target, null, "目标键", "选填", true, true));
         editWindow.addItem(new EditWindowItem(WebRuleDBHelper.key_main, null, "主键", "", true, true));
-        editWindow.addItem(new EditWindowItem(WebRuleDBHelper.key_joinChar, null, "连接符", "选填", true, true));
+        editWindow.addItem(new EditWindowItem(WebRuleDBHelper.key_join_char, null, "连接符", "选填", true, true));
         editWindow.setActionListener(new EditWindow.OnActionListener() {
             @Override
             public boolean onConfirm(Map<String, String> map) {
-                String envName = map.get(WebRuleDBHelper.key_envName).replace(" ", "");
+                String envName = map.get(WebRuleDBHelper.key_env_name).replace(" ", "");
                 String name = map.get(WebRuleDBHelper.key_name).replace(" ", "");
                 String url = map.get(WebRuleDBHelper.key_url).replace(" ", "");
                 String target = map.get(WebRuleDBHelper.key_target).replace(" ", "");
                 String main = map.get(WebRuleDBHelper.key_main).replace(" ", "");
-                String joinChar = map.get(WebRuleDBHelper.key_joinChar).replace(" ", "");
+                String joinChar = map.get(WebRuleDBHelper.key_join_char).replace(" ", "");
 
                 if (target.isEmpty()) {
                     target = "*";
@@ -200,7 +202,7 @@ public class PluginWebRuleActivity extends BaseActivity {
         }
         ToastUnit.showShort("新建成功：" + num);
         if (num > 0) {
-            itemAdapter.setData(WebRuleDBHelper.getAllWebRule());
+            itemAdapter.setData(WebRuleDBHelper.getAll());
         }
     }
 

@@ -26,6 +26,7 @@ import auto.qinglong.activity.ql.script.ScriptFragment;
 import auto.qinglong.activity.ql.setting.SettingFragment;
 import auto.qinglong.activity.ql.task.TaskFragment;
 import auto.qinglong.bean.app.Version;
+import auto.qinglong.database.db.StatisticsDBHelper;
 import auto.qinglong.database.sp.AccountSP;
 import auto.qinglong.database.sp.SettingSP;
 import auto.qinglong.network.http.ApiController;
@@ -66,6 +67,7 @@ public class HomeActivity extends BaseActivity {
         ui_drawer_left = findViewById(R.id.drawer_left);
 
         init();
+        StatisticsDBHelper.increase(TAG);
     }
 
     @Override
@@ -172,8 +174,6 @@ public class HomeActivity extends BaseActivity {
             Intent intent = new Intent(getBaseContext(), SettingActivity.class);
             startActivity(intent);
         });
-
-
     }
 
     private void showFragment(String menu) {
@@ -275,6 +275,12 @@ public class HomeActivity extends BaseActivity {
                     if (version.getVersionCode() > versionCode && (version.isForce() || SettingSP.isNotify())) {
                         showVersionNotice(version);
                     }
+                    //统计上报
+                    if (TextUnit.isFull(version.getStatisticsUrl())) {
+                        StatisticsDBHelper.setReportUrl(version.getStatisticsUrl());
+                        StatisticsDBHelper.setCanReport(true);
+                    }
+                    netReport();
                 } catch (PackageManager.NameNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -285,5 +291,9 @@ public class HomeActivity extends BaseActivity {
                 LogUnit.log(TAG, msg);
             }
         });
+    }
+
+    private void netReport() {
+        LogUnit.log(StatisticsDBHelper.getAll().size());
     }
 }

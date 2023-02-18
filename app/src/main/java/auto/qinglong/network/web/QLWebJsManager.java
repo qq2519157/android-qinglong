@@ -4,10 +4,8 @@ import android.webkit.ValueCallback;
 import android.webkit.WebView;
 
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.net.URLEncoder;
 
-import auto.qinglong.utils.LogUnit;
 import auto.qinglong.utils.ToastUnit;
 
 /**

@@ -7,19 +7,18 @@ import android.database.sqlite.SQLiteOpenHelper;
 import androidx.annotation.Nullable;
 
 public class DBHelper extends SQLiteOpenHelper {
-    public static final int VERSION = 2;
+    public static final int VERSION = 3;
     public static final String DB_NAME = "QingLong";
-    public static final String TABLE_ACCOUNT = "account";
+    public static final String TABLE_STATISTICS = "statistics";
     public static final String TABLE_PLUGIN_WEB_RULE = "pluginWebRule";
 
-    private final String CREATE_ACCOUNT = "create table account (" +
-            "address text Primary Key," +
-            "username text," +
-            "password text," +
-            "token text," +
-            "state int)";
+    private static final String CREATE_STATISTICS = "create table statistics (" +
+            "module text Primary Key," +
+            "startTime int," +
+            "endTime int," +
+            "num int default 0)";
 
-    private final String CREATE_PLUGIN_WEB_RULE = "create table pluginWebRule (" +
+    private static final String CREATE_PLUGIN_WEB_RULE = "create table pluginWebRule (" +
             "id INTEGER Primary Key autoincrement ," +
             "envName text," +
             "name text," +
@@ -35,12 +34,14 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(CREATE_ACCOUNT);
+        db.execSQL(CREATE_STATISTICS);
         db.execSQL(CREATE_PLUGIN_WEB_RULE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        if (newVersion > 2) {
+            db.execSQL(CREATE_STATISTICS);
+        }
     }
 }

@@ -1,13 +1,20 @@
 package auto.qinglong.activity;
 
+import android.content.Context;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import auto.qinglong.network.http.RequestManager;
 
 public abstract class BaseFragment extends Fragment {
     public static final String TAG = "BaseFragment";
-    //是否已经加载成功过数据标志
-    protected boolean initDataFlag = false;
+    protected boolean initDataFlag = false;//数据加载标志
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+    }
 
     @Override
     public void onStop() {

@@ -1,7 +1,6 @@
 package auto.qinglong.activity.ql;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
@@ -19,9 +18,9 @@ import java.util.Objects;
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseActivity;
 import auto.qinglong.bean.ql.QLDependence;
+import auto.qinglong.database.db.StatisticsDBHelper;
 import auto.qinglong.network.http.QLApiController;
 import auto.qinglong.network.web.QLWebJsManager;
-import auto.qinglong.utils.LogUnit;
 import auto.qinglong.utils.ToastUnit;
 import auto.qinglong.utils.WindowUnit;
 import auto.qinglong.views.WebViewBuilder;
@@ -89,6 +88,7 @@ public class CodeWebActivity extends BaseActivity {
         ui_web_container = findViewById(R.id.web_container);
 
         init();
+        StatisticsDBHelper.increase(TAG);
     }
 
     @Override

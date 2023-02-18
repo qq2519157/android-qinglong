@@ -27,6 +27,7 @@ import auto.qinglong.R;
 import auto.qinglong.activity.BaseActivity;
 import auto.qinglong.bean.app.WebRule;
 import auto.qinglong.bean.ql.QLEnvironment;
+import auto.qinglong.database.db.StatisticsDBHelper;
 import auto.qinglong.database.db.WebRuleDBHelper;
 import auto.qinglong.network.http.QLApiController;
 import auto.qinglong.utils.TextUnit;
@@ -65,6 +66,7 @@ public class PluginWebActivity extends BaseActivity {
         cookieManager = CookieManager.getInstance();
 
         init();
+        StatisticsDBHelper.increase(TAG);
     }
 
     @Override
@@ -207,7 +209,7 @@ public class PluginWebActivity extends BaseActivity {
         //获取键值对
         Map<String, String> cks = WebUnit.parseCookies(cookies);
         //获取规则列表
-        List<WebRule> rules = WebRuleDBHelper.getAllWebRule();
+        List<WebRule> rules = WebRuleDBHelper.getAll();
         //规则匹配 取第一个匹配成功规则
         for (WebRule rule : rules) {
             if (rule.match(url, cks)) {
@@ -233,7 +235,7 @@ public class PluginWebActivity extends BaseActivity {
         String cookies = cookieManager.getCookie(url);
 
         Map<String, String> cks = WebUnit.parseCookies(cookies);
-        List<WebRule> rules = WebRuleDBHelper.getAllWebRule();
+        List<WebRule> rules = WebRuleDBHelper.getAll();
         for (WebRule rule : rules) {
             if (rule.match(url, cks)) {
                 ToastUnit.showShort("匹配规则成功：" + rule.getName());
