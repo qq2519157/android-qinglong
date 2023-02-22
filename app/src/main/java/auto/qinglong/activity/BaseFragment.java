@@ -5,7 +5,7 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import auto.qinglong.network.http.RequestManager;
+import auto.qinglong.network.http.NetManager;
 
 public abstract class BaseFragment extends Fragment {
     public static final String TAG = "BaseFragment";
@@ -20,7 +20,7 @@ public abstract class BaseFragment extends Fragment {
     public void onStop() {
         super.onStop();
         //取消本页面的网络请求
-        RequestManager.cancelAllCall(getClass().getName());
+        NetManager.cancelAllCall(getClass().getName());
     }
 
     public String getNetRequestID() {

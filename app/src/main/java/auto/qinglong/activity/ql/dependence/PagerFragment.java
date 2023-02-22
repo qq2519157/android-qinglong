@@ -21,8 +21,8 @@ import auto.qinglong.activity.BaseFragment;
 import auto.qinglong.activity.ql.CodeWebActivity;
 import auto.qinglong.bean.ql.QLDependence;
 import auto.qinglong.database.db.StatisticsDBHelper;
+import auto.qinglong.network.http.NetManager;
 import auto.qinglong.network.http.QLApiController;
-import auto.qinglong.network.http.RequestManager;
 import auto.qinglong.utils.ToastUnit;
 
 public class PagerFragment extends BaseFragment {
@@ -90,7 +90,7 @@ public class PagerFragment extends BaseFragment {
     }
 
     private void initData() {
-        if (initDataFlag || RequestManager.isRequesting(getNetRequestID())) {
+        if (initDataFlag || NetManager.isRequesting(getNetRequestID())) {
             return;
         }
         ui_refresh.autoRefreshAnimationOnly();

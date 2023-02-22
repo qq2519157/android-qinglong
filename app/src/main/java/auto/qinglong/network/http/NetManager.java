@@ -5,7 +5,7 @@ import java.util.Map;
 
 import retrofit2.Call;
 
-public class RequestManager {
+public class NetManager {
     private static Map<String, Call<?>> callMap = new HashMap<>();
 
     /**

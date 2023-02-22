@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Locale;
 
 import auto.qinglong.MyApplication;
-import auto.qinglong.bean.app.Statistics;
+import auto.qinglong.bean.app.Statistic;
 import auto.qinglong.utils.LogUnit;
 
 public class StatisticsDBHelper {
@@ -29,25 +29,25 @@ public class StatisticsDBHelper {
     }
 
     @SuppressLint("Range")
-    public static List<Statistics> getAll() {
-        List<Statistics> list = new ArrayList<>();
+    public static List<Statistic> getAll() {
+        List<Statistic> statistics = new ArrayList<>();
         try {
             Cursor cursor = DBHelper.getWritableDatabase().query(auto.qinglong.database.db.DBHelper.TABLE_STATISTICS, null, null, null, null, null, null);
             if (cursor.moveToFirst()) {
                 do {
-                    Statistics statistics = new Statistics();
-                    statistics.setModule(cursor.getString(cursor.getColumnIndex(key_module)));
-                    statistics.setStartTime(cursor.getInt(cursor.getColumnIndex(key_start_time)));
-                    statistics.setEndTime(cursor.getInt(cursor.getColumnIndex(key_end_time)));
-                    statistics.setNum(cursor.getInt(cursor.getColumnIndex(key_num)));
-                    list.add(statistics);
+                    Statistic statistic = new Statistic();
+                    statistic.setModule(cursor.getString(cursor.getColumnIndex(key_module)));
+                    statistic.setStartTime(cursor.getInt(cursor.getColumnIndex(key_start_time)));
+                    statistic.setEndTime(cursor.getInt(cursor.getColumnIndex(key_end_time)));
+                    statistic.setNum(cursor.getInt(cursor.getColumnIndex(key_num)));
+                    statistics.add(statistic);
                 } while (cursor.moveToNext());
             }
             cursor.close();
         } catch (Exception e) {
             LogUnit.log(TAG, e.getMessage());
         }
-        return list;
+        return statistics;
     }
 
     /**

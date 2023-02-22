@@ -24,7 +24,7 @@ import auto.qinglong.bean.app.WebRule;
 import auto.qinglong.database.db.StatisticsDBHelper;
 import auto.qinglong.database.db.WebRuleDBHelper;
 import auto.qinglong.network.http.ApiController;
-import auto.qinglong.network.http.RequestManager;
+import auto.qinglong.network.http.NetManager;
 import auto.qinglong.utils.ToastUnit;
 import auto.qinglong.utils.WebUnit;
 import auto.qinglong.utils.WindowUnit;
@@ -153,9 +153,7 @@ public class PluginWebRuleActivity extends BaseActivity {
                 }
 
                 WindowUnit.hideKeyboard(editWindow.getView());
-                String baseUrl = WebUnit.getHost(url) + "/";
-                String path = WebUnit.getPath(url, "");
-                netGetRemoteWebRules(baseUrl, path);
+                netGetRemoteWebRules(url);
 
                 return true;
             }
@@ -206,11 +204,11 @@ public class PluginWebRuleActivity extends BaseActivity {
         }
     }
 
-    private void netGetRemoteWebRules(String baseUrl, String path) {
-        if (RequestManager.isRequesting(getNetRequestID())) {
+    private void netGetRemoteWebRules(String url) {
+        if (NetManager.isRequesting(getNetRequestID())) {
             return;
         }
-        ApiController.getRemoteWebRules(getNetRequestID(), baseUrl, path, new ApiController.NetRemoteWebRuleCallback() {
+        ApiController.getRemoteWebRules(getNetRequestID(), url, new ApiController.NetRemoteWebRuleCallback() {
 
             @Override
             public void onSuccess(List<WebRule> environments) {

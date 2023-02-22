@@ -45,8 +45,8 @@ import auto.qinglong.activity.ql.CodeWebActivity;
 import auto.qinglong.activity.ql.LocalFileAdapter;
 import auto.qinglong.bean.ql.QLTask;
 import auto.qinglong.database.db.StatisticsDBHelper;
+import auto.qinglong.network.http.NetManager;
 import auto.qinglong.network.http.QLApiController;
-import auto.qinglong.network.http.RequestManager;
 import auto.qinglong.utils.CronUnit;
 import auto.qinglong.utils.FileUtil;
 import auto.qinglong.utils.LogUnit;
@@ -188,7 +188,7 @@ public class TaskFragment extends BaseFragment {
 
             @Override
             public void onStop(QLTask QLTask) {
-                if (RequestManager.isRequesting(getNetRequestID())) {
+                if (NetManager.isRequesting(getNetRequestID())) {
                     return;
                 }
                 List<String> ids = new ArrayList<>();
@@ -234,7 +234,7 @@ public class TaskFragment extends BaseFragment {
 
         //搜索确定监听
         ui_search_confirm.setOnClickListener(v -> {
-            if (RequestManager.isRequesting(getNetRequestID())) {
+            if (NetManager.isRequesting(getNetRequestID())) {
                 return;
             }
             ToastUnit.showShort(getString(R.string.tip_searching));
@@ -258,7 +258,7 @@ public class TaskFragment extends BaseFragment {
 
         //执行
         ui_actions_run.setOnClickListener(v -> {
-            if (!RequestManager.isRequesting(getNetRequestID())) {
+            if (!NetManager.isRequesting(getNetRequestID())) {
                 List<QLTask> QLTasks = mTaskAdapter.getCheckedItems();
                 if (QLTasks.size() == 0) {
                     ToastUnit.showShort(getString(R.string.tip_empty_select));
@@ -274,7 +274,7 @@ public class TaskFragment extends BaseFragment {
 
         //停止
         ui_actions_stop.setOnClickListener(v -> {
-            if (!RequestManager.isRequesting(getNetRequestID())) {
+            if (!NetManager.isRequesting(getNetRequestID())) {
                 List<QLTask> QLTasks = mTaskAdapter.getCheckedItems();
                 if (QLTasks.size() == 0) {
                     ToastUnit.showShort(getString(R.string.tip_empty_select));
@@ -290,7 +290,7 @@ public class TaskFragment extends BaseFragment {
 
         //顶置
         ui_actions_pin.setOnClickListener(v -> {
-            if (!RequestManager.isRequesting(getNetRequestID())) {
+            if (!NetManager.isRequesting(getNetRequestID())) {
                 List<QLTask> QLTasks = mTaskAdapter.getCheckedItems();
                 if (QLTasks.size() == 0) {
                     ToastUnit.showShort(getString(R.string.tip_empty_select));
@@ -306,7 +306,7 @@ public class TaskFragment extends BaseFragment {
 
         //取消顶置
         ui_actions_unpin.setOnClickListener(v -> {
-            if (!RequestManager.isRequesting(getNetRequestID())) {
+            if (!NetManager.isRequesting(getNetRequestID())) {
                 List<QLTask> QLTasks = mTaskAdapter.getCheckedItems();
                 if (QLTasks.size() == 0) {
                     ToastUnit.showShort(getString(R.string.tip_empty_select));
@@ -322,7 +322,7 @@ public class TaskFragment extends BaseFragment {
 
         //启用
         ui_actions_enable.setOnClickListener(v -> {
-            if (!RequestManager.isRequesting(getNetRequestID())) {
+            if (!NetManager.isRequesting(getNetRequestID())) {
                 List<QLTask> QLTasks = mTaskAdapter.getCheckedItems();
                 if (QLTasks.size() == 0) {
                     ToastUnit.showShort(getString(R.string.tip_empty_select));
@@ -338,7 +338,7 @@ public class TaskFragment extends BaseFragment {
 
         //禁用
         ui_actions_disable.setOnClickListener(v -> {
-            if (!RequestManager.isRequesting(getNetRequestID())) {
+            if (!NetManager.isRequesting(getNetRequestID())) {
                 List<QLTask> QLTasks = mTaskAdapter.getCheckedItems();
                 if (QLTasks.size() == 0) {
                     ToastUnit.showShort(getString(R.string.tip_empty_select));
@@ -354,7 +354,7 @@ public class TaskFragment extends BaseFragment {
 
         //删除
         ui_actions_delete.setOnClickListener(v -> {
-            if (!RequestManager.isRequesting(getNetRequestID())) {
+            if (!NetManager.isRequesting(getNetRequestID())) {
                 List<QLTask> QLTasks = mTaskAdapter.getCheckedItems();
                 if (QLTasks.size() == 0) {
                     ToastUnit.showShort(getString(R.string.tip_empty_select));
@@ -375,7 +375,7 @@ public class TaskFragment extends BaseFragment {
     }
 
     private void initData() {
-        if (initDataFlag || RequestManager.isRequesting(this.getNetRequestID())) {
+        if (initDataFlag || NetManager.isRequesting(this.getNetRequestID())) {
             return;
         }
         ui_refresh.autoRefreshAnimationOnly();
@@ -664,7 +664,7 @@ public class TaskFragment extends BaseFragment {
     }
 
     private void netRunTasks(List<String> ids, boolean isFromBar) {
-        if (RequestManager.isRequesting(getNetRequestID())) {
+        if (NetManager.isRequesting(getNetRequestID())) {
             return;
         }
         QLApiController.runTasks(getNetRequestID(), ids, new QLApiController.NetBaseCallback() {

@@ -1,6 +1,7 @@
 package auto.qinglong.network.http;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -57,7 +58,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLSystemRes>() {
             @Override
             public void onResponse(@NonNull Call<QLSystemRes> call, @NonNull Response<QLSystemRes> response) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 QLSystemRes res = response.body();
                 if (res == null) {
                     if (response.code() == 401) {
@@ -76,7 +77,7 @@ public class QLApiController {
 
             @Override
             public void onFailure(@NonNull Call<QLSystemRes> call, @NonNull Throwable t) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 if (call.isCanceled()) {
                     return;
                 }
@@ -84,7 +85,7 @@ public class QLApiController {
             }
         });
 
-        RequestManager.addCall(call, requestId);
+        NetManager.addCall(call, requestId);
     }
 
     public static void checkToken(@NonNull String requestId, @NonNull Account account, @NonNull NetBaseCallback callback) {
@@ -98,7 +99,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLLogRemoveRes>() {
             @Override
             public void onResponse(@NonNull Call<QLLogRemoveRes> call, @NonNull Response<QLLogRemoveRes> response) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 QLLogRemoveRes res = response.body();
                 if (res == null) {
                     if (response.code() == 401) {
@@ -117,7 +118,7 @@ public class QLApiController {
 
             @Override
             public void onFailure(@NonNull Call<QLLogRemoveRes> call, @NonNull Throwable t) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 if (call.isCanceled()) {
                     return;
                 }
@@ -125,7 +126,7 @@ public class QLApiController {
             }
         });
 
-        RequestManager.addCall(call, requestId);
+        NetManager.addCall(call, requestId);
     }
 
     public static void login(@NonNull String requestId, @NonNull Account account, @NonNull NetLoginCallback callback) {
@@ -145,7 +146,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLLoginRes>() {
             @Override
             public void onResponse(@NonNull Call<QLLoginRes> call, @NonNull Response<QLLoginRes> response) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 QLLoginRes res = response.body();
                 if (res == null) {
                     if (response.code() == 401) {
@@ -166,14 +167,14 @@ public class QLApiController {
 
             @Override
             public void onFailure(@NonNull Call<QLLoginRes> call, @NonNull Throwable t) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 if (call.isCanceled()) {
                     return;
                 }
                 callback.onFailure(t.getLocalizedMessage());
             }
         });
-        RequestManager.addCall(call, requestId);
+        NetManager.addCall(call, requestId);
     }
 
     public static void getTasks(@NonNull String requestId, @NonNull String searchValue, @NonNull NetGetTasksCallback callback) {
@@ -186,7 +187,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLTasksRes>() {
             @Override
             public void onResponse(@NonNull Call<QLTasksRes> call, @NonNull Response<QLTasksRes> response) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 QLTasksRes res = response.body();
                 if (res == null) {
                     if (response.code() == 401) {
@@ -205,7 +206,7 @@ public class QLApiController {
 
             @Override
             public void onFailure(@NonNull Call<QLTasksRes> call, @NonNull Throwable t) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 if (call.isCanceled()) {
                     return;
                 }
@@ -213,7 +214,7 @@ public class QLApiController {
             }
         });
 
-        RequestManager.addCall(call, requestId);
+        NetManager.addCall(call, requestId);
     }
 
     public static void runTasks(@NonNull String requestId, @NonNull List<String> taskIds, @NonNull NetBaseCallback callback) {
@@ -234,7 +235,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLBaseRes>() {
             @Override
             public void onResponse(@NonNull Call<QLBaseRes> call, @NonNull Response<QLBaseRes> response) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 QLBaseRes res = response.body();
                 if (res == null) {
                     if (response.code() == 401) {
@@ -253,7 +254,7 @@ public class QLApiController {
 
             @Override
             public void onFailure(@NonNull Call<QLBaseRes> call, @NonNull Throwable t) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 if (call.isCanceled()) {
                     return;
                 }
@@ -261,7 +262,7 @@ public class QLApiController {
             }
         });
 
-        RequestManager.addCall(call, requestId);
+        NetManager.addCall(call, requestId);
 
     }
 
@@ -283,7 +284,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLBaseRes>() {
             @Override
             public void onResponse(@NonNull Call<QLBaseRes> call, @NonNull Response<QLBaseRes> response) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 QLBaseRes res = response.body();
                 if (res == null) {
                     if (response.code() == 401) {
@@ -302,7 +303,7 @@ public class QLApiController {
 
             @Override
             public void onFailure(@NonNull Call<QLBaseRes> call, @NonNull Throwable t) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 if (call.isCanceled()) {
                     return;
                 }
@@ -310,7 +311,7 @@ public class QLApiController {
             }
         });
 
-        RequestManager.addCall(call, requestId);
+        NetManager.addCall(call, requestId);
 
     }
 
@@ -332,7 +333,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLBaseRes>() {
             @Override
             public void onResponse(@NonNull Call<QLBaseRes> call, @NonNull Response<QLBaseRes> response) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 QLBaseRes res = response.body();
                 if (res == null) {
                     if (response.code() == 401) {
@@ -351,7 +352,7 @@ public class QLApiController {
 
             @Override
             public void onFailure(@NonNull Call<QLBaseRes> call, @NonNull Throwable t) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 if (call.isCanceled()) {
                     return;
                 }
@@ -359,7 +360,7 @@ public class QLApiController {
             }
         });
 
-        RequestManager.addCall(call, requestId);
+        NetManager.addCall(call, requestId);
 
     }
 
@@ -381,7 +382,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLBaseRes>() {
             @Override
             public void onResponse(@NonNull Call<QLBaseRes> call, @NonNull Response<QLBaseRes> response) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 QLBaseRes res = response.body();
                 if (res == null) {
                     if (response.code() == 401) {
@@ -400,7 +401,7 @@ public class QLApiController {
 
             @Override
             public void onFailure(@NonNull Call<QLBaseRes> call, @NonNull Throwable t) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 if (call.isCanceled()) {
                     return;
                 }
@@ -408,7 +409,7 @@ public class QLApiController {
             }
         });
 
-        RequestManager.addCall(call, requestId);
+        NetManager.addCall(call, requestId);
 
     }
 
@@ -430,7 +431,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLBaseRes>() {
             @Override
             public void onResponse(@NonNull Call<QLBaseRes> call, @NonNull Response<QLBaseRes> response) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 QLBaseRes res = response.body();
                 if (res == null) {
                     if (response.code() == 401) {
@@ -449,7 +450,7 @@ public class QLApiController {
 
             @Override
             public void onFailure(@NonNull Call<QLBaseRes> call, @NonNull Throwable t) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 if (call.isCanceled()) {
                     return;
                 }
@@ -457,7 +458,7 @@ public class QLApiController {
             }
         });
 
-        RequestManager.addCall(call, requestId);
+        NetManager.addCall(call, requestId);
 
     }
 
@@ -479,7 +480,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLBaseRes>() {
             @Override
             public void onResponse(@NonNull Call<QLBaseRes> call, @NonNull Response<QLBaseRes> response) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 QLBaseRes res = response.body();
                 if (res == null) {
                     if (response.code() == 401) {
@@ -498,7 +499,7 @@ public class QLApiController {
 
             @Override
             public void onFailure(@NonNull Call<QLBaseRes> call, @NonNull Throwable t) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 if (call.isCanceled()) {
                     return;
                 }
@@ -506,7 +507,7 @@ public class QLApiController {
             }
         });
 
-        RequestManager.addCall(call, requestId);
+        NetManager.addCall(call, requestId);
 
     }
 
@@ -528,7 +529,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLBaseRes>() {
             @Override
             public void onResponse(@NonNull Call<QLBaseRes> call, @NonNull Response<QLBaseRes> response) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 QLBaseRes res = response.body();
                 if (res == null) {
                     if (response.code() == 401) {
@@ -547,7 +548,7 @@ public class QLApiController {
 
             @Override
             public void onFailure(@NonNull Call<QLBaseRes> call, @NonNull Throwable t) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 if (call.isCanceled()) {
                     return;
                 }
@@ -555,7 +556,7 @@ public class QLApiController {
             }
         });
 
-        RequestManager.addCall(call, requestId);
+        NetManager.addCall(call, requestId);
 
     }
 
@@ -579,7 +580,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLTaskEditRes>() {
             @Override
             public void onResponse(@NonNull Call<QLTaskEditRes> call, @NonNull Response<QLTaskEditRes> response) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 QLTaskEditRes res = response.body();
                 if (res == null) {
                     if (response.code() == 401) {
@@ -598,7 +599,7 @@ public class QLApiController {
 
             @Override
             public void onFailure(@NonNull Call<QLTaskEditRes> call, @NonNull Throwable t) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 if (call.isCanceled()) {
                     return;
                 }
@@ -606,7 +607,7 @@ public class QLApiController {
             }
         });
 
-        RequestManager.addCall(call, requestId);
+        NetManager.addCall(call, requestId);
     }
 
     public static void addTask(@NonNull String requestId, @NonNull QLTask QLTask, @NonNull NetEditTaskCallback callback) {
@@ -627,7 +628,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLTaskEditRes>() {
             @Override
             public void onResponse(@NonNull Call<QLTaskEditRes> call, @NonNull Response<QLTaskEditRes> response) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 QLTaskEditRes res = response.body();
                 if (res == null) {
                     if (response.code() == 401) {
@@ -646,7 +647,7 @@ public class QLApiController {
 
             @Override
             public void onFailure(@NonNull Call<QLTaskEditRes> call, @NonNull Throwable t) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 if (call.isCanceled()) {
                     return;
                 }
@@ -654,7 +655,7 @@ public class QLApiController {
             }
         });
 
-        RequestManager.addCall(call, requestId);
+        NetManager.addCall(call, requestId);
     }
 
     public static void getEnvironments(@NonNull String requestId, @NonNull String searchValue, @NonNull NetGetEnvironmentsCallback callback) {
@@ -667,7 +668,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLEnvironmentRes>() {
             @Override
             public void onResponse(@NonNull Call<QLEnvironmentRes> call, @NonNull Response<QLEnvironmentRes> response) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 QLEnvironmentRes environmentRes = response.body();
                 if (environmentRes == null) {
                     if (response.code() == 401) {
@@ -686,7 +687,7 @@ public class QLApiController {
 
             @Override
             public void onFailure(@NonNull Call<QLEnvironmentRes> call, @NonNull Throwable t) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 if (call.isCanceled()) {
                     return;
                 }
@@ -694,7 +695,7 @@ public class QLApiController {
             }
         });
 
-        RequestManager.addCall(call, requestId);
+        NetManager.addCall(call, requestId);
     }
 
     public static void addEnvironment(@NonNull String requestId, @NonNull List<QLEnvironment> environments, @NonNull NetGetEnvironmentsCallback callback) {
@@ -720,7 +721,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLEnvironmentRes>() {
             @Override
             public void onResponse(@NonNull Call<QLEnvironmentRes> call, @NonNull Response<QLEnvironmentRes> response) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 QLEnvironmentRes environmentRes = response.body();
                 if (environmentRes == null) {
                     if (response.code() == 401) {
@@ -739,7 +740,7 @@ public class QLApiController {
 
             @Override
             public void onFailure(@NonNull Call<QLEnvironmentRes> call, @NonNull Throwable t) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 if (call.isCanceled()) {
                     return;
                 }
@@ -747,7 +748,7 @@ public class QLApiController {
             }
         });
 
-        RequestManager.addCall(call, requestId);
+        NetManager.addCall(call, requestId);
     }
 
     public static void updateEnvironment(@NonNull String requestId, @NonNull QLEnvironment environment, @NonNull NetEditEnvCallback callback) {
@@ -770,7 +771,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLEnvEditRes>() {
             @Override
             public void onResponse(@NonNull Call<QLEnvEditRes> call, @NonNull Response<QLEnvEditRes> response) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 QLEnvEditRes editEnvRes = response.body();
                 if (editEnvRes == null) {
                     if (response.code() == 401) {
@@ -789,7 +790,7 @@ public class QLApiController {
 
             @Override
             public void onFailure(@NonNull Call<QLEnvEditRes> call, @NonNull Throwable t) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 if (call.isCanceled()) {
                     return;
                 }
@@ -797,7 +798,7 @@ public class QLApiController {
             }
         });
 
-        RequestManager.addCall(call, requestId);
+        NetManager.addCall(call, requestId);
     }
 
     public static void deleteEnvironments(@NonNull String requestId, @NonNull List<String> envIds, @NonNull NetBaseCallback callback) {
@@ -818,7 +819,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLBaseRes>() {
             @Override
             public void onResponse(@NonNull Call<QLBaseRes> call, @NonNull Response<QLBaseRes> response) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 QLBaseRes res = response.body();
                 if (res == null) {
                     if (response.code() == 401) {
@@ -837,7 +838,7 @@ public class QLApiController {
 
             @Override
             public void onFailure(@NonNull Call<QLBaseRes> call, @NonNull Throwable t) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 if (call.isCanceled()) {
                     return;
                 }
@@ -845,7 +846,7 @@ public class QLApiController {
             }
         });
 
-        RequestManager.addCall(call, requestId);
+        NetManager.addCall(call, requestId);
 
     }
 
@@ -867,7 +868,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLBaseRes>() {
             @Override
             public void onResponse(@NonNull Call<QLBaseRes> call, @NonNull Response<QLBaseRes> response) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 QLBaseRes res = response.body();
                 if (res == null) {
                     if (response.code() == 401) {
@@ -886,7 +887,7 @@ public class QLApiController {
 
             @Override
             public void onFailure(@NonNull Call<QLBaseRes> call, @NonNull Throwable t) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 if (call.isCanceled()) {
                     return;
                 }
@@ -894,7 +895,7 @@ public class QLApiController {
             }
         });
 
-        RequestManager.addCall(call, requestId);
+        NetManager.addCall(call, requestId);
 
     }
 
@@ -916,7 +917,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLBaseRes>() {
             @Override
             public void onResponse(@NonNull Call<QLBaseRes> call, @NonNull Response<QLBaseRes> response) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 QLBaseRes res = response.body();
                 if (res == null) {
                     if (response.code() == 401) {
@@ -935,7 +936,7 @@ public class QLApiController {
 
             @Override
             public void onFailure(@NonNull Call<QLBaseRes> call, @NonNull Throwable t) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 if (call.isCanceled()) {
                     return;
                 }
@@ -943,7 +944,7 @@ public class QLApiController {
             }
         });
 
-        RequestManager.addCall(call, requestId);
+        NetManager.addCall(call, requestId);
 
     }
 
@@ -957,7 +958,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLLogsRes>() {
             @Override
             public void onResponse(@NonNull Call<QLLogsRes> call, @NonNull Response<QLLogsRes> response) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 QLLogsRes res = response.body();
                 if (res == null) {
                     if (response.code() == 401) {
@@ -976,7 +977,7 @@ public class QLApiController {
 
             @Override
             public void onFailure(@NonNull Call<QLLogsRes> call, @NonNull Throwable t) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 if (call.isCanceled()) {
                     return;
                 }
@@ -984,7 +985,7 @@ public class QLApiController {
             }
         });
 
-        RequestManager.addCall(call, requestId);
+        NetManager.addCall(call, requestId);
     }
 
     public static void getLogDetail(@NonNull String requestId, @NonNull String logPath, @NonNull NetSimpleCallBack callback) {
@@ -998,7 +999,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLSimpleRes>() {
             @Override
             public void onResponse(@NonNull Call<QLSimpleRes> call, @NonNull Response<QLSimpleRes> response) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 QLSimpleRes res = response.body();
                 if (res == null) {
                     if (response.code() == 401) {
@@ -1017,14 +1018,14 @@ public class QLApiController {
 
             @Override
             public void onFailure(@NonNull Call<QLSimpleRes> call, @NonNull Throwable t) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 if (call.isCanceled()) {
                     return;
                 }
                 callback.onFailure(t.getLocalizedMessage());
             }
         });
-        RequestManager.addCall(call, requestId);
+        NetManager.addCall(call, requestId);
     }
 
     public static void getConfigDetail(@NonNull String requestId, @NonNull NetConfigCallback callback) {
@@ -1038,7 +1039,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLSimpleRes>() {
             @Override
             public void onResponse(@NonNull Call<QLSimpleRes> call, @NonNull Response<QLSimpleRes> response) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 QLSimpleRes res = response.body();
                 if (res == null) {
                     if (response.code() == 401) {
@@ -1057,14 +1058,14 @@ public class QLApiController {
 
             @Override
             public void onFailure(@NonNull Call<QLSimpleRes> call, @NonNull Throwable t) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 if (call.isCanceled()) {
                     return;
                 }
                 callback.onFailure(t.getLocalizedMessage());
             }
         });
-        RequestManager.addCall(call, requestId);
+        NetManager.addCall(call, requestId);
     }
 
     public static void saveConfig(@NonNull String requestId, @NonNull String content, @NonNull NetBaseCallback callback) {
@@ -1085,7 +1086,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLBaseRes>() {
             @Override
             public void onResponse(@NonNull Call<QLBaseRes> call, @NonNull Response<QLBaseRes> response) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 QLBaseRes res = response.body();
                 if (res == null) {
                     if (response.code() == 401) {
@@ -1104,7 +1105,7 @@ public class QLApiController {
 
             @Override
             public void onFailure(@NonNull Call<QLBaseRes> call, @NonNull Throwable t) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 if (call.isCanceled()) {
                     return;
                 }
@@ -1112,7 +1113,7 @@ public class QLApiController {
             }
         });
 
-        RequestManager.addCall(call, requestId);
+        NetManager.addCall(call, requestId);
     }
 
     public static void getScripts(@NonNull String requestId, @NonNull NetGetScriptsCallback callback) {
@@ -1125,7 +1126,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLScriptsRes>() {
             @Override
             public void onResponse(@NonNull Call<QLScriptsRes> call, @NonNull Response<QLScriptsRes> response) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 QLScriptsRes res = response.body();
                 if (res == null) {
                     if (response.code() == 401) {
@@ -1144,7 +1145,7 @@ public class QLApiController {
 
             @Override
             public void onFailure(@NonNull Call<QLScriptsRes> call, @NonNull Throwable t) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 if (call.isCanceled()) {
                     return;
                 }
@@ -1152,7 +1153,7 @@ public class QLApiController {
             }
         });
 
-        RequestManager.addCall(call, requestId);
+        NetManager.addCall(call, requestId);
     }
 
     public static void getScriptDetail(@NonNull String requestId, @NonNull String scriptPath, @NonNull NetSimpleCallBack callback) {
@@ -1166,7 +1167,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLSimpleRes>() {
             @Override
             public void onResponse(@NonNull Call<QLSimpleRes> call, @NonNull Response<QLSimpleRes> response) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 QLSimpleRes res = response.body();
                 if (res == null) {
                     if (response.code() == 401) {
@@ -1185,14 +1186,14 @@ public class QLApiController {
 
             @Override
             public void onFailure(@NonNull Call<QLSimpleRes> call, @NonNull Throwable t) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 if (call.isCanceled()) {
                     return;
                 }
                 callback.onFailure(t.getLocalizedMessage());
             }
         });
-        RequestManager.addCall(call, requestId);
+        NetManager.addCall(call, requestId);
     }
 
     public static void saveScript(@NonNull String requestId, @NonNull String content, @NonNull String filename, String path, @NonNull NetBaseCallback callback) {
@@ -1214,7 +1215,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLBaseRes>() {
             @Override
             public void onResponse(@NonNull Call<QLBaseRes> call, @NonNull Response<QLBaseRes> response) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 QLBaseRes res = response.body();
                 if (res == null) {
                     if (response.code() == 401) {
@@ -1233,7 +1234,7 @@ public class QLApiController {
 
             @Override
             public void onFailure(@NonNull Call<QLBaseRes> call, @NonNull Throwable t) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 if (call.isCanceled()) {
                     return;
                 }
@@ -1241,7 +1242,104 @@ public class QLApiController {
             }
         });
 
-        RequestManager.addCall(call, requestId);
+        NetManager.addCall(call, requestId);
+    }
+
+    public static void createScript(@NonNull String requestId, @NonNull String fileName, @Nullable String path, @NonNull NetBaseCallback callback) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("filename", fileName);
+        jsonObject.addProperty("path", path == null ? "" : path);
+        jsonObject.addProperty("content", "");
+
+        String json = jsonObject.toString();
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+
+        Call<QLBaseRes> call = new Retrofit.Builder()
+                .baseUrl(AccountSP.getBaseUrl())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(QLApi.class)
+                .createScript(AccountSP.getAuthorization(), body);
+
+        call.enqueue(new Callback<QLBaseRes>() {
+            @Override
+            public void onResponse(@NonNull Call<QLBaseRes> call, @NonNull Response<QLBaseRes> response) {
+                NetManager.finishCall(requestId);
+                QLBaseRes res = response.body();
+                if (res == null) {
+                    if (response.code() == 401) {
+                        callback.onFailure(ERROR_INVALID_AUTH);
+                    } else {
+                        callback.onFailure(ERROR_NO_BODY);
+                    }
+                } else {
+                    if (res.getCode() == 200) {
+                        callback.onSuccess();
+                    } else {
+                        callback.onFailure(res.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<QLBaseRes> call, @NonNull Throwable t) {
+                NetManager.finishCall(requestId);
+                if (call.isCanceled()) {
+                    return;
+                }
+                callback.onFailure(t.getLocalizedMessage());
+            }
+        });
+
+        NetManager.addCall(call, requestId);
+    }
+
+    public static void deleteScript(@NonNull String requestId, @NonNull String fileName, @Nullable String path, @NonNull NetBaseCallback callback) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("filename", fileName);
+        jsonObject.addProperty("path", path == null ? "" : path);
+
+        String json = jsonObject.toString();
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+
+        Call<QLBaseRes> call = new Retrofit.Builder()
+                .baseUrl(AccountSP.getBaseUrl())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(QLApi.class)
+                .deleteScript(AccountSP.getAuthorization(), body);
+
+        call.enqueue(new Callback<QLBaseRes>() {
+            @Override
+            public void onResponse(@NonNull Call<QLBaseRes> call, @NonNull Response<QLBaseRes> response) {
+                NetManager.finishCall(requestId);
+                QLBaseRes res = response.body();
+                if (res == null) {
+                    if (response.code() == 401) {
+                        callback.onFailure(ERROR_INVALID_AUTH);
+                    } else {
+                        callback.onFailure(ERROR_NO_BODY);
+                    }
+                } else {
+                    if (res.getCode() == 200) {
+                        callback.onSuccess();
+                    } else {
+                        callback.onFailure(res.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<QLBaseRes> call, @NonNull Throwable t) {
+                NetManager.finishCall(requestId);
+                if (call.isCanceled()) {
+                    return;
+                }
+                callback.onFailure(t.getLocalizedMessage());
+            }
+        });
+
+        NetManager.addCall(call, requestId);
     }
 
     public static void getDependencies(@NonNull String requestId, String searchValue, String type, @NonNull NetGetDependenciesCallback callback) {
@@ -1255,7 +1353,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLDependenciesRes>() {
             @Override
             public void onResponse(@NonNull Call<QLDependenciesRes> call, @NonNull Response<QLDependenciesRes> response) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 QLDependenciesRes res = response.body();
                 if (res == null) {
                     if (response.code() == 401) {
@@ -1274,14 +1372,14 @@ public class QLApiController {
 
             @Override
             public void onFailure(@NonNull Call<QLDependenciesRes> call, @NonNull Throwable t) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 if (call.isCanceled()) {
                     return;
                 }
                 callback.onFailure(t.getLocalizedMessage());
             }
         });
-        RequestManager.addCall(call, requestId);
+        NetManager.addCall(call, requestId);
 
     }
 
@@ -1306,7 +1404,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLBaseRes>() {
             @Override
             public void onResponse(@NonNull Call<QLBaseRes> call, @NonNull Response<QLBaseRes> response) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 QLBaseRes res = response.body();
                 if (res == null) {
                     if (response.code() == 401) {
@@ -1325,7 +1423,7 @@ public class QLApiController {
 
             @Override
             public void onFailure(@NonNull Call<QLBaseRes> call, @NonNull Throwable t) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 if (call.isCanceled()) {
                     return;
                 }
@@ -1333,7 +1431,7 @@ public class QLApiController {
             }
         });
 
-        RequestManager.addCall(call, requestId);
+        NetManager.addCall(call, requestId);
     }
 
     public static void deleteDependencies(@NonNull String requestId, @NonNull List<String> ids, @NonNull NetBaseCallback callback) {
@@ -1354,7 +1452,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLBaseRes>() {
             @Override
             public void onResponse(@NonNull Call<QLBaseRes> call, @NonNull Response<QLBaseRes> response) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 QLBaseRes res = response.body();
                 if (res == null) {
                     if (response.code() == 401) {
@@ -1373,7 +1471,7 @@ public class QLApiController {
 
             @Override
             public void onFailure(@NonNull Call<QLBaseRes> call, @NonNull Throwable t) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 if (call.isCanceled()) {
                     return;
                 }
@@ -1381,7 +1479,7 @@ public class QLApiController {
             }
         });
 
-        RequestManager.addCall(call, requestId);
+        NetManager.addCall(call, requestId);
     }
 
     public static void getDependence(@NonNull String requestId, @NonNull String path, @NonNull NetGetDependenceCallback callback) {
@@ -1395,7 +1493,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLDependenceRes>() {
             @Override
             public void onResponse(@NonNull Call<QLDependenceRes> call, @NonNull Response<QLDependenceRes> response) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 QLDependenceRes res = response.body();
                 if (res == null) {
                     if (response.code() == 401) {
@@ -1414,14 +1512,14 @@ public class QLApiController {
 
             @Override
             public void onFailure(@NonNull Call<QLDependenceRes> call, @NonNull Throwable t) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 if (call.isCanceled()) {
                     return;
                 }
                 callback.onFailure(t.getLocalizedMessage());
             }
         });
-        RequestManager.addCall(call, requestId);
+        NetManager.addCall(call, requestId);
     }
 
     public static void reinstallDependencies(@NonNull String requestId, @NonNull List<String> ids, @NonNull NetBaseCallback callback) {
@@ -1441,7 +1539,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLBaseRes>() {
             @Override
             public void onResponse(@NonNull Call<QLBaseRes> call, @NonNull Response<QLBaseRes> response) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 QLBaseRes res = response.body();
                 if (res == null) {
                     if (response.code() == 401) {
@@ -1460,7 +1558,7 @@ public class QLApiController {
 
             @Override
             public void onFailure(@NonNull Call<QLBaseRes> call, @NonNull Throwable t) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 if (call.isCanceled()) {
                     return;
                 }
@@ -1468,7 +1566,7 @@ public class QLApiController {
             }
         });
 
-        RequestManager.addCall(call, requestId);
+        NetManager.addCall(call, requestId);
     }
 
     public static void getLoginLogs(@NonNull String requestId, @NonNull NetGetLoginLogsCallback callback) {
@@ -1482,7 +1580,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLLoginLogsRes>() {
             @Override
             public void onResponse(@NonNull Call<QLLoginLogsRes> call, @NonNull Response<QLLoginLogsRes> response) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 QLLoginLogsRes res = response.body();
                 if (res == null) {
                     if (response.code() == 401) {
@@ -1501,7 +1599,7 @@ public class QLApiController {
 
             @Override
             public void onFailure(@NonNull Call<QLLoginLogsRes> call, @NonNull Throwable t) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 if (call.isCanceled()) {
                     return;
                 }
@@ -1509,7 +1607,7 @@ public class QLApiController {
             }
         });
 
-        RequestManager.addCall(call, requestId);
+        NetManager.addCall(call, requestId);
     }
 
     public static void getLogRemove(@NonNull String requestId, @NonNull NetGetLogRemoveCallback callback) {
@@ -1523,7 +1621,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLLogRemoveRes>() {
             @Override
             public void onResponse(@NonNull Call<QLLogRemoveRes> call, @NonNull Response<QLLogRemoveRes> response) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 QLLogRemoveRes res = response.body();
                 if (res == null) {
                     if (response.code() == 401) {
@@ -1542,7 +1640,7 @@ public class QLApiController {
 
             @Override
             public void onFailure(@NonNull Call<QLLogRemoveRes> call, @NonNull Throwable t) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 if (call.isCanceled()) {
                     return;
                 }
@@ -1550,7 +1648,7 @@ public class QLApiController {
             }
         });
 
-        RequestManager.addCall(call, requestId);
+        NetManager.addCall(call, requestId);
     }
 
     public static void updateLogRemove(@NonNull String requestId, int frequency, @NonNull NetBaseCallback callback) {
@@ -1568,7 +1666,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLBaseRes>() {
             @Override
             public void onResponse(@NonNull Call<QLBaseRes> call, @NonNull Response<QLBaseRes> response) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 QLBaseRes res = response.body();
                 if (res == null) {
                     if (response.code() == 401) {
@@ -1587,7 +1685,7 @@ public class QLApiController {
 
             @Override
             public void onFailure(@NonNull Call<QLBaseRes> call, @NonNull Throwable t) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 if (call.isCanceled()) {
                     return;
                 }
@@ -1595,7 +1693,7 @@ public class QLApiController {
             }
         });
 
-        RequestManager.addCall(call, requestId);
+        NetManager.addCall(call, requestId);
 
     }
 
@@ -1615,7 +1713,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLBaseRes>() {
             @Override
             public void onResponse(@NonNull Call<QLBaseRes> call, @NonNull Response<QLBaseRes> response) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 QLBaseRes res = response.body();
                 if (res == null) {
                     if (response.code() == 401) {
@@ -1634,7 +1732,7 @@ public class QLApiController {
 
             @Override
             public void onFailure(@NonNull Call<QLBaseRes> call, @NonNull Throwable t) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 if (call.isCanceled()) {
                     return;
                 }
@@ -1642,7 +1740,7 @@ public class QLApiController {
             }
         });
 
-        RequestManager.addCall(call, requestId);
+        NetManager.addCall(call, requestId);
 
     }
 

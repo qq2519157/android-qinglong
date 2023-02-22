@@ -18,8 +18,8 @@ import auto.qinglong.R;
 import auto.qinglong.activity.BaseFragment;
 import auto.qinglong.bean.ql.QLLoginLog;
 import auto.qinglong.database.db.StatisticsDBHelper;
+import auto.qinglong.network.http.NetManager;
 import auto.qinglong.network.http.QLApiController;
-import auto.qinglong.network.http.RequestManager;
 import auto.qinglong.utils.ToastUnit;
 
 
@@ -60,7 +60,7 @@ public class LoginLogFragment extends BaseFragment {
     }
 
     private void initData() {
-        if (initDataFlag || RequestManager.isRequesting(this.getNetRequestID())) {
+        if (initDataFlag || NetManager.isRequesting(this.getNetRequestID())) {
             return;
         }
         ui_refresh.autoRefreshAnimationOnly();

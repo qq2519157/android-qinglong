@@ -5,10 +5,12 @@ import androidx.annotation.NonNull;
 import java.util.List;
 
 import auto.qinglong.bean.app.Link;
+import auto.qinglong.bean.app.Statistic;
 import auto.qinglong.bean.app.Version;
 import auto.qinglong.bean.app.WebRule;
 import auto.qinglong.bean.app.network.BaseRes;
 import auto.qinglong.bean.ql.QLEnvironment;
+import auto.qinglong.utils.WebUnit;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -34,7 +36,7 @@ public class ApiController {
         call.enqueue(new Callback<Version>() {
             @Override
             public void onResponse(@NonNull Call<Version> call, @NonNull Response<Version> response) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 Version version = response.body();
                 if (version != null) {
                     callback.onSuccess(version);
@@ -45,7 +47,7 @@ public class ApiController {
 
             @Override
             public void onFailure(@NonNull Call<Version> call, @NonNull Throwable t) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 if (call.isCanceled()) {
                     return;
                 }
@@ -53,7 +55,7 @@ public class ApiController {
             }
         });
 
-        RequestManager.addCall(call, requestId);
+        NetManager.addCall(call, requestId);
     }
 
     public static void getProject(@NonNull String requestId) {
@@ -67,19 +69,22 @@ public class ApiController {
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
             }
         });
 
-        RequestManager.addCall(call, requestId);
+        NetManager.addCall(call, requestId);
     }
 
-    public static void getRemoteEnvironments(@NonNull String requestId, @NonNull String baseUrl, @NonNull String path, @NonNull NetRemoteEnvCallback callback) {
+    public static void getRemoteEnvironments(@NonNull String requestId, @NonNull String url, @NonNull NetRemoteEnvCallback callback) {
+        String baseUrl = WebUnit.getHost(url) + "/";
+        String path = WebUnit.getPath(url, "");
+
         Call<List<QLEnvironment>> call = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -90,14 +95,14 @@ public class ApiController {
         call.enqueue(new Callback<List<QLEnvironment>>() {
             @Override
             public void onResponse(@NonNull Call<List<QLEnvironment>> call, @NonNull Response<List<QLEnvironment>> response) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 List<QLEnvironment> res = response.body();
                 callback.onSuccess(res);
             }
 
             @Override
             public void onFailure(@NonNull Call<List<QLEnvironment>> call, @NonNull Throwable t) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 if (call.isCanceled()) {
                     return;
                 }
@@ -105,10 +110,13 @@ public class ApiController {
             }
         });
 
-        RequestManager.addCall(call, requestId);
+        NetManager.addCall(call, requestId);
     }
 
-    public static void getRemoteWebRules(@NonNull String requestId, @NonNull String baseUrl, @NonNull String path, @NonNull NetRemoteWebRuleCallback callback) {
+    public static void getRemoteWebRules(@NonNull String requestId, @NonNull String url, @NonNull NetRemoteWebRuleCallback callback) {
+        String baseUrl = WebUnit.getHost(url) + "/";
+        String path = WebUnit.getPath(url, "");
+
         Call<List<WebRule>> call = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -119,14 +127,14 @@ public class ApiController {
         call.enqueue(new Callback<List<WebRule>>() {
             @Override
             public void onResponse(@NonNull Call<List<WebRule>> call, @NonNull Response<List<WebRule>> response) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 List<WebRule> res = response.body();
                 callback.onSuccess(res);
             }
 
             @Override
             public void onFailure(@NonNull Call<List<WebRule>> call, @NonNull Throwable t) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 if (call.isCanceled()) {
                     return;
                 }
@@ -134,7 +142,7 @@ public class ApiController {
             }
         });
 
-        RequestManager.addCall(call, requestId);
+        NetManager.addCall(call, requestId);
     }
 
     public static void getLinks(@NonNull String requestId, @NonNull String baseUrl, @NonNull String path, @NonNull NetLinkCallback callback) {
@@ -148,14 +156,14 @@ public class ApiController {
         call.enqueue(new Callback<List<Link>>() {
             @Override
             public void onResponse(@NonNull Call<List<Link>> call, @NonNull Response<List<Link>> response) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 List<Link> res = response.body();
                 callback.onSuccess(res);
             }
 
             @Override
             public void onFailure(@NonNull Call<List<Link>> call, @NonNull Throwable t) {
-                RequestManager.finishCall(requestId);
+                NetManager.finishCall(requestId);
                 if (call.isCanceled()) {
                     return;
                 }
@@ -163,7 +171,11 @@ public class ApiController {
             }
         });
 
-        RequestManager.addCall(call, requestId);
+        NetManager.addCall(call, requestId);
+    }
+
+    public static void report(@NonNull String requestId, @NonNull List<Statistic> statistics, @NonNull NetBaseCallback callback) {
+
     }
 
 

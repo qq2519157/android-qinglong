@@ -24,7 +24,7 @@ import auto.qinglong.activity.ql.log.LogFragment;
 import auto.qinglong.activity.ql.script.ScriptFragment;
 import auto.qinglong.activity.ql.setting.SettingFragment;
 import auto.qinglong.activity.ql.task.TaskFragment;
-import auto.qinglong.bean.app.Statistics;
+import auto.qinglong.bean.app.Statistic;
 import auto.qinglong.bean.app.Version;
 import auto.qinglong.bean.ql.QLSystem;
 import auto.qinglong.database.db.StatisticsDBHelper;
@@ -292,8 +292,8 @@ public class HomeActivity extends BaseActivity {
     }
 
     private void netReport() {
-        for (Statistics statistics : StatisticsDBHelper.getAll()) {
-            LogUnit.log(statistics.getModule() + "：" + statistics.getNum());
+        for (Statistic statistic : StatisticsDBHelper.getAll()) {
+            LogUnit.log(statistic.getModule() + "：" + statistic.getNum());
         }
     }
 }

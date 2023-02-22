@@ -9,7 +9,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import auto.qinglong.network.http.RequestManager;
+import auto.qinglong.network.http.NetManager;
 import auto.qinglong.utils.ToastUnit;
 
 public abstract class BaseActivity extends AppCompatActivity {
@@ -45,7 +45,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        RequestManager.cancelAllCall(getClass().getName());
+        NetManager.cancelAllCall(getClass().getName());
         super.onDestroy();
     }
 

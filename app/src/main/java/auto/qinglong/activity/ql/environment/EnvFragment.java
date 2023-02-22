@@ -43,8 +43,8 @@ import auto.qinglong.activity.ql.LocalFileAdapter;
 import auto.qinglong.bean.ql.QLEnvironment;
 import auto.qinglong.database.db.StatisticsDBHelper;
 import auto.qinglong.network.http.ApiController;
+import auto.qinglong.network.http.NetManager;
 import auto.qinglong.network.http.QLApiController;
-import auto.qinglong.network.http.RequestManager;
 import auto.qinglong.utils.FileUtil;
 import auto.qinglong.utils.TextUnit;
 import auto.qinglong.utils.TimeUnit;
@@ -202,7 +202,7 @@ public class EnvFragment extends BaseFragment {
 
         //删除
         ui_actions_delete.setOnClickListener(v -> {
-            if (RequestManager.isRequesting(getNetRequestID())) {
+            if (NetManager.isRequesting(getNetRequestID())) {
                 return;
             }
             List<QLEnvironment> environments = envItemAdapter.getSelectedItems();
@@ -220,7 +220,7 @@ public class EnvFragment extends BaseFragment {
 
         //禁用
         ui_actions_disable.setOnClickListener(v -> {
-            if (RequestManager.isRequesting(getNetRequestID())) {
+            if (NetManager.isRequesting(getNetRequestID())) {
                 return;
             }
             List<QLEnvironment> environments = envItemAdapter.getSelectedItems();
@@ -238,7 +238,7 @@ public class EnvFragment extends BaseFragment {
 
         //启用
         ui_actions_enable.setOnClickListener(v -> {
-            if (RequestManager.isRequesting(getNetRequestID())) {
+            if (NetManager.isRequesting(getNetRequestID())) {
                 return;
             }
             List<QLEnvironment> environments = envItemAdapter.getSelectedItems();
@@ -270,7 +270,7 @@ public class EnvFragment extends BaseFragment {
     }
 
     private void initData() {
-        if (initDataFlag || RequestManager.isRequesting(getNetRequestID())) {
+        if (initDataFlag || NetManager.isRequesting(getNetRequestID())) {
             return;
         }
         ui_refresh.autoRefreshAnimationOnly();
@@ -434,12 +434,10 @@ public class EnvFragment extends BaseFragment {
                     ToastUnit.showShort("地址不合法");
                     return false;
                 }
+                WindowUnit.hideKeyboard(ui_pop_edit.getView());
+                netGetRemoteEnvironments(url);
 
-                String baseUrl = WebUnit.getHost(url) + "/";
-                String path = WebUnit.getPath(url, "");
-                netGetRemoteEnvironments(baseUrl, path);
-
-                return false;
+                return true;
             }
 
             @Override
@@ -634,7 +632,7 @@ public class EnvFragment extends BaseFragment {
     }
 
     private void netGetEnvironments(String searchValue, boolean needTip) {
-        if (RequestManager.isRequesting(getNetRequestID())) {
+        if (NetManager.isRequesting(getNetRequestID())) {
             return;
         }
         QLApiController.getEnvironments(getNetRequestID(), searchValue, new QLApiController.NetGetEnvironmentsCallback() {
@@ -657,7 +655,7 @@ public class EnvFragment extends BaseFragment {
     }
 
     private void netUpdateEnvironment(QLEnvironment environment) {
-        if (RequestManager.isRequesting(getNetRequestID())) {
+        if (NetManager.isRequesting(getNetRequestID())) {
             return;
         }
         QLApiController.updateEnvironment(getNetRequestID(), environment, new QLApiController.NetEditEnvCallback() {
@@ -676,7 +674,7 @@ public class EnvFragment extends BaseFragment {
     }
 
     private void netAddEnvironments(List<QLEnvironment> environments) {
-        if (RequestManager.isRequesting(getNetRequestID())) {
+        if (NetManager.isRequesting(getNetRequestID())) {
             return;
         }
         QLApiController.addEnvironment(getNetRequestID(), environments, new QLApiController.NetGetEnvironmentsCallback() {
@@ -700,7 +698,7 @@ public class EnvFragment extends BaseFragment {
     }
 
     private void netDeleteEnvironments(List<String> ids) {
-        if (RequestManager.isRequesting(getNetRequestID())) {
+        if (NetManager.isRequesting(getNetRequestID())) {
             return;
         }
         QLApiController.deleteEnvironments(getNetRequestID(), ids, new QLApiController.NetBaseCallback() {
@@ -719,7 +717,7 @@ public class EnvFragment extends BaseFragment {
     }
 
     private void netEnableEnvironments(List<String> ids) {
-        if (RequestManager.isRequesting(getNetRequestID())) {
+        if (NetManager.isRequesting(getNetRequestID())) {
             return;
         }
         QLApiController.enableEnvironments(getNetRequestID(), ids, new QLApiController.NetBaseCallback() {
@@ -739,7 +737,7 @@ public class EnvFragment extends BaseFragment {
     }
 
     private void netDisableEnvironments(List<String> ids) {
-        if (RequestManager.isRequesting(getNetRequestID())) {
+        if (NetManager.isRequesting(getNetRequestID())) {
             return;
         }
         QLApiController.disableEnvironments(getNetRequestID(), ids, new QLApiController.NetBaseCallback() {
@@ -757,11 +755,11 @@ public class EnvFragment extends BaseFragment {
         });
     }
 
-    private void netGetRemoteEnvironments(String baseUrl, String path) {
-        if (RequestManager.isRequesting(getNetRequestID())) {
+    private void netGetRemoteEnvironments(String url) {
+        if (NetManager.isRequesting(getNetRequestID())) {
             return;
         }
-        ApiController.getRemoteEnvironments(getNetRequestID(), baseUrl, path, new ApiController.NetRemoteEnvCallback() {
+        ApiController.getRemoteEnvironments(getNetRequestID(), url, new ApiController.NetRemoteEnvCallback() {
 
             @Override
             public void onSuccess(List<QLEnvironment> environments) {

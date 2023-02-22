@@ -1,6 +1,6 @@
 package auto.qinglong.bean.app;
 
-public class Statistics {
+public class Statistic {
     private String module;
     private int startTime;
     private int endTime;

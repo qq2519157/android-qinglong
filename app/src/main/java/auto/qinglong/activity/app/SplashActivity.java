@@ -1,10 +1,7 @@
 package auto.qinglong.activity.app;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 
@@ -16,6 +13,7 @@ import auto.qinglong.database.sp.AccountSP;
 import auto.qinglong.network.http.QLApiController;
 import auto.qinglong.utils.NetUnit;
 import auto.qinglong.utils.ToastUnit;
+
 
 @SuppressLint("CustomSplashScreen")
 public class SplashActivity extends BaseActivity {

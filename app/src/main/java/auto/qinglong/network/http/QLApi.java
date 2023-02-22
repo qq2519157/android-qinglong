@@ -17,6 +17,7 @@ import auto.qinglong.bean.ql.network.QLTasksRes;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.HTTP;
 import retrofit2.http.Header;
@@ -253,6 +254,26 @@ public interface QLApi {
      */
     @PUT("api/scripts")
     Call<QLBaseRes> updateScript(@Header("Authorization") String authorization, @Body RequestBody body);
+
+    /**
+     * 新建脚本.
+     *
+     * @param authorization the authorization
+     * @param body          the body
+     * @return the call
+     */
+    @PUT("api/scripts")
+    Call<QLBaseRes> createScript(@Header("Authorization") String authorization, @Body RequestBody body);
+
+    /**
+     * 删除脚本.
+     *
+     * @param authorization the authorization
+     * @param body          the body
+     * @return the call
+     */
+    @DELETE("api/scripts")
+    Call<QLBaseRes> deleteScript(@Header("Authorization") String authorization, @Body RequestBody body);
 
     /**
      * 获取依赖列表.

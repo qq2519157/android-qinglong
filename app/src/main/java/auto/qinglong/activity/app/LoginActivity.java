@@ -15,8 +15,8 @@ import auto.qinglong.bean.app.Account;
 import auto.qinglong.bean.ql.QLSystem;
 import auto.qinglong.database.db.StatisticsDBHelper;
 import auto.qinglong.database.sp.AccountSP;
+import auto.qinglong.network.http.NetManager;
 import auto.qinglong.network.http.QLApiController;
-import auto.qinglong.network.http.RequestManager;
 import auto.qinglong.utils.TextUnit;
 import auto.qinglong.utils.ToastUnit;
 import auto.qinglong.utils.WebUnit;
@@ -119,7 +119,7 @@ public class LoginActivity extends BaseActivity {
             ui_confirm.postDelayed(() -> ui_confirm.setEnabled(true), 300);
 
             if (ui_pop_progress == null) {
-                ui_pop_progress = PopupWindowBuilder.buildProgressWindow(this, () -> RequestManager.cancelAllCall(getNetRequestID()));
+                ui_pop_progress = PopupWindowBuilder.buildProgressWindow(this, () -> NetManager.cancelAllCall(getNetRequestID()));
             }
             ui_pop_progress.setTextAndShow("登录中...");
 
