@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/bg_gray"
     android:orientation="vertical"
-    tools:context=".activity.plugin.web.PluginWebActivity">
+    tools:context=".activity.extension.web.PluginWebActivity">
 
     <LinearLayout
         android:id="@+id/common_bar"

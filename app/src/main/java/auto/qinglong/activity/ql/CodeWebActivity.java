@@ -251,7 +251,7 @@ public class CodeWebActivity extends BaseActivity {
                 ui_edit.setVisibility(View.VISIBLE);
                 QLWebJsManager.setContent(ui_webView, content);
                 loadFinish();
-                ToastUnit.showShort(getString(R.string.load_success));
+                ToastUnit.showShort(getString(R.string.tip_load_success));
             }
 
             @Override
@@ -286,7 +286,7 @@ public class CodeWebActivity extends BaseActivity {
                 ui_edit.setVisibility(View.VISIBLE);
                 QLWebJsManager.setContent(ui_webView, content);
                 loadFinish();
-                ToastUnit.showShort(getString(R.string.load_success));
+                ToastUnit.showShort(getString(R.string.tip_load_success));
             }
 
             @Override
@@ -319,7 +319,7 @@ public class CodeWebActivity extends BaseActivity {
             public void onSuccess(String content) {
                 QLWebJsManager.setContent(ui_webView, content);
                 loadFinish();
-                ToastUnit.showShort(getString(R.string.load_success));
+                ToastUnit.showShort(getString(R.string.tip_load_success));
             }
 
             @Override
@@ -336,7 +336,7 @@ public class CodeWebActivity extends BaseActivity {
             public void onSuccess(QLDependence dependence) {
                 QLWebJsManager.setContent(ui_webView, dependence.getLogStr());
                 loadFinish();
-                ToastUnit.showShort(getString(R.string.load_success));
+                ToastUnit.showShort(getString(R.string.tip_load_success));
             }
 
             @Override

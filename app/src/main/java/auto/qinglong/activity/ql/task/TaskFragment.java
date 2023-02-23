@@ -65,9 +65,9 @@ import auto.qinglong.views.popup.ProgressWindow;
 public class TaskFragment extends BaseFragment {
     public static String TAG = "TaskFragment";
 
-    private String mCurrentSearchValue = "";
+    private String mCurrentSearchValue;
     private MenuClickListener mMenuClickListener;
-    private TaskAdapter mTaskAdapter;
+    private TaskAdapter mAdapter;
 
     //主导航栏
     private LinearLayout ui_bar_main;
@@ -168,15 +168,13 @@ public class TaskFragment extends BaseFragment {
 
     @Override
     public void init() {
-        //item容器配置
-        mTaskAdapter = new TaskAdapter(getContext());
-        //取消更新动画，避免刷新闪烁
-        Objects.requireNonNull(ui_recycler.getItemAnimator()).setChangeDuration(0);
+        mAdapter = new TaskAdapter(getContext());
+        ui_recycler.setAdapter(mAdapter);
         ui_recycler.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
-        ui_recycler.setAdapter(mTaskAdapter);
+        Objects.requireNonNull(ui_recycler.getItemAnimator()).setChangeDuration(0);//取消更新动画，避免刷新闪烁
 
-        //列表item操作接口
-        mTaskAdapter.setTaskInterface(new TaskAdapter.ItemActionListener() {
+        //列表操作接口
+        mAdapter.setTaskInterface(new TaskAdapter.ItemActionListener() {
             @Override
             public void onLog(QLTask task) {
                 Intent intent = new Intent(getContext(), CodeWebActivity.class);
@@ -214,52 +212,51 @@ public class TaskFragment extends BaseFragment {
             }
         });
 
-        ui_refresh.setOnRefreshListener(refreshLayout -> netGetTasks(mCurrentSearchValue, true));
+        //刷新
+        ui_refresh.setOnRefreshListener(refreshLayout -> {
+            if (ui_bar_search.getVisibility() != View.VISIBLE) {
+                mCurrentSearchValue = null;
+            }
+            netGetTasks(mCurrentSearchValue, true);
+        });
 
-        //导航点击监听
+        //唤起导航栏
         ui_nav_menu.setOnClickListener(v -> {
             if (mMenuClickListener != null) {
                 mMenuClickListener.onMenuClick();
             }
         });
 
-        //搜索按键监听
-        ui_nav_search.setOnClickListener(v -> {
-            ui_search_value.setText(mCurrentSearchValue);
-            changeBar(BarType.SEARCH);
-        });
+        //更多操作
+        ui_nav_more.setOnClickListener(v -> showPopWindowMiniMore());
 
-        //搜索返回按键监听
+        //搜索栏进入
+        ui_nav_search.setOnClickListener(v -> changeBar(BarType.SEARCH));
+
+        //搜索栏返回
         ui_search_back.setOnClickListener(v -> changeBar(BarType.NAV));
 
-        //搜索确定监听
+        //搜索栏确定
         ui_search_confirm.setOnClickListener(v -> {
-            if (NetManager.isRequesting(getNetRequestID())) {
-                return;
-            }
-            ToastUnit.showShort(getString(R.string.tip_searching));
             mCurrentSearchValue = ui_search_value.getText().toString();
             WindowUnit.hideKeyboard(ui_search_value);
             netGetTasks(mCurrentSearchValue, true);
         });
 
-        //更多操作按键监听
-        ui_nav_more.setOnClickListener(v -> showPopWindowMiniMore());
-
-        //批量操作返回
+        //操作栏返回
         ui_actions_back.setOnClickListener(v -> changeBar(BarType.NAV));
 
-        //全选监听
+        //全选
         ui_actions_select.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (mTaskAdapter.getCheckState()) {
-                mTaskAdapter.selectAll(isChecked);
+            if (mAdapter.getCheckState()) {
+                mAdapter.selectAll(isChecked);
             }
         });
 
         //执行
         ui_actions_run.setOnClickListener(v -> {
             if (!NetManager.isRequesting(getNetRequestID())) {
-                List<QLTask> QLTasks = mTaskAdapter.getCheckedItems();
+                List<QLTask> QLTasks = mAdapter.getCheckedItems();
                 if (QLTasks.size() == 0) {
                     ToastUnit.showShort(getString(R.string.tip_empty_select));
                 } else {
@@ -275,7 +272,7 @@ public class TaskFragment extends BaseFragment {
         //停止
         ui_actions_stop.setOnClickListener(v -> {
             if (!NetManager.isRequesting(getNetRequestID())) {
-                List<QLTask> QLTasks = mTaskAdapter.getCheckedItems();
+                List<QLTask> QLTasks = mAdapter.getCheckedItems();
                 if (QLTasks.size() == 0) {
                     ToastUnit.showShort(getString(R.string.tip_empty_select));
                 } else {
@@ -291,7 +288,7 @@ public class TaskFragment extends BaseFragment {
         //顶置
         ui_actions_pin.setOnClickListener(v -> {
             if (!NetManager.isRequesting(getNetRequestID())) {
-                List<QLTask> QLTasks = mTaskAdapter.getCheckedItems();
+                List<QLTask> QLTasks = mAdapter.getCheckedItems();
                 if (QLTasks.size() == 0) {
                     ToastUnit.showShort(getString(R.string.tip_empty_select));
                 } else {
@@ -307,7 +304,7 @@ public class TaskFragment extends BaseFragment {
         //取消顶置
         ui_actions_unpin.setOnClickListener(v -> {
             if (!NetManager.isRequesting(getNetRequestID())) {
-                List<QLTask> QLTasks = mTaskAdapter.getCheckedItems();
+                List<QLTask> QLTasks = mAdapter.getCheckedItems();
                 if (QLTasks.size() == 0) {
                     ToastUnit.showShort(getString(R.string.tip_empty_select));
                 } else {
@@ -323,7 +320,7 @@ public class TaskFragment extends BaseFragment {
         //启用
         ui_actions_enable.setOnClickListener(v -> {
             if (!NetManager.isRequesting(getNetRequestID())) {
-                List<QLTask> QLTasks = mTaskAdapter.getCheckedItems();
+                List<QLTask> QLTasks = mAdapter.getCheckedItems();
                 if (QLTasks.size() == 0) {
                     ToastUnit.showShort(getString(R.string.tip_empty_select));
                 } else {
@@ -339,7 +336,7 @@ public class TaskFragment extends BaseFragment {
         //禁用
         ui_actions_disable.setOnClickListener(v -> {
             if (!NetManager.isRequesting(getNetRequestID())) {
-                List<QLTask> QLTasks = mTaskAdapter.getCheckedItems();
+                List<QLTask> QLTasks = mAdapter.getCheckedItems();
                 if (QLTasks.size() == 0) {
                     ToastUnit.showShort(getString(R.string.tip_empty_select));
                 } else {
@@ -355,7 +352,7 @@ public class TaskFragment extends BaseFragment {
         //删除
         ui_actions_delete.setOnClickListener(v -> {
             if (!NetManager.isRequesting(getNetRequestID())) {
-                List<QLTask> QLTasks = mTaskAdapter.getCheckedItems();
+                List<QLTask> QLTasks = mAdapter.getCheckedItems();
                 if (QLTasks.size() == 0) {
                     ToastUnit.showShort(getString(R.string.tip_empty_select));
                 } else {
@@ -370,8 +367,8 @@ public class TaskFragment extends BaseFragment {
     }
 
     @Override
-    public void setMenuClickListener(MenuClickListener menuClickListener) {
-        this.mMenuClickListener = menuClickListener;
+    public void setMenuClickListener(MenuClickListener mMenuClickListener) {
+        this.mMenuClickListener = mMenuClickListener;
     }
 
     private void initData() {
@@ -445,11 +442,11 @@ public class TaskFragment extends BaseFragment {
                     return false;
                 }
                 if (TextUnit.isEmpty(command)) {
-                    ToastUnit.showShort(getString(R.string.tip_empty_command));
+                    ToastUnit.showShort(getString(R.string.tip_empty_task_command));
                     return false;
                 }
                 if (!CronUnit.isValid(schedule)) {
-                    ToastUnit.showShort(getString(R.string.tip_invalid_schedule));
+                    ToastUnit.showShort(getString(R.string.tip_invalid_task_schedule));
                     return false;
                 }
 
@@ -509,12 +506,9 @@ public class TaskFragment extends BaseFragment {
         if (ui_bar_search.getVisibility() == View.VISIBLE) {
             WindowUnit.hideKeyboard(ui_root);
             ui_bar_search.setVisibility(View.INVISIBLE);
-            mCurrentSearchValue = "";
-        }
-
-        if (ui_bar_actions.getVisibility() == View.VISIBLE) {
+        } else if (ui_bar_actions.getVisibility() == View.VISIBLE) {
             ui_bar_actions.setVisibility(View.INVISIBLE);
-            mTaskAdapter.setCheckState(false);
+            mAdapter.setCheckState(false);
             ui_actions_select.setChecked(false);
         }
 
@@ -523,10 +517,11 @@ public class TaskFragment extends BaseFragment {
         if (barType == BarType.NAV) {
             ui_bar_main.setVisibility(View.VISIBLE);
         } else if (barType == BarType.SEARCH) {
+            ui_search_value.setText(mCurrentSearchValue);
             ui_bar_search.setVisibility(View.VISIBLE);
         } else {
             ui_actions_scroll.scrollTo(0, 0);
-            mTaskAdapter.setCheckState(true);
+            mAdapter.setCheckState(true);
             ui_bar_actions.setVisibility(View.VISIBLE);
         }
     }
@@ -534,7 +529,7 @@ public class TaskFragment extends BaseFragment {
     private void compareAndDeleteData() {
         List<String> ids = new ArrayList<>();
         Set<String> set = new HashSet<>();
-        List<QLTask> tasks = this.mTaskAdapter.getData();
+        List<QLTask> tasks = this.mAdapter.getData();
         for (QLTask task : tasks) {
             String key = task.getCommand();
             if (set.contains(key)) {
@@ -603,7 +598,7 @@ public class TaskFragment extends BaseFragment {
             return;
         }
 
-        List<QLTask> tasks = mTaskAdapter.getData();
+        List<QLTask> tasks = mAdapter.getData();
         if (tasks == null || tasks.size() == 0) {
             ToastUnit.showShort("数据为空,无需备份");
             return;
@@ -640,6 +635,9 @@ public class TaskFragment extends BaseFragment {
     }
 
     private void netGetTasks(String searchValue, boolean needTip) {
+        if (NetManager.isRequesting(getNetRequestID())) {
+            return;
+        }
         QLApiController.getTasks(getNetRequestID(), searchValue, new QLApiController.NetGetTasksCallback() {
             @Override
             public void onSuccess(List<QLTask> tasks) {
@@ -648,7 +646,7 @@ public class TaskFragment extends BaseFragment {
                 for (int k = 0; k < tasks.size(); k++) {
                     tasks.get(k).setIndex(k + 1);
                 }
-                mTaskAdapter.setData(tasks);
+                mAdapter.setData(tasks);
                 if (needTip) {
                     ToastUnit.showShort("加载成功：" + tasks.size());
                 }
@@ -752,7 +750,7 @@ public class TaskFragment extends BaseFragment {
 
             @Override
             public void onFailure(String msg) {
-                ToastUnit.showShort(getString(R.string.action_pin_failure) + msg);
+                ToastUnit.showShort(getString(R.string.tip_pin_failure) + msg);
             }
         });
     }
@@ -764,13 +762,13 @@ public class TaskFragment extends BaseFragment {
                 if (ui_actions_back.getVisibility() == View.VISIBLE) {
                     ui_actions_back.performClick();
                 }
-                ToastUnit.showShort("取消顶置成功");
+                ToastUnit.showShort(getString(R.string.tip_unpin_success));
                 netGetTasks(mCurrentSearchValue, false);
             }
 
             @Override
             public void onFailure(String msg) {
-                ToastUnit.showShort("取消顶置失败：" + msg);
+                ToastUnit.showShort(getString(R.string.tip_unpin_failure) + msg);
             }
         });
     }

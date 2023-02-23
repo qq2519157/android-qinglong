@@ -146,8 +146,8 @@ public class DepFragment extends BaseFragment {
     }
 
     @Override
-    public void setMenuClickListener(MenuClickListener menuClickListener) {
-        this.mMenuClickListener = menuClickListener;
+    public void setMenuClickListener(MenuClickListener mMenuClickListener) {
+        this.mMenuClickListener = mMenuClickListener;
     }
 
     @Override

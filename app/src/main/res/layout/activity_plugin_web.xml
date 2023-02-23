@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".activity.plugin.web.PluginWebActivity">
+    tools:context=".activity.extension.web.PluginWebActivity">
 
     <LinearLayout
         android:id="@+id/action_bar"
@@ -20,7 +20,7 @@
             android:layout_width="@dimen/action_bar_icon_size"
             android:layout_height="@dimen/action_bar_icon_size"
             android:background="@drawable/style_button_ripple"
-            android:contentDescription="@string/bar_back"
+            android:contentDescription="@string/tip_back_en"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_white_arrow_back" />
 
@@ -31,7 +31,7 @@
             android:layout_marginHorizontal="10dp"
             android:layout_weight="1"
             android:background="@drawable/style_input_gray"
-            android:hint="@string/url_input_hint"
+            android:hint="@string/str_input_hint_url"
             android:imeOptions="actionGo"
             android:lines="1"
             android:paddingHorizontal="5dp"

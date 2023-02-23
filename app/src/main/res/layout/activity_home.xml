@@ -315,7 +315,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/menu_exit"
+                    android:text="@string/menu_account_exit"
                     android:textColor="@color/text_color_49"
                     android:textSize="14sp" />
             </LinearLayout>

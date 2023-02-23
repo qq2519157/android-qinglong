@@ -45,11 +45,11 @@
             android:exported="false"
             android:launchMode="singleTask" />
         <activity
-            android:name=".activity.plugin.web.PluginWebRuleActivity"
+            android:name=".activity.extension.web.PluginWebRuleActivity"
             android:exported="false"
             android:launchMode="singleTask" />
         <activity
-            android:name=".activity.plugin.web.PluginWebActivity"
+            android:name=".activity.extension.web.PluginWebActivity"
             android:exported="false"
             android:launchMode="singleTask" />
         <activity

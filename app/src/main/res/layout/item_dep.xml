@@ -61,7 +61,7 @@
         <TextView
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:text="@string/status"
+            android:text="@string/str_status"
             android:textColor="@color/text_color_49" />
 
         <TextView
@@ -82,7 +82,7 @@
         <TextView
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:text="@string/created_time"
+            android:text="@string/str_created_time"
             android:textColor="@color/text_color_49" />
 
         <TextView

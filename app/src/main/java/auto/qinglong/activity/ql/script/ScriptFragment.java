@@ -75,8 +75,8 @@ public class ScriptFragment extends BaseFragment {
     }
 
     @Override
-    public void setMenuClickListener(MenuClickListener menuClickListener) {
-        this.menuClickListener = menuClickListener;
+    public void setMenuClickListener(MenuClickListener mMenuClickListener) {
+        this.menuClickListener = mMenuClickListener;
     }
 
     @Override

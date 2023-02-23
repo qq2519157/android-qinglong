@@ -23,7 +23,7 @@
                 android:layout_width="@dimen/action_bar_icon_size"
                 android:layout_height="@dimen/action_bar_icon_size"
                 android:background="@drawable/style_button_ripple"
-                android:contentDescription="@string/back"
+                android:contentDescription="@string/action_back"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_white_arrow_back" />
 
@@ -46,7 +46,7 @@
                 android:layout_marginEnd="10dp"
                 android:background="@drawable/style_button_ripple"
                 android:clickable="true"
-                android:contentDescription="@string/edit"
+                android:contentDescription="@string/action_edit"
                 android:src="@drawable/ic_white_write"
                 android:visibility="invisible" />
 
@@ -56,7 +56,7 @@
                 android:layout_height="@dimen/action_bar_icon_size"
                 android:background="@drawable/style_button_ripple"
                 android:clickable="true"
-                android:contentDescription="@string/refresh"
+                android:contentDescription="@string/action_refresh"
                 android:src="@drawable/ic_white_refresh"
                 android:visibility="invisible" />
         </LinearLayout>
@@ -74,7 +74,7 @@
                 android:layout_width="@dimen/action_bar_icon_size"
                 android:layout_height="@dimen/action_bar_icon_size"
                 android:background="@drawable/style_button_ripple"
-                android:contentDescription="@string/back"
+                android:contentDescription="@string/action_back"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_white_arrow_back" />
 
@@ -91,7 +91,7 @@
                 android:background="@drawable/style_button_ripple"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_white_save"
-                android:contentDescription="@string/save" />
+                android:contentDescription="@string/action_save" />
         </LinearLayout>
     </RelativeLayout>
 

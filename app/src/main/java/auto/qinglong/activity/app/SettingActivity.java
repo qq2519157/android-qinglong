@@ -60,7 +60,7 @@ public class SettingActivity extends BaseActivity {
         ui_donate.setOnClickListener(v -> {
             //跳转支付宝支付
             try {
-                String scheme = getString(R.string.alipay_scheme) + URLEncoder.encode(getString(R.string.alipay_qrcode), "UTF-8");
+                String scheme = getString(R.string.url_alipay_scheme) + URLEncoder.encode(getString(R.string.url_alipay_qrcode), "UTF-8");
                 Uri uri = Uri.parse(scheme);
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.setData(uri);

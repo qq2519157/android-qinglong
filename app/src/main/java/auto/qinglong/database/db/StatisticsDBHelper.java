@@ -14,6 +14,9 @@ import auto.qinglong.MyApplication;
 import auto.qinglong.bean.app.Statistic;
 import auto.qinglong.utils.LogUnit;
 
+/**
+ * 应用模块统计类.
+ */
 public class StatisticsDBHelper {
     public static final String TAG = "StatisticsDBHelper";
     private static final DBHelper DBHelper;

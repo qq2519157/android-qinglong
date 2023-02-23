@@ -61,9 +61,9 @@ import auto.qinglong.views.popup.ProgressWindow;
 
 public class EnvFragment extends BaseFragment {
     public static String TAG = "EnvFragment";
-    private String currentSearchValue = "";
-    private MenuClickListener menuClickListener;
-    private EnvItemAdapter envItemAdapter;
+    private String mCurrentSearchValue;
+    private MenuClickListener mMenuClickListener;
+    private EnvItemAdapter mAdapter;
 
     private LinearLayout ui_root;
     private RelativeLayout ui_bar;
@@ -82,6 +82,7 @@ public class EnvFragment extends BaseFragment {
     private LinearLayout ui_actions_disable;
     private LinearLayout ui_actions_delete;
 
+    private RecyclerView ui_recycler;
     private SmartRefreshLayout ui_refresh;
 
     private EditWindow ui_pop_edit;
@@ -112,12 +113,7 @@ public class EnvFragment extends BaseFragment {
         ui_actions_delete = view.findViewById(R.id.env_bar_actions_delete);
 
         ui_refresh = view.findViewById(R.id.refresh_layout);
-        RecyclerView ui_recycler = view.findViewById(R.id.recycler_view);
-
-        envItemAdapter = new EnvItemAdapter(requireContext());
-        ui_recycler.setAdapter(envItemAdapter);
-        ui_recycler.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
-        Objects.requireNonNull(ui_recycler.getItemAnimator()).setChangeDuration(0);
+        ui_recycler = view.findViewById(R.id.recycler_view);
 
         init();
         StatisticsDBHelper.increase(TAG);
@@ -154,7 +150,13 @@ public class EnvFragment extends BaseFragment {
 
     @Override
     public void init() {
-        envItemAdapter.setItemInterface(new EnvItemAdapter.ItemActionListener() {
+        mAdapter = new EnvItemAdapter(requireContext());
+        ui_recycler.setAdapter(mAdapter);
+        ui_recycler.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
+        Objects.requireNonNull(ui_recycler.getItemAnimator()).setChangeDuration(0);
+
+        //列表操作接口
+        mAdapter.setItemInterface(new EnvItemAdapter.ItemActionListener() {
             @Override
             public void onEdit(QLEnvironment environment, int position) {
                 showPopWindowCommonEdit(environment);
@@ -162,50 +164,52 @@ public class EnvFragment extends BaseFragment {
 
             @Override
             public void onMulAction() {
-                envItemAdapter.setCheckState(true);
+                mAdapter.setCheckState(true);
                 changeBar(BarType.MUL_ACTION);
             }
         });
 
-        //导航栏
-        ui_nav_menu.setOnClickListener(v -> menuClickListener.onMenuClick());
+        //刷新
+        ui_refresh.setOnRefreshListener(refreshLayout -> {
+            if (ui_bar_search.getVisibility() != View.VISIBLE) {
+                mCurrentSearchValue = null;
+            }
+            netGetEnvironments(mCurrentSearchValue, true);
+        });
 
-        ui_refresh.setOnRefreshListener(refreshLayout -> netGetEnvironments(currentSearchValue, true));
+        //导航栏
+        ui_nav_menu.setOnClickListener(v -> mMenuClickListener.onMenuClick());
 
         //更多操作
         ui_nav_more.setOnClickListener(v -> showPopWindowMiniMore());
 
         //搜索栏进入
         ui_nav_search.setOnClickListener(v -> {
-            ui_search_value.setText(currentSearchValue);
             changeBar(BarType.SEARCH);
-        });
-
-        //搜索栏确定
-        ui_search_confirm.setOnClickListener(v -> {
-            String value = ui_search_value.getText().toString().trim();
-            if (!value.isEmpty()) {
-                currentSearchValue = value;
-                WindowUnit.hideKeyboard(ui_search_value);
-                netGetEnvironments(currentSearchValue, true);
-            }
         });
 
         //搜索栏返回
         ui_search_back.setOnClickListener(v -> changeBar(BarType.NAV));
 
-        //动作栏返回
+        //搜索栏确定
+        ui_search_confirm.setOnClickListener(v -> {
+            mCurrentSearchValue = ui_search_value.getText().toString().trim();
+            WindowUnit.hideKeyboard(ui_search_value);
+            netGetEnvironments(mCurrentSearchValue, true);
+        });
+
+        //操作栏返回
         ui_actions_back.setOnClickListener(v -> changeBar(BarType.NAV));
 
         //全选
-        ui_actions_select.setOnCheckedChangeListener((buttonView, isChecked) -> envItemAdapter.setAllChecked(isChecked));
+        ui_actions_select.setOnCheckedChangeListener((buttonView, isChecked) -> mAdapter.setAllChecked(isChecked));
 
         //删除
         ui_actions_delete.setOnClickListener(v -> {
             if (NetManager.isRequesting(getNetRequestID())) {
                 return;
             }
-            List<QLEnvironment> environments = envItemAdapter.getSelectedItems();
+            List<QLEnvironment> environments = mAdapter.getSelectedItems();
             if (environments.size() == 0) {
                 ToastUnit.showShort(getString(R.string.tip_empty_select));
                 return;
@@ -223,7 +227,7 @@ public class EnvFragment extends BaseFragment {
             if (NetManager.isRequesting(getNetRequestID())) {
                 return;
             }
-            List<QLEnvironment> environments = envItemAdapter.getSelectedItems();
+            List<QLEnvironment> environments = mAdapter.getSelectedItems();
             if (environments.size() == 0) {
                 ToastUnit.showShort(getString(R.string.tip_empty_select));
                 return;
@@ -241,7 +245,7 @@ public class EnvFragment extends BaseFragment {
             if (NetManager.isRequesting(getNetRequestID())) {
                 return;
             }
-            List<QLEnvironment> environments = envItemAdapter.getSelectedItems();
+            List<QLEnvironment> environments = mAdapter.getSelectedItems();
             if (environments.size() == 0) {
                 ToastUnit.showShort(getString(R.string.tip_empty_select));
                 return;
@@ -258,7 +262,7 @@ public class EnvFragment extends BaseFragment {
 
     @Override
     public void setMenuClickListener(MenuClickListener menuClickListener) {
-        this.menuClickListener = menuClickListener;
+        this.mMenuClickListener = menuClickListener;
     }
 
     @Override
@@ -276,7 +280,7 @@ public class EnvFragment extends BaseFragment {
         ui_refresh.autoRefreshAnimationOnly();
         new Handler().postDelayed(() -> {
             if (isVisible()) {
-                netGetEnvironments(currentSearchValue, true);
+                netGetEnvironments(mCurrentSearchValue, true);
             }
         }, 1000);
     }
@@ -431,7 +435,7 @@ public class EnvFragment extends BaseFragment {
                 String url = map.get("url");
 
                 if (WebUnit.isInvalid(url)) {
-                    ToastUnit.showShort("地址不合法");
+                    ToastUnit.showShort(getString(R.string.tip_invalid_url));
                     return false;
                 }
                 WindowUnit.hideKeyboard(ui_pop_edit.getView());
@@ -477,12 +481,9 @@ public class EnvFragment extends BaseFragment {
         if (ui_bar_search.getVisibility() == View.VISIBLE) {
             WindowUnit.hideKeyboard(ui_root);
             ui_bar_search.setVisibility(View.INVISIBLE);
-            currentSearchValue = "";
-        }
-
-        if (ui_bar_actions.getVisibility() == View.VISIBLE) {
+        } else if (ui_bar_actions.getVisibility() == View.VISIBLE) {
             ui_bar_actions.setVisibility(View.INVISIBLE);
-            envItemAdapter.setCheckState(false);
+            mAdapter.setCheckState(false);
             ui_actions_select.setChecked(false);
         }
 
@@ -491,10 +492,11 @@ public class EnvFragment extends BaseFragment {
         if (barType == BarType.NAV) {
             ui_bar_nav.setVisibility(View.VISIBLE);
         } else if (barType == BarType.SEARCH) {
+            ui_search_value.setText(mCurrentSearchValue);
             ui_bar_search.setVisibility(View.VISIBLE);
         } else {
             ui_actions_select.setChecked(false);
-            envItemAdapter.setCheckState(true);
+            mAdapter.setCheckState(true);
             ui_bar_actions.setVisibility(View.VISIBLE);
         }
     }
@@ -520,13 +522,13 @@ public class EnvFragment extends BaseFragment {
                 current += 1;
             }
         }
-        envItemAdapter.setData(data);
+        mAdapter.setData(data);
     }
 
     private void compareAndDeleteData() {
         List<String> ids = new ArrayList<>();
         Set<String> set = new HashSet<>();
-        List<QLEnvironment> qlEnvironments = this.envItemAdapter.getData();
+        List<QLEnvironment> qlEnvironments = this.mAdapter.getData();
         for (QLEnvironment qlEnvironment : qlEnvironments) {
             String key = qlEnvironment.getName() + qlEnvironment.getValue();
             if (set.contains(key)) {
@@ -549,7 +551,7 @@ public class EnvFragment extends BaseFragment {
             return;
         }
 
-        List<QLEnvironment> environments = envItemAdapter.getData();
+        List<QLEnvironment> environments = mAdapter.getData();
         if (environments == null || environments.size() == 0) {
             ToastUnit.showShort("数据为空,无需备份");
             return;
@@ -663,7 +665,7 @@ public class EnvFragment extends BaseFragment {
             public void onSuccess(QLEnvironment environment) {
                 ui_pop_edit.dismiss();
                 ToastUnit.showShort("更新成功");
-                netGetEnvironments(currentSearchValue, false);
+                netGetEnvironments(mCurrentSearchValue, false);
             }
 
             @Override
@@ -687,7 +689,7 @@ public class EnvFragment extends BaseFragment {
                     ui_pop_progress.dismiss();
                 }
                 ToastUnit.showShort("新建成功：" + environments.size());
-                netGetEnvironments(currentSearchValue, false);
+                netGetEnvironments(mCurrentSearchValue, false);
             }
 
             @Override
@@ -706,7 +708,7 @@ public class EnvFragment extends BaseFragment {
             public void onSuccess() {
                 ui_actions_back.performClick();
                 ToastUnit.showShort("删除成功：" + ids.size());
-                netGetEnvironments(currentSearchValue, false);
+                netGetEnvironments(mCurrentSearchValue, false);
             }
 
             @Override
@@ -725,7 +727,7 @@ public class EnvFragment extends BaseFragment {
             public void onSuccess() {
                 ui_actions_back.performClick();
                 ToastUnit.showShort("启用成功");
-                netGetEnvironments(currentSearchValue, false);
+                netGetEnvironments(mCurrentSearchValue, false);
             }
 
             @Override
@@ -745,7 +747,7 @@ public class EnvFragment extends BaseFragment {
             public void onSuccess() {
                 ui_actions_back.performClick();
                 ToastUnit.showShort("禁用成功");
-                netGetEnvironments(currentSearchValue, false);
+                netGetEnvironments(mCurrentSearchValue, false);
             }
 
             @Override

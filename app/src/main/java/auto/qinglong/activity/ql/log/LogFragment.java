@@ -147,8 +147,8 @@ public class LogFragment extends BaseFragment {
         ui_dir.setText(getString(R.string.char_path_split) + dir);
     }
 
-    public void setMenuClickListener(MenuClickListener menuClickListener) {
-        this.menuClickListener = menuClickListener;
+    public void setMenuClickListener(MenuClickListener mMenuClickListener) {
+        this.menuClickListener = mMenuClickListener;
     }
 
     @Override

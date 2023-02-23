@@ -177,7 +177,7 @@ public class QLApiController {
         NetManager.addCall(call, requestId);
     }
 
-    public static void getTasks(@NonNull String requestId, @NonNull String searchValue, @NonNull NetGetTasksCallback callback) {
+    public static void getTasks(@NonNull String requestId, @Nullable String searchValue, @NonNull NetGetTasksCallback callback) {
         Call<QLTasksRes> call = new Retrofit.Builder()
                 .baseUrl(AccountSP.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())

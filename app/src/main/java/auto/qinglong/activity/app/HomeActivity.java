@@ -16,7 +16,7 @@ import java.util.Objects;
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseActivity;
 import auto.qinglong.activity.BaseFragment;
-import auto.qinglong.activity.plugin.web.PluginWebActivity;
+import auto.qinglong.activity.extension.web.PluginWebActivity;
 import auto.qinglong.activity.ql.CodeWebActivity;
 import auto.qinglong.activity.ql.dependence.DepFragment;
 import auto.qinglong.activity.ql.environment.EnvFragment;

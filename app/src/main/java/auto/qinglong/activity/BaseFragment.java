@@ -19,7 +19,6 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        //取消本页面的网络请求
         NetManager.cancelAllCall(getClass().getName());
     }
 
@@ -45,7 +44,7 @@ public abstract class BaseFragment extends Fragment {
     protected void init() {
     }
 
-    public void setMenuClickListener(MenuClickListener menuClickListener) {
+    public void setMenuClickListener(MenuClickListener mMenuClickListener) {
     }
 
     public interface MenuClickListener {

@@ -1,4 +1,4 @@
-package auto.qinglong.activity.plugin.web;
+package auto.qinglong.activity.extension.web;
 
 import android.annotation.SuppressLint;
 import android.content.ClipData;
