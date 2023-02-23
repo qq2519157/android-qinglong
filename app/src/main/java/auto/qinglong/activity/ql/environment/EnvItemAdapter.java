@@ -17,7 +17,6 @@ import java.util.List;
 
 import auto.qinglong.R;
 import auto.qinglong.bean.ql.QLEnvironment;
-import auto.qinglong.utils.TimeUnit;
 
 public class EnvItemAdapter extends RecyclerView.Adapter<EnvItemAdapter.MyViewHolder> {
     public static final String TAG = "EnvItemAdapter";
@@ -28,10 +27,16 @@ public class EnvItemAdapter extends RecyclerView.Adapter<EnvItemAdapter.MyViewHo
     private boolean checkState;
     private Boolean[] dataCheckState;
 
+    private final int colorBlue;
+    private final int colorRed;
+
     public EnvItemAdapter(@NonNull Context context) {
         this.context = context;
         this.data = new ArrayList<>();
         this.checkState = false;
+
+        this.colorBlue = context.getColor(R.color.theme_color_shadow);
+        this.colorRed = context.getColor(R.color.text_color_red);
     }
 
     @NonNull
@@ -45,9 +50,9 @@ public class EnvItemAdapter extends RecyclerView.Adapter<EnvItemAdapter.MyViewHo
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         QLEnvironment environment = this.data.get(position);
-        holder.ui_name.setText(String.format("[%d] %s", environment.getIndex(), environment.getName()));
+        holder.ui_name.setText(environment.getFormatName());
         holder.ui_value.setText(environment.getValue());
-
+        holder.ui_createAt.setText(environment.getFormatCreated());
         if (this.checkState) {
             holder.ui_check.setChecked(this.dataCheckState[position]);
             holder.ui_check.setVisibility(View.VISIBLE);
@@ -62,14 +67,12 @@ public class EnvItemAdapter extends RecyclerView.Adapter<EnvItemAdapter.MyViewHo
         }
 
         if (environment.getStatus() == 0) {
-            holder.ui_status.setTextColor(context.getColor(R.color.theme_color_shadow));
+            holder.ui_status.setTextColor(colorBlue);
             holder.ui_status.setText("已启用");
         } else {
-            holder.ui_status.setTextColor(context.getColor(R.color.text_color_red));
+            holder.ui_status.setTextColor(colorRed);
             holder.ui_status.setText("已禁用");
         }
-
-        holder.ui_createAt.setText(TimeUnit.formatTimeA(environment.getCreated()));
 
         holder.ui_name.setOnClickListener(v -> {
             if (this.checkState) {

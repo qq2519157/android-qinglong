@@ -2,29 +2,31 @@ package auto.qinglong.bean.ql;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import auto.qinglong.utils.TimeUnit;
+
 public class QLEnvironment implements Comparable<QLEnvironment> {
-    public static final String TAG = "QLEnvironment";
-    private int index = -1;//自定义序号 同变量名区分用
-    //原生字段
+    /* 接口字段 */
     private String _id;
     private int status;
     private String name;
     private float position;
     private long created;
-    private String remarks = "";
+    private String remarks;
     private String timestamp;
     private String value;
+    /* 自定义字段 */
+    private int index = -1;
+    private String mFormatName;
+    private String mFormatCreated;
 
     public int getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
-    }
 
     public float getPosition() {
         return position;
@@ -50,14 +52,6 @@ public class QLEnvironment implements Comparable<QLEnvironment> {
         this.remarks = remarks;
     }
 
-    public String getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(String timestamp) {
-        this.timestamp = timestamp;
-    }
-
     public String getValue() {
         return value;
     }
@@ -66,28 +60,30 @@ public class QLEnvironment implements Comparable<QLEnvironment> {
         this.value = value;
     }
 
-    public String get_id() {
+    public String getId() {
         return _id;
     }
 
-    public void set_id(String _id) {
+    public void setId(String _id) {
         this._id = _id;
-    }
-
-    public long getCreated() {
-        return created;
-    }
-
-    public void setCreated(long created) {
-        this.created = created;
-    }
-
-    public int getIndex() {
-        return index;
     }
 
     public void setIndex(int index) {
         this.index = index;
+    }
+
+    public String getFormatName() {
+        if (mFormatName == null) {
+            mFormatName = String.format(Locale.CHINA, "[%d] %s", index, name);
+        }
+        return mFormatName;
+    }
+
+    public String getFormatCreated() {
+        if (mFormatCreated == null) {
+            mFormatCreated = TimeUnit.formatTimeA(created);
+        }
+        return mFormatCreated;
     }
 
     @Override
@@ -95,7 +91,7 @@ public class QLEnvironment implements Comparable<QLEnvironment> {
         return this.name.toLowerCase().compareTo(o.getName().toLowerCase());
     }
 
-    public static List<QLEnvironment> parseExport(String str, String remarks) {
+    public static List<QLEnvironment> parse(String str, String remarks) {
         List<QLEnvironment> qlEnvironments = new ArrayList<>();
         Pattern pattern = Pattern.compile("export \\w+=\"[^\"]+\"");
         Matcher matcher = pattern.matcher(str);
@@ -112,4 +108,5 @@ public class QLEnvironment implements Comparable<QLEnvironment> {
         }
         return qlEnvironments;
     }
+
 }

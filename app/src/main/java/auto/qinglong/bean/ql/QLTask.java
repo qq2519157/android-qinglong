@@ -6,7 +6,7 @@ import auto.qinglong.utils.CronUnit;
 import auto.qinglong.utils.TimeUnit;
 
 public class QLTask implements Comparable<QLTask> {
-    /*接口属性*/
+    /* 接口属性 */
     private String _id;
     private String name;
     private String command;
@@ -23,7 +23,7 @@ public class QLTask implements Comparable<QLTask> {
     private long last_execution_time;
     private String createdAt;
     private String updatedAt;
-    /*自定义属性*/
+    /* 自定义属性 */
     private int mIndex;//序号
     private QLTaskState mState;//状态
     private String mFormatName;//格式化的名称
@@ -94,7 +94,7 @@ public class QLTask implements Comparable<QLTask> {
 
     public String getFormatName() {
         if (mFormatName == null) {
-            mFormatName = String.format(Locale.CHINA, "[%1$d]%2$s", mIndex, name);
+            mFormatName = String.format(Locale.CHINA, "[%d] %s", mIndex, name);
         }
         return mFormatName;
     }

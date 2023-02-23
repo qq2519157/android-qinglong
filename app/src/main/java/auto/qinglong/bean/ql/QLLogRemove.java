@@ -1,6 +1,7 @@
 package auto.qinglong.bean.ql;
 
 public class QLLogRemove {
+    /* 接口字段 */
     private int frequency;
 
     public int getFrequency() {

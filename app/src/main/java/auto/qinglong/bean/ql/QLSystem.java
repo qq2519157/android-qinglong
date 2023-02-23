@@ -1,18 +1,14 @@
 package auto.qinglong.bean.ql;
 
 public class QLSystem {
+    /* 接口属性 */
     private boolean isInitialized;
-
     private String version;
-
+    /* 自定义属性 */
     private static String VERSION;
 
     public boolean isInitialized() {
         return isInitialized;
-    }
-
-    public void setInitialized(boolean initialized) {
-        isInitialized = initialized;
     }
 
     public String getVersion() {

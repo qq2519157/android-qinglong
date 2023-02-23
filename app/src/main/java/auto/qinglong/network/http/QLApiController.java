@@ -757,7 +757,7 @@ public class QLApiController {
         jsonObject.addProperty("name", environment.getName());
         jsonObject.addProperty("remarks", environment.getRemarks());
         jsonObject.addProperty("value", environment.getValue());
-        jsonObject.addProperty("_id", environment.get_id());
+        jsonObject.addProperty("_id", environment.getId());
 
         String json = jsonObject.toString();
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), json);

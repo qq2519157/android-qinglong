@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import java.util.List;
 
 public class QLScript implements Comparable<QLScript> {
+    /* 接口属性 */
     private float mtime;
     private String key;
     private String parent;
@@ -15,10 +16,6 @@ public class QLScript implements Comparable<QLScript> {
 
     public float getMtime() {
         return mtime;
-    }
-
-    public void setMtime(float mtime) {
-        this.mtime = mtime;
     }
 
     public String getKey() {
@@ -45,10 +42,6 @@ public class QLScript implements Comparable<QLScript> {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getValue() {
         return value;
     }
@@ -57,20 +50,8 @@ public class QLScript implements Comparable<QLScript> {
         this.value = value;
     }
 
-    public boolean isDisabled() {
-        return disabled;
-    }
-
-    public void setDisabled(boolean disabled) {
-        this.disabled = disabled;
-    }
-
     public List<QLScript> getChildren() {
         return children;
-    }
-
-    public void setChildren(List<QLScript> children) {
-        this.children = children;
     }
 
     @Override

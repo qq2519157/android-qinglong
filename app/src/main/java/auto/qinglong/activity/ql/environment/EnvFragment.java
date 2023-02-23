@@ -217,7 +217,7 @@ public class EnvFragment extends BaseFragment {
 
             List<String> ids = new ArrayList<>();
             for (QLEnvironment environment : environments) {
-                ids.add(environment.get_id());
+                ids.add(environment.getId());
             }
             netDeleteEnvironments(ids);
         });
@@ -235,7 +235,7 @@ public class EnvFragment extends BaseFragment {
 
             List<String> ids = new ArrayList<>();
             for (QLEnvironment environment : environments) {
-                ids.add(environment.get_id());
+                ids.add(environment.getId());
             }
             netDisableEnvironments(ids);
         });
@@ -253,7 +253,7 @@ public class EnvFragment extends BaseFragment {
 
             List<String> ids = new ArrayList<>();
             for (QLEnvironment environment : environments) {
-                ids.add(environment.get_id());
+                ids.add(environment.getId());
             }
             netEnableEnvironments(ids);
         });
@@ -371,7 +371,7 @@ public class EnvFragment extends BaseFragment {
                 if (environment == null) {
                     netAddEnvironments(environments);
                 } else {
-                    newEnv.set_id(environment.get_id());
+                    newEnv.setId(environment.getId());
                     netUpdateEnvironment(newEnv);
                 }
 
@@ -407,7 +407,7 @@ public class EnvFragment extends BaseFragment {
 
                 WindowUnit.hideKeyboard(ui_pop_edit.getView());
 
-                List<QLEnvironment> environments = QLEnvironment.parseExport(values, remarks);
+                List<QLEnvironment> environments = QLEnvironment.parse(values, remarks);
                 if (environments.size() == 0) {
                     ToastUnit.showShort("提取变量失败");
                 } else {
@@ -532,7 +532,7 @@ public class EnvFragment extends BaseFragment {
         for (QLEnvironment qlEnvironment : qlEnvironments) {
             String key = qlEnvironment.getName() + qlEnvironment.getValue();
             if (set.contains(key)) {
-                ids.add(qlEnvironment.get_id());
+                ids.add(qlEnvironment.getId());
             } else {
                 set.add(key);
             }

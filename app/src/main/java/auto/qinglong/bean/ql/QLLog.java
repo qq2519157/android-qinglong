@@ -6,14 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class QLLog implements Comparable<QLLog> {
+    /* 接口属性 */
     private boolean isDir;
     private String name;
     private String parentName;
     private List<String> files;
-
-    public String getParentName() {
-        return parentName;
-    }
 
     public void setParentName(String parentName) {
         this.parentName = parentName;
@@ -37,10 +34,6 @@ public class QLLog implements Comparable<QLLog> {
 
     public List<String> getFiles() {
         return files;
-    }
-
-    public void setFiles(List<String> files) {
-        this.files = files;
     }
 
     public List<QLLog> getChildren() {
