@@ -18,20 +18,28 @@ import java.util.List;
 
 import auto.qinglong.R;
 import auto.qinglong.bean.ql.QLDependence;
-import auto.qinglong.utils.TimeUnit;
 
 public class DepItemAdapter extends RecyclerView.Adapter<DepItemAdapter.MyViewHolder> {
-    List<QLDependence> data;
+    public static String TAG = "DepItemAdapter";
+
+    private final Context context;
+    private ItemActionListener itemActionListener;
+    private List<QLDependence> data;
     private boolean checkState;
     private Boolean[] dataCheckState;
 
-    private ItemActionListener itemActionListener;
-    private final Context context;
+    private final int colorBlue;
+    private final int colorRed;
+    private final int colorGray;
 
     public DepItemAdapter(Context context) {
         this.context = context;
         this.data = new ArrayList<>();
         this.checkState = false;
+
+        this.colorBlue = context.getColor(R.color.theme_color_shadow);
+        this.colorRed = context.getColor(R.color.text_color_red);
+        this.colorGray = context.getColor(R.color.text_color_49);
     }
 
     @NonNull
@@ -46,26 +54,26 @@ public class DepItemAdapter extends RecyclerView.Adapter<DepItemAdapter.MyViewHo
         QLDependence dependence = data.get(position);
 
         holder.ui_title.setText(dependence.getName());
-        holder.ui_time.setText(TimeUnit.formatTimeA(dependence.getCreated()));
+        holder.ui_time.setText(dependence.getFormatCreated());
 
         if (dependence.getStatus() == 0) {
             holder.ui_status.setText("安装中");
-            holder.ui_status.setTextColor(context.getColor(R.color.theme_color_shadow));
+            holder.ui_status.setTextColor(colorBlue);
         } else if (dependence.getStatus() == 1) {
             holder.ui_status.setText("已安装");
-            holder.ui_status.setTextColor(context.getColor(R.color.theme_color_shadow));
+            holder.ui_status.setTextColor(colorBlue);
         } else if (dependence.getStatus() == 2) {
             holder.ui_status.setText("安装失败");
-            holder.ui_status.setTextColor(context.getColor(R.color.text_color_red));
+            holder.ui_status.setTextColor(colorRed);
         } else if (dependence.getStatus() == 3) {
             holder.ui_status.setText("删除中");
-            holder.ui_status.setTextColor(context.getColor(R.color.text_color_red));
+            holder.ui_status.setTextColor(colorRed);
         } else if (dependence.getStatus() == 5) {
             holder.ui_status.setText("卸载失败");
-            holder.ui_status.setTextColor(context.getColor(R.color.text_color_red));
+            holder.ui_status.setTextColor(colorRed);
         } else {
             holder.ui_status.setText("未知");
-            holder.ui_status.setTextColor(context.getColor(R.color.text_color_49));
+            holder.ui_status.setTextColor(colorGray);
         }
 
         //处于选择状态

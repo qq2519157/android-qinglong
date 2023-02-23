@@ -6,7 +6,7 @@ import java.util.Map;
 import retrofit2.Call;
 
 public class NetManager {
-    private static Map<String, Call<?>> callMap = new HashMap<>();
+    private static final Map<String, Call<?>> callMap = new HashMap<>();
 
     /**
      * 记录页面的网络请求
@@ -45,11 +45,7 @@ public class NetManager {
      * @return 页面是否有网络请求正在进行
      */
     public static boolean isRequesting(String id) {
-        if (callMap.get(id) == null) {
-            return false;
-        } else {
-            return true;
-        }
+        return callMap.get(id) != null;
     }
 
 }

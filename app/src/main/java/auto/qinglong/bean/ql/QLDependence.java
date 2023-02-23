@@ -3,16 +3,20 @@ package auto.qinglong.bean.ql;
 import java.util.List;
 
 import auto.qinglong.utils.TextUnit;
+import auto.qinglong.utils.TimeUnit;
 
 public class QLDependence {
-    private String _id;//ID
-    private String remark;//备注
-    private String name;//名称
-    private String timestamp;//创建时间(Date类型)
-    private List<String> log;//日志
-    private long created;//创建时间(时间戳)
-    private int status;//状态
-    private int type;//类型
+    /*接口属性*/
+    private String _id;
+    private String name;
+    private String remark;
+    private String timestamp;//Date格式
+    private List<String> log;
+    private long created;//13位时间戳
+    private int status;
+    private int type;
+    /*自定义属性*/
+    private String mFormatCreated;//格式化的创建时间
 
     public String getId() {
         return _id;
@@ -20,14 +24,6 @@ public class QLDependence {
 
     public void setId(String _id) {
         this._id = _id;
-    }
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
     }
 
     public String getName() {
@@ -38,14 +34,6 @@ public class QLDependence {
         this.name = name;
     }
 
-    public String getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(String timestamp) {
-        this.timestamp = timestamp;
-    }
-
     public List<String> getLog() {
         return log;
     }
@@ -54,20 +42,8 @@ public class QLDependence {
         this.log = log;
     }
 
-    public long getCreated() {
-        return created;
-    }
-
-    public void setCreated(long created) {
-        this.created = created;
-    }
-
     public int getStatus() {
         return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
     }
 
     public int getType() {
@@ -80,5 +56,12 @@ public class QLDependence {
 
     public String getLogStr() {
         return TextUnit.join(this.log, "\n");
+    }
+
+    public String getFormatCreated() {
+        if (mFormatCreated == null) {
+            mFormatCreated = TimeUnit.formatTimeA(created);
+        }
+        return mFormatCreated;
     }
 }

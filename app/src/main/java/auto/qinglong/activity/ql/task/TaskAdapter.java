@@ -19,8 +19,6 @@ import java.util.List;
 import auto.qinglong.R;
 import auto.qinglong.bean.ql.QLTask;
 import auto.qinglong.bean.ql.QLTaskState;
-import auto.qinglong.utils.CronUnit;
-import auto.qinglong.utils.TimeUnit;
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> {
     public static final String TAG = "TaskAdapter";
@@ -31,10 +29,17 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
     private boolean checkState;
     private boolean[] dataCheckState;
 
+    private final int colorBlue;
+    private final int colorRed;
+    private final int colorGray;
+
     public TaskAdapter(Context context) {
         this.context = context;
         this.data = new ArrayList<>();
         this.checkState = false;
+        this.colorBlue = context.getColor(R.color.theme_color_shadow);
+        this.colorRed = context.getColor(R.color.text_color_red);
+        this.colorGray = context.getColor(R.color.text_color_49);
     }
 
     @NonNull
@@ -44,56 +49,32 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
         return new MyViewHolder(view);
     }
 
-    @SuppressLint({"DefaultLocale", "SetTextI18n"})
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         QLTask qlTask = data.get(position);
-        holder.ui_name.setText("[" + qlTask.getIndex() + "] " + qlTask.getName());
+        holder.ui_name.setText(qlTask.getFormatName());
         holder.ui_command.setText(qlTask.getCommand());
         holder.ui_schedule.setText(qlTask.getSchedule());
+        holder.ui_last_run_time.setText(qlTask.getFormatLastRunningTime());
+        holder.ui_last_execution_time.setText(qlTask.getFormatLastExecutionTime());
+        holder.ui_next_execution_time.setText(qlTask.getFormatNextExecutionTime());
         //运行状态
         if (qlTask.getTaskState() == QLTaskState.RUNNING) {
             holder.ui_state.setText("运行中");
-            holder.ui_state.setTextColor(context.getColor(R.color.theme_color_shadow));
+            holder.ui_state.setTextColor(colorBlue);
             holder.ui_action.setImageResource(R.drawable.ic_blue_pause);
         } else if (qlTask.getTaskState() == QLTaskState.WAITING) {
             holder.ui_state.setText("队列中");
-            holder.ui_state.setTextColor(context.getColor(R.color.theme_color_shadow));
+            holder.ui_state.setTextColor(colorBlue);
             holder.ui_action.setImageResource(R.drawable.ic_blue_pause);
         } else if (qlTask.getTaskState() == QLTaskState.LIMIT) {
             holder.ui_state.setText("禁止中");
-            holder.ui_state.setTextColor(context.getColor(R.color.text_color_red));
+            holder.ui_state.setTextColor(colorRed);
             holder.ui_action.setImageResource(R.drawable.ic_blue_start);
         } else {
             holder.ui_state.setText("空闲中");
-            holder.ui_state.setTextColor(context.getColor(R.color.text_color_49));
+            holder.ui_state.setTextColor(colorGray);
             holder.ui_action.setImageResource(R.drawable.ic_blue_start);
-        }
-
-        //上次运行时长
-        @SuppressLint("DefaultLocale") String str;
-        if (qlTask.getLast_running_time() >= 60) {
-            str = String.format("%d分%d秒", qlTask.getLast_running_time() / 60, qlTask.getLast_running_time() % 60);
-        } else if (qlTask.getLast_running_time() > 0) {
-            str = String.format("%d秒", qlTask.getLast_running_time());
-        } else {
-            str = "--";
-        }
-        holder.ui_last_run_time.setText(str);
-
-        //上次运行时间
-        if (qlTask.getLast_execution_time() > 0) {
-            str = TimeUnit.formatTimeA(qlTask.getLast_execution_time() * 1000);
-        } else {
-            str = "--";
-        }
-        holder.ui_last_execution_time.setText(str);
-
-        //下次运行时间(判断定时规则是否合法)
-        if (CronUnit.isValid(qlTask.getSchedule())) {
-            holder.ui_next_execution_time.setText(CronUnit.nextExecutionTime(qlTask.getSchedule()));
-        } else {
-            holder.ui_next_execution_time.setText("--");
         }
 
         //复选框
@@ -106,7 +87,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
         }
 
         //顶置
-        if (qlTask.getIsPinned() == 1) {
+        if (qlTask.isPinned() == 1) {
             holder.ui_pinned.setVisibility(View.VISIBLE);
         } else {
             holder.ui_pinned.setVisibility(View.GONE);

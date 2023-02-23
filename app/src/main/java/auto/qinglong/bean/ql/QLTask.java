@@ -1,13 +1,18 @@
 package auto.qinglong.bean.ql;
 
+import java.util.Locale;
+
+import auto.qinglong.utils.CronUnit;
+import auto.qinglong.utils.TimeUnit;
+
 public class QLTask implements Comparable<QLTask> {
-    private int index;//自定义序号
+    /*接口属性*/
     private String _id;
     private String name;
     private String command;
     private String schedule;
-    private String timestamp;
     private String saved;
+    private String timestamp;
     private int status;
     private int isSystem;
     private String pid;
@@ -18,7 +23,22 @@ public class QLTask implements Comparable<QLTask> {
     private long last_execution_time;
     private String createdAt;
     private String updatedAt;
+    /*自定义属性*/
+    private int mIndex;//序号
+    private QLTaskState mState;//状态
+    private String mFormatName;//格式化的名称
+    private String mFormatLastExecutionTime;//格式化的上次运行时间
+    private String mFormatLastRunningTime;//格式化的上次运行时长
+    private String mFormatNextExecutionTime;//格式化的下次运行时间
+    private String mLastLogPath;//最后的日志地址
 
+    public String getId() {
+        return _id;
+    }
+
+    public void setId(String _id) {
+        this._id = _id;
+    }
 
     public String getName() {
         return name;
@@ -44,14 +64,6 @@ public class QLTask implements Comparable<QLTask> {
         this.schedule = schedule;
     }
 
-    public String getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(String timestamp) {
-        this.timestamp = timestamp;
-    }
-
     public String getSaved() {
         return saved;
     }
@@ -60,128 +72,88 @@ public class QLTask implements Comparable<QLTask> {
         this.saved = saved;
     }
 
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
-    public int getIsSystem() {
-        return isSystem;
-    }
-
-    public void setIsSystem(int isSystem) {
-        this.isSystem = isSystem;
-    }
-
-    public String getPid() {
-        return pid;
-    }
-
-    public void setPid(String pid) {
-        this.pid = pid;
-    }
-
-    public int getIsDisabled() {
-        return isDisabled;
-    }
-
-    public void setIsDisabled(int isDisabled) {
-        this.isDisabled = isDisabled;
-    }
-
-    public int getIsPinned() {
+    public int isPinned() {
         return isPinned;
     }
 
-    public void setIsPinned(int isPinned) {
-        this.isPinned = isPinned;
+    public void setIndex(int index) {
+        this.mIndex = index;
     }
 
-    public String getLog_path() {
-        return log_path;
+    /**
+     * 获取任务最新日志地址
+     *
+     * @return 地址
+     */
+    public String getLastLogPath() {
+        if (mLastLogPath == null) {
+            mLastLogPath = "api/crons/" + _id + "/log";
+        }
+        return mLastLogPath;
     }
 
-    public void setLog_path(String log_path) {
-        this.log_path = log_path;
+    public String getFormatName() {
+        if (mFormatName == null) {
+            mFormatName = String.format(Locale.CHINA, "[%1$d]%2$s", mIndex, name);
+        }
+        return mFormatName;
     }
 
-    public long getLast_execution_time() {
-        return last_execution_time;
+    public String getFormatLastExecutionTime() {
+        if (mFormatLastExecutionTime == null) {
+            if (last_execution_time > 0) {
+                mFormatLastExecutionTime = TimeUnit.formatTimeA(last_execution_time * 1000);
+            } else {
+                mFormatLastExecutionTime = "--";
+            }
+        }
+        return mFormatLastExecutionTime;
     }
 
-    public void setLast_execution_time(long last_execution_time) {
-        this.last_execution_time = last_execution_time;
+    public String getFormatLastRunningTime() {
+        if (mFormatLastRunningTime == null) {
+            if (last_running_time >= 60) {
+                mFormatLastRunningTime = String.format(Locale.CHINA, "%d分%d秒", last_running_time / 60, last_running_time % 60);
+            } else if (last_running_time > 0) {
+                mFormatLastRunningTime = String.format(Locale.CHINA, "%d秒", last_running_time);
+            } else {
+                mFormatLastRunningTime = "--";
+            }
+        }
+        return mFormatLastRunningTime;
     }
 
-    public String getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public String getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(String updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public int getLast_running_time() {
-        return last_running_time;
-    }
-
-    public void setLast_running_time(int last_running_time) {
-        this.last_running_time = last_running_time;
+    public String getFormatNextExecutionTime() {
+        if (mFormatNextExecutionTime == null) {
+            mFormatNextExecutionTime = CronUnit.nextExecutionTime(schedule, "--");
+        }
+        return mFormatNextExecutionTime;
     }
 
     public QLTaskState getTaskState() {
-        if (this.status == 0) {
-            return QLTaskState.RUNNING;
-        } else if (this.status == 3) {
-            return QLTaskState.WAITING;
-        } else if (this.isDisabled == 1) {
-            return QLTaskState.LIMIT;
-        } else {
-            return QLTaskState.FREE;
+        if (mState == null) {
+            if (this.status == 0) {
+                mState = QLTaskState.RUNNING;
+            } else if (this.status == 3) {
+                mState = QLTaskState.WAITING;
+            } else if (this.isDisabled == 1) {
+                mState = QLTaskState.LIMIT;
+            } else {
+                mState = QLTaskState.FREE;
+            }
         }
-    }
-
-    public String getId() {
-        return _id;
-    }
-
-    public void setId(String _id) {
-        this._id = _id;
+        return mState;
     }
 
     /**
-     * @return 任务最新日志地址
-     */
-    public String getLogPath() {
-        return "api/crons/" + _id + "/log";
-    }
-
-    public int getIndex() {
-        return index;
-    }
-
-    public void setIndex(int index) {
-        this.index = index;
-    }
-
-    /**
-     * @return 排序：运行>队列>顶置>空闲>禁止
+     * 排序，运行>队列>顶置>空闲>禁止
+     *
+     * @return -1,0,1
      */
     @Override
     public int compareTo(QLTask o) {
         if (this.getTaskState() == o.getTaskState()) {
-            return o.getIsPinned() - this.isPinned;
+            return o.isPinned() - this.isPinned;
         } else if (this.getTaskState() == QLTaskState.RUNNING && o.getTaskState() == QLTaskState.WAITING) {
             return -1;
         } else if (this.getTaskState() == QLTaskState.WAITING && o.getTaskState() == QLTaskState.RUNNING) {
@@ -191,7 +163,7 @@ public class QLTask implements Comparable<QLTask> {
         } else if ((this.getTaskState() == QLTaskState.LIMIT || this.getTaskState() == QLTaskState.FREE) && (o.getTaskState() == QLTaskState.RUNNING || o.getTaskState() == QLTaskState.WAITING)) {
             return 1;
         } else {
-            return o.getIsPinned() - this.isPinned;
+            return o.isPinned() - this.isPinned;
         }
     }
 

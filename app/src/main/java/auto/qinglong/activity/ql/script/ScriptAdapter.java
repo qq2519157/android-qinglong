@@ -22,7 +22,7 @@ public class ScriptAdapter extends RecyclerView.Adapter<ScriptAdapter.MyViewHold
     public static final String TAG = "ScriptAdapter";
 
     private final Context context;
-    private List<QLScript> data;
+    private final List<QLScript> data;
     private ItemActionListener scriptInterface;
 
     public ScriptAdapter(@NonNull Context context) {

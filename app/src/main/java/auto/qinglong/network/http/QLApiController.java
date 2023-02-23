@@ -1342,7 +1342,7 @@ public class QLApiController {
         NetManager.addCall(call, requestId);
     }
 
-    public static void getDependencies(@NonNull String requestId, String searchValue, String type, @NonNull NetGetDependenciesCallback callback) {
+    public static void getDependencies(@NonNull String requestId, @Nullable String searchValue, String type, @NonNull NetGetDependenciesCallback callback) {
         Call<QLDependenciesRes> call = new Retrofit.Builder()
                 .baseUrl(AccountSP.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())

@@ -10,7 +10,7 @@ import java.util.HashMap;
 public class PagerAdapter extends FragmentStateAdapter {
     public static final String TAG = "PagerAdapter";
 
-    private HashMap<Integer, PagerFragment> fragmentList;
+    private HashMap<Integer, DepFragment> fragmentList;
     private PagerActionListener pagerActionListener;
 
     public PagerAdapter(@NonNull FragmentActivity fragmentActivity) {
@@ -20,23 +20,23 @@ public class PagerAdapter extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        PagerFragment pagerFragment = new PagerFragment();
+        DepFragment depFragment = new DepFragment();
 
         if (position == 0) {
-            pagerFragment.setType("nodejs");
+            depFragment.setType("nodejs");
         } else if (position == 1) {
-            pagerFragment.setType("python3");
+            depFragment.setType("python3");
         } else if (position == 2) {
-            pagerFragment.setType("linux");
+            depFragment.setType("linux");
         }
 
         if (fragmentList == null) {
             fragmentList = new HashMap<>();
         }
 
-        fragmentList.put(position, pagerFragment);
-        pagerFragment.setPagerActionListener(pagerActionListener);
-        return pagerFragment;
+        fragmentList.put(position, depFragment);
+        depFragment.setPagerActionListener(pagerActionListener);
+        return depFragment;
     }
 
     @Override
@@ -44,7 +44,7 @@ public class PagerAdapter extends FragmentStateAdapter {
         return 3;
     }
 
-    public PagerFragment getCurrentFragment(int position) {
+    public DepFragment getCurrentFragment(int position) {
         return fragmentList.get(position);
     }
 

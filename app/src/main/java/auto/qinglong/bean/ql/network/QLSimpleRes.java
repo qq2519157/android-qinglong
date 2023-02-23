@@ -1,6 +1,6 @@
 package auto.qinglong.bean.ql.network;
 
-public class QLSimpleRes extends QLBaseRes{
+public class QLSimpleRes extends QLBaseRes {
     private String data;
 
     public String getData() {

@@ -180,7 +180,7 @@ public class TaskFragment extends BaseFragment {
                 Intent intent = new Intent(getContext(), CodeWebActivity.class);
                 intent.putExtra(CodeWebActivity.EXTRA_TYPE, CodeWebActivity.TYPE_LOG);
                 intent.putExtra(CodeWebActivity.EXTRA_TITLE, task.getName());
-                intent.putExtra(CodeWebActivity.EXTRA_LOG_PATH, task.getLogPath());
+                intent.putExtra(CodeWebActivity.EXTRA_LOG_PATH, task.getLastLogPath());
                 startActivity(intent);
             }
 

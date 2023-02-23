@@ -18,8 +18,8 @@ import auto.qinglong.R;
 import auto.qinglong.bean.ql.QLLog;
 
 public class LogAdapter extends RecyclerView.Adapter<LogAdapter.MyViewHolder> {
-    private Context context;
-    private List<QLLog> data;
+    private final Context context;
+    private final List<QLLog> data;
     private ItemActionListener itemActionListener;
 
     public LogAdapter(@NonNull Context context) {

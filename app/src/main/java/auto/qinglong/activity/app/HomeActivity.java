@@ -18,7 +18,7 @@ import auto.qinglong.activity.BaseActivity;
 import auto.qinglong.activity.BaseFragment;
 import auto.qinglong.activity.extension.web.PluginWebActivity;
 import auto.qinglong.activity.ql.CodeWebActivity;
-import auto.qinglong.activity.ql.dependence.DepFragment;
+import auto.qinglong.activity.ql.dependence.DepPagerFragment;
 import auto.qinglong.activity.ql.environment.EnvFragment;
 import auto.qinglong.activity.ql.log.LogFragment;
 import auto.qinglong.activity.ql.script.ScriptFragment;
@@ -51,7 +51,7 @@ public class HomeActivity extends BaseActivity {
     private LogFragment fg_log;
     private ScriptFragment fg_script;
     private EnvFragment fg_environment;
-    private DepFragment fg_dependence;
+    private DepPagerFragment fg_dependence;
     private SettingFragment fg_setting;
     //布局变量
     private DrawerLayout ui_drawer;
@@ -150,7 +150,7 @@ public class HomeActivity extends BaseActivity {
 
         menu_env.setOnClickListener(v -> showFragment(EnvFragment.TAG));
 
-        menu_dep.setOnClickListener(v -> showFragment(DepFragment.TAG));
+        menu_dep.setOnClickListener(v -> showFragment(DepPagerFragment.TAG));
 
         menu_setting.setOnClickListener(v -> showFragment(SettingFragment.TAG));
 
@@ -212,9 +212,9 @@ public class HomeActivity extends BaseActivity {
                 getSupportFragmentManager().beginTransaction().add(R.id.frame_layout, fg_environment, EnvFragment.TAG).commit();
             }
             mCurrentFragment = fg_environment;
-        } else if (menu.equals(DepFragment.TAG)) {
+        } else if (menu.equals(DepPagerFragment.TAG)) {
             if (fg_dependence == null) {
-                fg_dependence = new DepFragment();
+                fg_dependence = new DepPagerFragment();
                 fg_dependence.setMenuClickListener(mMenuClickListener);
                 getSupportFragmentManager().beginTransaction().add(R.id.frame_layout, fg_dependence, EnvFragment.TAG).commit();
             }

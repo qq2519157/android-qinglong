@@ -23,7 +23,7 @@ public class EnvItemAdapter extends RecyclerView.Adapter<EnvItemAdapter.MyViewHo
     public static final String TAG = "EnvItemAdapter";
 
     private final Context context;
-    private List<QLEnvironment> data;
+    private final List<QLEnvironment> data;
     private ItemActionListener itemActionListener;
     private boolean checkState;
     private Boolean[] dataCheckState;

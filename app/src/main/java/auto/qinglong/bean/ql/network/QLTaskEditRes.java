@@ -2,7 +2,7 @@ package auto.qinglong.bean.ql.network;
 
 import auto.qinglong.bean.ql.QLTask;
 
-public class QLTaskEditRes extends QLBaseRes{
+public class QLTaskEditRes extends QLBaseRes {
     private QLTask data;
 
     public QLTask getData() {
