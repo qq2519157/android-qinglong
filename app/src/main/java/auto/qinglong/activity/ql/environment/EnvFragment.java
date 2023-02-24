@@ -103,7 +103,7 @@ public class EnvFragment extends BaseFragment {
         ui_nav_more = view.findViewById(R.id.env_more);
         ui_bar_search = view.findViewById(R.id.env_bar_search);
         ui_search_back = view.findViewById(R.id.env_bar_search_back);
-        ui_search_value = view.findViewById(R.id.env_bar_search_value);
+        ui_search_value = view.findViewById(R.id.env_bar_search_input);
         ui_search_confirm = view.findViewById(R.id.env_bar_search_confirm);
         ui_bar_actions = view.findViewById(R.id.env_bar_actions);
         ui_actions_back = view.findViewById(R.id.env_bar_actions_back);

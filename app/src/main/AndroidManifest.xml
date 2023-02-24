@@ -24,12 +24,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:screenOrientation="portrait"
         android:supportsRtl="true"
-        android:theme="@style/Theme.main">
+        android:theme="@style/Theme.App">
 
         <activity
             android:name=".activity.app.SplashActivity"
             android:exported="true"
-            android:theme="@style/Theme.white">
+            android:theme="@style/Theme.App.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -60,7 +60,7 @@
             android:name=".activity.app.LoginActivity"
             android:exported="false"
             android:launchMode="singleTop"
-            android:theme="@style/Theme.gray" />
+            android:theme="@style/Theme.App.Login" />
     </application>
 
 </manifest>

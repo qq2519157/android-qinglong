@@ -25,7 +25,7 @@
         <EditText
             android:id="@+id/et_url"
             android:layout_width="0dp"
-            android:layout_height="34dp"
+            android:layout_height="32dp"
             android:layout_marginHorizontal="10dp"
             android:layout_weight="1"
             android:background="@drawable/style_input_gray"
@@ -36,7 +36,7 @@
             android:singleLine="true"
             android:textColor="@color/text_color_49"
             android:textCursorDrawable="@drawable/style_cursor_blue"
-            android:textSize="18sp" />
+            android:textSize="17sp" />
 
         <ImageView
             android:id="@+id/action_bar_options"

@@ -1,29 +1,28 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="Theme.main" parent="Theme.MaterialComponents.DayNight.NoActionBar.Bridge">
-        <!-- Primary brand color. -->
+    <style name="Theme.App" parent="Theme.MaterialComponents.Light.NoActionBar.Bridge">
         <!-- 导航栏颜色 -->
         <item name="colorPrimary">@color/theme_color</item>
         <item name="colorPrimaryVariant">@color/theme_color</item>
         <item name="colorOnPrimary">@color/white</item>
-        <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
         <item name="colorSecondaryVariant">@color/theme_color</item>
         <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <item name="colorControlActivated">@color/theme_color_shadow</item>
+        <item name="android:windowLightStatusBar">false</item>
         <!-- 背景颜色 -->
         <item name="android:windowBackground">@color/bg_gray</item>
     </style>
 
-    <style name="Theme.white" parent="Theme.main">
+    <style name="Theme.App.Splash" parent="Theme.App">
+        <item name="android:windowLightStatusBar">true</item>
         <item name="colorPrimary">@color/white</item>
         <item name="colorPrimaryVariant">@color/white</item>
         <item name="android:windowBackground">@color/white</item>
     </style>
 
-    <style name="Theme.gray" parent="Theme.main">
+    <style name="Theme.App.Login" parent="Theme.App">
         <item name="colorPrimary">@color/bg_gray</item>
         <item name="colorPrimaryVariant">@color/bg_gray</item>
         <item name="android:windowBackground">@color/bg_gray</item>

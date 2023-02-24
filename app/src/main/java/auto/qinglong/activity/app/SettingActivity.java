@@ -58,7 +58,6 @@ public class SettingActivity extends BaseActivity {
         ui_share.setOnClickListener(v -> DeviceUnit.shareText(this, getString(R.string.app_share_description)));
 
         ui_donate.setOnClickListener(v -> {
-            //跳转支付宝支付
             try {
                 String scheme = getString(R.string.url_alipay_scheme) + URLEncoder.encode(getString(R.string.url_alipay_qrcode), "UTF-8");
                 Uri uri = Uri.parse(scheme);
