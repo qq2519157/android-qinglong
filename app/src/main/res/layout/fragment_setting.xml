@@ -4,7 +4,6 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_gray"
     android:orientation="vertical">
 
     <LinearLayout
@@ -25,7 +24,6 @@
             android:scaleType="centerCrop"
             android:src="@drawable/ic_white_menu" />
     </LinearLayout>
-
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/page_tab"

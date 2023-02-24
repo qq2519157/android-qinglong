@@ -13,24 +13,20 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <item name="colorControlActivated">@color/theme_color_shadow</item>
+        <!-- 背景颜色 -->
+        <item name="android:windowBackground">@color/bg_gray</item>
     </style>
 
     <style name="Theme.white" parent="Theme.main">
         <item name="colorPrimary">@color/white</item>
         <item name="colorPrimaryVariant">@color/white</item>
+        <item name="android:windowBackground">@color/white</item>
     </style>
 
     <style name="Theme.gray" parent="Theme.main">
         <item name="colorPrimary">@color/bg_gray</item>
         <item name="colorPrimaryVariant">@color/bg_gray</item>
+        <item name="android:windowBackground">@color/bg_gray</item>
     </style>
 
-    <style name="Theme.main.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
-    <style name="Theme.main.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="Theme.main.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>
