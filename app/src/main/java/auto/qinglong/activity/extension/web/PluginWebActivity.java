@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.net.http.SslError;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.webkit.CookieManager;
 import android.webkit.SslErrorHandler;
@@ -17,7 +18,6 @@ import android.webkit.WebViewClient;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +45,6 @@ public class PluginWebActivity extends BaseActivity {
 
     private CookieManager cookieManager;
 
-    private LinearLayout ui_bar;
     private ImageView ui_back;
     private ImageView ui_options;
     private EditText ui_et_url;
@@ -57,7 +56,6 @@ public class PluginWebActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plugin_web);
 
-        ui_bar = findViewById(R.id.action_bar);
         ui_back = findViewById(R.id.action_bar_back);
         ui_options = findViewById(R.id.action_bar_options);
         ui_webView_container = findViewById(R.id.web_container);
@@ -91,7 +89,7 @@ public class PluginWebActivity extends BaseActivity {
         ui_options.setOnClickListener(v -> {
             ui_et_url.clearFocus();
             WindowUnit.hideKeyboard(ui_et_url);
-            showPopWindowMiniMore();
+            showPopWindowMenu(v);
         });
 
         //加载网页操作 同时清除所有cookies
@@ -149,9 +147,9 @@ public class PluginWebActivity extends BaseActivity {
         PopupWindowBuilder.buildConfirmWindow(this, confirmWindow);
     }
 
-    private void showPopWindowMiniMore() {
+    private void showPopWindowMenu(View view) {
         MiniMoreWindow miniMoreWindow = new MiniMoreWindow();
-        miniMoreWindow.setTargetView(ui_bar);
+        miniMoreWindow.setTargetView(view);
         miniMoreWindow.setGravity(Gravity.END);
         miniMoreWindow.addItem(new MiniMoreItem("rule", "规则配置", R.drawable.ic_gray_mul_setting));
         miniMoreWindow.addItem(new MiniMoreItem("read_normal", "常规提取", R.drawable.ic_gray_crop_free));
@@ -176,7 +174,7 @@ public class PluginWebActivity extends BaseActivity {
             return true;
         });
 
-        PopupWindowBuilder.buildMiniMoreWindow(this, miniMoreWindow);
+        PopupWindowBuilder.buildMenuWindow(this, miniMoreWindow);
     }
 
     private void readNormal() {

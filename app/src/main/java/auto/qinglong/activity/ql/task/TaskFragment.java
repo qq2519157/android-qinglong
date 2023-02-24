@@ -13,7 +13,6 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -93,7 +92,6 @@ public class TaskFragment extends BaseFragment {
     private LinearLayout ui_actions_delete;
     //布局控件
     private LinearLayout ui_root;
-    private RelativeLayout ui_bar;
     private RecyclerView ui_recycler;
     private SmartRefreshLayout ui_refresh;
 
@@ -108,11 +106,10 @@ public class TaskFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_task, null);
 
         ui_root = view.findViewById(R.id.root);
-        ui_bar = view.findViewById(R.id.task_bar);
         ui_bar_main = view.findViewById(R.id.task_bar_nav);
+        ui_nav_menu = view.findViewById(R.id.task_bar_nav_menu);
         ui_nav_search = view.findViewById(R.id.task_bar_nav_search);
         ui_nav_more = view.findViewById(R.id.task_bar_nav_more);
-        ui_nav_menu = view.findViewById(R.id.task_bar_nav_menu);
 
         ui_bar_search = view.findViewById(R.id.task_bar_search);
         ui_search_back = view.findViewById(R.id.task_bar_search_back);
@@ -168,7 +165,7 @@ public class TaskFragment extends BaseFragment {
 
     @Override
     public void init() {
-        mAdapter = new TaskAdapter(getContext());
+        mAdapter = new TaskAdapter(requireContext());
         ui_recycler.setAdapter(mAdapter);
         ui_recycler.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         Objects.requireNonNull(ui_recycler.getItemAnimator()).setChangeDuration(0);//取消更新动画，避免刷新闪烁
@@ -228,7 +225,7 @@ public class TaskFragment extends BaseFragment {
         });
 
         //更多操作
-        ui_nav_more.setOnClickListener(v -> showPopWindowMiniMore());
+        ui_nav_more.setOnClickListener(this::showPopWindowMenu);
 
         //搜索栏进入
         ui_nav_search.setOnClickListener(v -> changeBar(BarType.SEARCH));
@@ -383,9 +380,9 @@ public class TaskFragment extends BaseFragment {
         }, 1000);
     }
 
-    private void showPopWindowMiniMore() {
+    private void showPopWindowMenu(View view) {
         MiniMoreWindow miniMoreWindow = new MiniMoreWindow();
-        miniMoreWindow.setTargetView(ui_bar);
+        miniMoreWindow.setTargetView(view);
         miniMoreWindow.setGravity(Gravity.END);
         miniMoreWindow.addItem(new MiniMoreItem("add", "新建任务", R.drawable.ic_gray_add));
         miniMoreWindow.addItem(new MiniMoreItem("localAdd", "本地导入", R.drawable.ic_gray_file));
@@ -411,7 +408,7 @@ public class TaskFragment extends BaseFragment {
             }
             return true;
         });
-        PopupWindowBuilder.buildMiniMoreWindow(requireActivity(), miniMoreWindow);
+        PopupWindowBuilder.buildMenuWindow(requireActivity(), miniMoreWindow);
     }
 
     private void showPopWindowEdit(QLTask qlTask) {

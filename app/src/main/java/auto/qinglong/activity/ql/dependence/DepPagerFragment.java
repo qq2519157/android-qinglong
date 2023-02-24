@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -45,7 +44,6 @@ public class DepPagerFragment extends BaseFragment {
     private PagerAdapter mPagerAdapter;
     private MenuClickListener mMenuClickListener;
 
-    private RelativeLayout ui_bar;
     private LinearLayout ui_nav_bar;
     private LinearLayout ui_action_bar;
     private CheckBox ui_action_bar_check;
@@ -66,7 +64,6 @@ public class DepPagerFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_dep, null);
 
-        ui_bar = view.findViewById(R.id.dep_top_bar);
         ui_nav_bar = view.findViewById(R.id.dep_nav_bar);
 
         ui_action_bar = view.findViewById(R.id.dep_action_bar);
@@ -91,7 +88,7 @@ public class DepPagerFragment extends BaseFragment {
         ui_menu.setOnClickListener(v -> mMenuClickListener.onMenuClick());
 
         //弹窗-更多
-        ui_more.setOnClickListener(v -> showPopWindowMiniMore());
+        ui_more.setOnClickListener(this::showPopWindowMenu);
 
         //操作栏-返回
         ui_action_bar_back.setOnClickListener(v -> showBar(BarType.NAV));
@@ -200,9 +197,9 @@ public class DepPagerFragment extends BaseFragment {
         PopupWindowBuilder.buildEditWindow(requireActivity(), ui_pop_edit);
     }
 
-    private void showPopWindowMiniMore() {
+    private void showPopWindowMenu(View view) {
         MiniMoreWindow miniMoreWindow = new MiniMoreWindow();
-        miniMoreWindow.setTargetView(ui_bar);
+        miniMoreWindow.setTargetView(view);
         miniMoreWindow.setGravity(Gravity.END);
         miniMoreWindow.addItem(new MiniMoreItem("add", "新建依赖", R.drawable.ic_gray_add));
         miniMoreWindow.addItem(new MiniMoreItem("mulAction", "批量操作", R.drawable.ic_gray_mul_setting));
@@ -215,7 +212,7 @@ public class DepPagerFragment extends BaseFragment {
             return true;
         });
 
-        PopupWindowBuilder.buildMiniMoreWindow(requireActivity(), miniMoreWindow);
+        PopupWindowBuilder.buildMenuWindow(requireActivity(), miniMoreWindow);
     }
 
     private void showBar(BarType barType) {

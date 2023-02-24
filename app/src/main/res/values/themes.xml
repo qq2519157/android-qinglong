@@ -23,6 +23,7 @@
     </style>
 
     <style name="Theme.App.Login" parent="Theme.App">
+        <item name="android:windowLightStatusBar">true</item>
         <item name="colorPrimary">@color/bg_gray</item>
         <item name="colorPrimaryVariant">@color/bg_gray</item>
         <item name="android:windowBackground">@color/bg_gray</item>

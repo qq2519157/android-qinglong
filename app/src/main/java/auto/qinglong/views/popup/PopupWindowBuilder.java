@@ -34,7 +34,7 @@ public class PopupWindowBuilder {
     public static final String TAG = "PopupWindowManager";
 
     @SuppressLint("UseCompatLoadingForDrawables")
-    public static void buildMiniMoreWindow(Activity activity, MiniMoreWindow miniMoreWindow) {
+    public static void buildMenuWindow(Activity activity, MiniMoreWindow miniMoreWindow) {
         View view = LayoutInflater.from(activity.getBaseContext()).inflate(R.layout.pop_common_mini_more, null, false);
         PopupWindow popWindow = build(activity.getBaseContext(), true);
         popWindow.setContentView(view);

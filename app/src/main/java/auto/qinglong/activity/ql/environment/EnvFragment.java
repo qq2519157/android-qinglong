@@ -11,7 +11,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -66,7 +65,6 @@ public class EnvFragment extends BaseFragment {
     private EnvItemAdapter mAdapter;
 
     private LinearLayout ui_root;
-    private RelativeLayout ui_bar;
     private LinearLayout ui_bar_nav;
     private ImageView ui_nav_menu;
     private ImageView ui_nav_search;
@@ -96,7 +94,6 @@ public class EnvFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_env, null);
 
         ui_root = view.findViewById(R.id.root);
-        ui_bar = view.findViewById(R.id.env_top_bar);
         ui_bar_nav = view.findViewById(R.id.env_bar_nav);
         ui_nav_menu = view.findViewById(R.id.env_menu);
         ui_nav_search = view.findViewById(R.id.env_search);
@@ -181,7 +178,7 @@ public class EnvFragment extends BaseFragment {
         ui_nav_menu.setOnClickListener(v -> mMenuClickListener.onMenuClick());
 
         //更多操作
-        ui_nav_more.setOnClickListener(v -> showPopWindowMiniMore());
+        ui_nav_more.setOnClickListener(this::showPopWindowMenu);
 
         //搜索栏进入
         ui_nav_search.setOnClickListener(v -> {
@@ -285,9 +282,9 @@ public class EnvFragment extends BaseFragment {
         }, 1000);
     }
 
-    private void showPopWindowMiniMore() {
+    private void showPopWindowMenu(View view) {
         MiniMoreWindow miniMoreWindow = new MiniMoreWindow();
-        miniMoreWindow.setTargetView(ui_bar);
+        miniMoreWindow.setTargetView(view);
         miniMoreWindow.setGravity(Gravity.END);
         miniMoreWindow.addItem(new MiniMoreItem("add", "新建变量", R.drawable.ic_gray_add));
         miniMoreWindow.addItem(new MiniMoreItem("quickAdd", "快捷导入", R.drawable.ic_gray_flash_on));
@@ -324,7 +321,7 @@ public class EnvFragment extends BaseFragment {
             }
             return true;
         });
-        PopupWindowBuilder.buildMiniMoreWindow(requireActivity(), miniMoreWindow);
+        PopupWindowBuilder.buildMenuWindow(requireActivity(), miniMoreWindow);
     }
 
     private void showPopWindowCommonEdit(QLEnvironment environment) {

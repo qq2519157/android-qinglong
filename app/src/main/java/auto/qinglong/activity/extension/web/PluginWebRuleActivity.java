@@ -186,7 +186,7 @@ public class PluginWebRuleActivity extends BaseActivity {
             }
             return true;
         });
-        PopupWindowBuilder.buildMiniMoreWindow(this, miniMoreWindow);
+        PopupWindowBuilder.buildMenuWindow(this, miniMoreWindow);
     }
 
     private void addRuleToDB(List<WebRule> rules) {
