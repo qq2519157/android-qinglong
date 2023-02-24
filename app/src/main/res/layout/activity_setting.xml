@@ -64,7 +64,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1px"
-                        android:background="@color/divide_line" />
+                        android:background="@color/divider" />
 
                     <LinearLayout
                         android:id="@+id/app_setting_notify"
@@ -98,7 +98,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1px"
-                        android:background="@color/divide_line" />
+                        android:background="@color/divider" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -111,7 +111,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1px"
-                        android:background="@color/divide_line" />
+                        android:background="@color/divider" />
 
                     <LinearLayout
                         android:id="@+id/app_setting_document"
@@ -133,7 +133,7 @@
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="1px"
-                            android:background="@color/divide_line" />
+                            android:background="@color/divider" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -157,7 +157,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1px"
-                        android:background="@color/divide_line" />
+                        android:background="@color/divider" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -170,7 +170,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1px"
-                        android:background="@color/divide_line" />
+                        android:background="@color/divider" />
 
                     <LinearLayout
                         android:id="@+id/app_setting_donate"
@@ -192,7 +192,7 @@
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="1px"
-                            android:background="@color/divide_line" />
+                            android:background="@color/divider" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -216,7 +216,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1px"
-                        android:background="@color/divide_line" />
+                        android:background="@color/divider" />
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>

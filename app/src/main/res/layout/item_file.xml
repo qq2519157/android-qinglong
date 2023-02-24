@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/style_press_gray"
@@ -60,8 +61,11 @@
         </LinearLayout>
     </LinearLayout>
 
-    <View
+    <com.google.android.material.divider.MaterialDivider
         android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/divide_line" />
+        android:layout_height="@dimen/divider_thickness"
+        app:dividerColor="@color/divider"
+        app:dividerInsetEnd="10dp"
+        app:dividerInsetStart="50dp"
+        app:lastItemDecorated="false" />
 </LinearLayout>
