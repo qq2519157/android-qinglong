@@ -8,7 +8,6 @@ import android.os.Vibrator;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,17 +27,16 @@ import auto.qinglong.network.http.NetManager;
 import auto.qinglong.utils.ToastUnit;
 import auto.qinglong.utils.WebUnit;
 import auto.qinglong.utils.WindowUnit;
-import auto.qinglong.views.popup.EditWindow;
-import auto.qinglong.views.popup.EditWindowItem;
-import auto.qinglong.views.popup.MiniMoreItem;
-import auto.qinglong.views.popup.MiniMoreWindow;
+import auto.qinglong.views.popup.PopEditItem;
+import auto.qinglong.views.popup.PopEditWindow;
+import auto.qinglong.views.popup.PopMenuItem;
+import auto.qinglong.views.popup.PopMenuWindow;
 import auto.qinglong.views.popup.PopupWindowBuilder;
 
 public class PluginWebRuleActivity extends BaseActivity {
     public static final String TAG = "PluginWebRuleActivity";
 
     private RuleItemAdapter itemAdapter;
-    private LinearLayout ui_bar;
     private ImageView ui_bar_back;
     private ImageView ui_bar_more;
     private RecyclerView ui_recycler;
@@ -48,7 +46,6 @@ public class PluginWebRuleActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plugin_web_rule);
 
-        ui_bar = findViewById(R.id.common_bar);
         ui_bar_back = findViewById(R.id.action_bar_back);
         ui_bar_more = findViewById(R.id.bar_more);
         ui_recycler = findViewById(R.id.plugin_web_rule_recycler);
@@ -84,21 +81,21 @@ public class PluginWebRuleActivity extends BaseActivity {
 
         ui_bar_back.setOnClickListener(v -> finish());
 
-        ui_bar_more.setOnClickListener(v -> showPopWindowMiniMore());
+        ui_bar_more.setOnClickListener(this::showPopMenu);
 
         itemAdapter.setData(WebRuleDBHelper.getAll());
     }
 
     private void showPopWindowCommonEdit() {
-        EditWindow editWindow = new EditWindow("新建规则", "取消", "确定");
-        editWindow.setMaxHeight(WindowUnit.getWindowHeightPix(getBaseContext()) / 3);//限制最大高度
-        editWindow.addItem(new EditWindowItem(WebRuleDBHelper.key_env_name, null, "环境变量", "", true, true));
-        editWindow.addItem(new EditWindowItem(WebRuleDBHelper.key_name, null, "规则名称", "", true, true));
-        editWindow.addItem(new EditWindowItem(WebRuleDBHelper.key_url, null, "网址", "", true, true));
-        editWindow.addItem(new EditWindowItem(WebRuleDBHelper.key_target, null, "目标键", "选填", true, true));
-        editWindow.addItem(new EditWindowItem(WebRuleDBHelper.key_main, null, "主键", "", true, true));
-        editWindow.addItem(new EditWindowItem(WebRuleDBHelper.key_join_char, null, "连接符", "选填", true, true));
-        editWindow.setActionListener(new EditWindow.OnActionListener() {
+        PopEditWindow popEditWindow = new PopEditWindow("新建规则", "取消", "确定");
+        popEditWindow.setMaxHeight(WindowUnit.getWindowHeightPix(getBaseContext()) / 3);//限制最大高度
+        popEditWindow.addItem(new PopEditItem(WebRuleDBHelper.key_env_name, null, "环境变量", "", true, true));
+        popEditWindow.addItem(new PopEditItem(WebRuleDBHelper.key_name, null, "规则名称", "", true, true));
+        popEditWindow.addItem(new PopEditItem(WebRuleDBHelper.key_url, null, "网址", "", true, true));
+        popEditWindow.addItem(new PopEditItem(WebRuleDBHelper.key_target, null, "目标键", "选填", true, true));
+        popEditWindow.addItem(new PopEditItem(WebRuleDBHelper.key_main, null, "主键", "", true, true));
+        popEditWindow.addItem(new PopEditItem(WebRuleDBHelper.key_join_char, null, "连接符", "选填", true, true));
+        popEditWindow.setActionListener(new PopEditWindow.OnActionListener() {
             @Override
             public boolean onConfirm(Map<String, String> map) {
                 String envName = map.get(WebRuleDBHelper.key_env_name).replace(" ", "");
@@ -122,7 +119,7 @@ public class PluginWebRuleActivity extends BaseActivity {
                     return false;
                 }
 
-                WindowUnit.hideKeyboard(editWindow.getView());
+                WindowUnit.hideKeyboard(popEditWindow.getView());
                 List<WebRule> rules = new ArrayList<>();
                 rules.add(rule);
                 addRuleToDB(rules);
@@ -135,14 +132,14 @@ public class PluginWebRuleActivity extends BaseActivity {
                 return true;
             }
         });
-        PopupWindowBuilder.buildEditWindow(this, editWindow);
+        PopupWindowBuilder.buildEditWindow(this, popEditWindow);
     }
 
     private void showPopWindowRemoteEdit() {
-        EditWindow editWindow = new EditWindow("远程导入", "取消", "确定");
-        EditWindowItem itemValue = new EditWindowItem("url", null, "链接", "请输入远程地址");
-        editWindow.addItem(itemValue);
-        editWindow.setActionListener(new EditWindow.OnActionListener() {
+        PopEditWindow popEditWindow = new PopEditWindow("远程导入", "取消", "确定");
+        PopEditItem itemValue = new PopEditItem("url", null, "链接", "请输入远程地址");
+        popEditWindow.addItem(itemValue);
+        popEditWindow.setActionListener(new PopEditWindow.OnActionListener() {
             @Override
             public boolean onConfirm(Map<String, String> map) {
                 String url = map.get("url");
@@ -152,7 +149,7 @@ public class PluginWebRuleActivity extends BaseActivity {
                     return false;
                 }
 
-                WindowUnit.hideKeyboard(editWindow.getView());
+                WindowUnit.hideKeyboard(popEditWindow.getView());
                 netGetRemoteWebRules(url);
 
                 return true;
@@ -164,16 +161,14 @@ public class PluginWebRuleActivity extends BaseActivity {
             }
         });
 
-        PopupWindowBuilder.buildEditWindow(this, editWindow);
+        PopupWindowBuilder.buildEditWindow(this, popEditWindow);
     }
 
-    private void showPopWindowMiniMore() {
-        MiniMoreWindow miniMoreWindow = new MiniMoreWindow();
-        miniMoreWindow.setTargetView(ui_bar);
-        miniMoreWindow.setGravity(Gravity.END);
-        miniMoreWindow.addItem(new MiniMoreItem("add", "新建规则", R.drawable.ic_gray_add));
-        miniMoreWindow.addItem(new MiniMoreItem("remoteAdd", "远程导入", R.drawable.ic_gray_download));
-        miniMoreWindow.setOnActionListener(key -> {
+    private void showPopMenu(View view) {
+        PopMenuWindow popMenuWindow = new PopMenuWindow(view, Gravity.END);
+        popMenuWindow.addItem(new PopMenuItem("add", "新建规则", R.drawable.ic_gray_add));
+        popMenuWindow.addItem(new PopMenuItem("remoteAdd", "远程导入", R.drawable.ic_gray_download));
+        popMenuWindow.setOnActionListener(key -> {
             switch (key) {
                 case "add":
                     showPopWindowCommonEdit();
@@ -186,7 +181,7 @@ public class PluginWebRuleActivity extends BaseActivity {
             }
             return true;
         });
-        PopupWindowBuilder.buildMenuWindow(this, miniMoreWindow);
+        PopupWindowBuilder.buildMenuWindow(this, popMenuWindow);
     }
 
     private void addRuleToDB(List<WebRule> rules) {

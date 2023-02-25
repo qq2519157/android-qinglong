@@ -7,28 +7,28 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class EditWindow {
+public class PopEditWindow {
     private String title;
     private String cancelTip = "取消";
     private String confirmTip = "确定";
     private int maxHeight = 0;
     private PopupWindow popupWindow;
     private View view;
-    private List<EditWindowItem> items;
+    private List<PopEditItem> items;
     private OnActionListener actionListener;
 
-    public EditWindow() {
+    public PopEditWindow() {
         this.items = new ArrayList<>();
     }
 
-    public EditWindow(String title, String cancelTip, String confirmTip) {
+    public PopEditWindow(String title, String cancelTip, String confirmTip) {
         this.title = title;
         this.cancelTip = cancelTip;
         this.confirmTip = confirmTip;
         this.items = new ArrayList<>();
     }
 
-    public void setItems(List<EditWindowItem> items) {
+    public void setItems(List<PopEditItem> items) {
         this.items = items;
     }
 
@@ -40,11 +40,11 @@ public class EditWindow {
         this.actionListener = actionListener;
     }
 
-    public void addItem(EditWindowItem item) {
+    public void addItem(PopEditItem item) {
         this.items.add(item);
     }
 
-    public List<EditWindowItem> getItems() {
+    public List<PopEditItem> getItems() {
         return items;
     }
 

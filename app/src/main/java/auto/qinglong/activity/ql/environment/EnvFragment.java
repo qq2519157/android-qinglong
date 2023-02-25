@@ -50,13 +50,13 @@ import auto.qinglong.utils.TimeUnit;
 import auto.qinglong.utils.ToastUnit;
 import auto.qinglong.utils.WebUnit;
 import auto.qinglong.utils.WindowUnit;
-import auto.qinglong.views.popup.EditWindow;
-import auto.qinglong.views.popup.EditWindowItem;
-import auto.qinglong.views.popup.ListWindow;
-import auto.qinglong.views.popup.MiniMoreItem;
-import auto.qinglong.views.popup.MiniMoreWindow;
+import auto.qinglong.views.popup.PopEditItem;
+import auto.qinglong.views.popup.PopEditWindow;
+import auto.qinglong.views.popup.PopListWindow;
+import auto.qinglong.views.popup.PopMenuItem;
+import auto.qinglong.views.popup.PopMenuWindow;
+import auto.qinglong.views.popup.PopProgressWindow;
 import auto.qinglong.views.popup.PopupWindowBuilder;
-import auto.qinglong.views.popup.ProgressWindow;
 
 public class EnvFragment extends BaseFragment {
     public static String TAG = "EnvFragment";
@@ -64,7 +64,6 @@ public class EnvFragment extends BaseFragment {
     private MenuClickListener mMenuClickListener;
     private EnvItemAdapter mAdapter;
 
-    private LinearLayout ui_root;
     private LinearLayout ui_bar_nav;
     private ImageView ui_nav_menu;
     private ImageView ui_nav_search;
@@ -83,8 +82,8 @@ public class EnvFragment extends BaseFragment {
     private RecyclerView ui_recycler;
     private SmartRefreshLayout ui_refresh;
 
-    private EditWindow ui_pop_edit;
-    private ProgressWindow ui_pop_progress;
+    private PopEditWindow ui_pop_edit;
+    private PopProgressWindow ui_pop_progress;
 
     enum BarType {NAV, SEARCH, MUL_ACTION}
 
@@ -93,7 +92,6 @@ public class EnvFragment extends BaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_env, null);
 
-        ui_root = view.findViewById(R.id.root);
         ui_bar_nav = view.findViewById(R.id.env_bar_nav);
         ui_nav_menu = view.findViewById(R.id.env_menu);
         ui_nav_search = view.findViewById(R.id.env_search);
@@ -283,17 +281,15 @@ public class EnvFragment extends BaseFragment {
     }
 
     private void showPopWindowMenu(View view) {
-        MiniMoreWindow miniMoreWindow = new MiniMoreWindow();
-        miniMoreWindow.setTargetView(view);
-        miniMoreWindow.setGravity(Gravity.END);
-        miniMoreWindow.addItem(new MiniMoreItem("add", "新建变量", R.drawable.ic_gray_add));
-        miniMoreWindow.addItem(new MiniMoreItem("quickAdd", "快捷导入", R.drawable.ic_gray_flash_on));
-        miniMoreWindow.addItem(new MiniMoreItem("localAdd", "本地导入", R.drawable.ic_gray_file));
-        miniMoreWindow.addItem(new MiniMoreItem("remoteAdd", "远程导入", R.drawable.ic_gray_download));
-        miniMoreWindow.addItem(new MiniMoreItem("backup", "变量备份", R.drawable.ic_gray_backup));
-        miniMoreWindow.addItem(new MiniMoreItem("deleteMul", "变量去重", R.drawable.ic_gray_delete));
-        miniMoreWindow.addItem(new MiniMoreItem("mulAction", "批量操作", R.drawable.ic_gray_mul_setting));
-        miniMoreWindow.setOnActionListener(key -> {
+        PopMenuWindow popMenuWindow = new PopMenuWindow(view, Gravity.END);
+        popMenuWindow.addItem(new PopMenuItem("add", "新建变量", R.drawable.ic_gray_add));
+        popMenuWindow.addItem(new PopMenuItem("quickAdd", "快捷导入", R.drawable.ic_gray_flash_on));
+        popMenuWindow.addItem(new PopMenuItem("localAdd", "本地导入", R.drawable.ic_gray_file));
+        popMenuWindow.addItem(new PopMenuItem("remoteAdd", "远程导入", R.drawable.ic_gray_download));
+        popMenuWindow.addItem(new PopMenuItem("backup", "变量备份", R.drawable.ic_gray_backup));
+        popMenuWindow.addItem(new PopMenuItem("deleteMul", "变量去重", R.drawable.ic_gray_delete));
+        popMenuWindow.addItem(new PopMenuItem("mulAction", "批量操作", R.drawable.ic_gray_mul_setting));
+        popMenuWindow.setOnActionListener(key -> {
             switch (key) {
                 case "add":
                     showPopWindowCommonEdit(null);
@@ -321,14 +317,14 @@ public class EnvFragment extends BaseFragment {
             }
             return true;
         });
-        PopupWindowBuilder.buildMenuWindow(requireActivity(), miniMoreWindow);
+        PopupWindowBuilder.buildMenuWindow(requireActivity(), popMenuWindow);
     }
 
     private void showPopWindowCommonEdit(QLEnvironment environment) {
-        ui_pop_edit = new EditWindow("新建变量", "取消", "确定");
-        EditWindowItem itemName = new EditWindowItem("name", null, "名称", "请输入变量名称");
-        EditWindowItem itemValue = new EditWindowItem("value", null, "值", "请输入变量值");
-        EditWindowItem itemRemark = new EditWindowItem("remark", null, "备注", "请输入备注(可选)");
+        ui_pop_edit = new PopEditWindow("新建变量", "取消", "确定");
+        PopEditItem itemName = new PopEditItem("name", null, "名称", "请输入变量名称");
+        PopEditItem itemValue = new PopEditItem("value", null, "值", "请输入变量值");
+        PopEditItem itemRemark = new PopEditItem("remark", null, "备注", "请输入备注(可选)");
 
         if (environment != null) {
             ui_pop_edit.setTitle("编辑变量");
@@ -340,7 +336,7 @@ public class EnvFragment extends BaseFragment {
         ui_pop_edit.addItem(itemName);
         ui_pop_edit.addItem(itemValue);
         ui_pop_edit.addItem(itemRemark);
-        ui_pop_edit.setActionListener(new EditWindow.OnActionListener() {
+        ui_pop_edit.setActionListener(new PopEditWindow.OnActionListener() {
             @Override
             public boolean onConfirm(Map<String, String> map) {
                 String name = map.get("name");
@@ -385,13 +381,13 @@ public class EnvFragment extends BaseFragment {
     }
 
     private void showPopWindowQuickEdit() {
-        ui_pop_edit = new EditWindow("快捷导入", "取消", "确定");
-        EditWindowItem itemValue = new EditWindowItem("values", null, "文本", "请输入文本");
-        EditWindowItem itemRemark = new EditWindowItem("remark", null, "备注", "请输入备注(可选)");
+        ui_pop_edit = new PopEditWindow("快捷导入", "取消", "确定");
+        PopEditItem itemValue = new PopEditItem("values", null, "文本", "请输入文本");
+        PopEditItem itemRemark = new PopEditItem("remark", null, "备注", "请输入备注(可选)");
 
         ui_pop_edit.addItem(itemValue);
         ui_pop_edit.addItem(itemRemark);
-        ui_pop_edit.setActionListener(new EditWindow.OnActionListener() {
+        ui_pop_edit.setActionListener(new PopEditWindow.OnActionListener() {
             @Override
             public boolean onConfirm(Map<String, String> map) {
                 String values = map.get("values");
@@ -423,10 +419,10 @@ public class EnvFragment extends BaseFragment {
     }
 
     private void showPopWindowRemoteEdit() {
-        ui_pop_edit = new EditWindow("远程导入", "取消", "确定");
-        EditWindowItem itemValue = new EditWindowItem("url", null, "链接", "请输入远程地址");
+        ui_pop_edit = new PopEditWindow("远程导入", "取消", "确定");
+        PopEditItem itemValue = new PopEditItem("url", null, "链接", "请输入远程地址");
         ui_pop_edit.addItem(itemValue);
-        ui_pop_edit.setActionListener(new EditWindow.OnActionListener() {
+        ui_pop_edit.setActionListener(new PopEditWindow.OnActionListener() {
             @Override
             public boolean onConfirm(Map<String, String> map) {
                 String url = map.get("url");
@@ -451,12 +447,12 @@ public class EnvFragment extends BaseFragment {
     }
 
     private void showPopWindowBackupEdit() {
-        ui_pop_edit = new EditWindow("变量备份", "取消", "确定");
-        EditWindowItem itemName = new EditWindowItem("file_name", null, "文件名", "选填");
+        ui_pop_edit = new PopEditWindow("变量备份", "取消", "确定");
+        PopEditItem itemName = new PopEditItem("file_name", null, "文件名", "选填");
 
         ui_pop_edit.addItem(itemName);
 
-        ui_pop_edit.setActionListener(new EditWindow.OnActionListener() {
+        ui_pop_edit.setActionListener(new PopEditWindow.OnActionListener() {
             @Override
             public boolean onConfirm(Map<String, String> map) {
                 String fileName = map.get("file_name");
@@ -476,7 +472,7 @@ public class EnvFragment extends BaseFragment {
 
     private void changeBar(BarType barType) {
         if (ui_bar_search.getVisibility() == View.VISIBLE) {
-            WindowUnit.hideKeyboard(ui_root);
+            WindowUnit.hideKeyboard(ui_search_value);
             ui_bar_search.setVisibility(View.INVISIBLE);
         } else if (ui_bar_actions.getVisibility() == View.VISIBLE) {
             ui_bar_actions.setVisibility(View.INVISIBLE);
@@ -598,7 +594,7 @@ public class EnvFragment extends BaseFragment {
             return;
         }
 
-        ListWindow<LocalFileAdapter> listWindow = new ListWindow<>("选择文件");
+        PopListWindow<LocalFileAdapter> listWindow = new PopListWindow<>("选择文件");
         LocalFileAdapter fileAdapter = new LocalFileAdapter(getContext());
         fileAdapter.setData(files);
         listWindow.setAdapter(fileAdapter);

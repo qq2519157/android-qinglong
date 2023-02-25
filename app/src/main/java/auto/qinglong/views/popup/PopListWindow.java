@@ -1,21 +1,21 @@
 package auto.qinglong.views.popup;
 
-public class ListWindow<T> {
+public class PopListWindow<T> {
     private String title;
     private String cancelTip = "取消";
     private T adapter;
     private OnActionListener listener;
 
 
-    public ListWindow() {
+    public PopListWindow() {
 
     }
 
-    public ListWindow(String title) {
+    public PopListWindow(String title) {
         this.title = title;
     }
 
-    public ListWindow(String title, T adapter) {
+    public PopListWindow(String title, T adapter) {
         this.title = title;
         this.adapter = adapter;
     }

@@ -24,7 +24,7 @@
             android:src="@drawable/ic_white_menu" />
 
         <ImageView
-            android:id="@+id/script_add"
+            android:id="@+id/script_more"
             android:layout_width="@dimen/action_bar_icon_size"
             android:layout_height="@dimen/action_bar_icon_size"
             android:layout_alignParentEnd="true"
@@ -32,8 +32,8 @@
             android:layout_marginStart="10dp"
             android:background="@drawable/style_button_ripple"
             android:clickable="true"
-            android:src="@drawable/ic_white_add"
-            android:visibility="invisible" />
+            android:src="@drawable/ic_white_more_options"
+            android:visibility="visible" />
     </RelativeLayout>
 
     <TextView

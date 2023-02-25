@@ -7,12 +7,12 @@ import android.widget.TextView;
 
 import auto.qinglong.utils.WindowUnit;
 
-public class ProgressWindow {
+public class PopProgressWindow {
     private final Activity mActivity;
     private final PopupWindow ui_popupWindow;
     private final TextView ui_tip;
 
-    ProgressWindow(Activity activity, PopupWindow popupWindow, TextView textView) {
+    PopProgressWindow(Activity activity, PopupWindow popupWindow, TextView textView) {
         mActivity = activity;
         ui_popupWindow = popupWindow;
         ui_tip = textView;

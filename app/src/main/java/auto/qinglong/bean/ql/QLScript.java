@@ -54,6 +54,14 @@ public class QLScript implements Comparable<QLScript> {
         return children;
     }
 
+    public boolean isFile() {
+        return children == null;
+    }
+
+    public boolean isDirectory() {
+        return this.children != null;
+    }
+
     @Override
     public int compareTo(QLScript o) {
         if (this.children != null && o.getChildren() != null) {

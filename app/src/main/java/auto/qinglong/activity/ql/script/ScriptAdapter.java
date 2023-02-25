@@ -23,7 +23,7 @@ public class ScriptAdapter extends RecyclerView.Adapter<ScriptAdapter.MyViewHold
 
     private final Context context;
     private final List<QLScript> data;
-    private ItemActionListener scriptInterface;
+    private ItemActionListener itemActionListener;
 
     public ScriptAdapter(@NonNull Context context) {
         this.context = context;
@@ -44,13 +44,13 @@ public class ScriptAdapter extends RecyclerView.Adapter<ScriptAdapter.MyViewHold
 
         holder.ui_title.setText(qlScript.getTitle());
 
-        if (qlScript.getChildren() == null) {
-            holder.ui_num.setText(null);
-        } else {
+        if (qlScript.isDirectory()) {
             holder.ui_num.setText(qlScript.getChildren().size() + " 项");
+        } else {
+            holder.ui_num.setText(null);
         }
 
-        if (qlScript.getChildren() != null) {
+        if (qlScript.isDirectory()) {
             holder.ui_image.setImageResource(R.drawable.ic_blue_folder);
         } else if (qlScript.getTitle().matches(".*\\.(js)|(JS)$")) {
             holder.ui_image.setImageResource(R.mipmap.ic_file_js);
@@ -64,10 +64,10 @@ public class ScriptAdapter extends RecyclerView.Adapter<ScriptAdapter.MyViewHold
 
         holder.ui_mtime.setText(TimeUnit.formatTimeB((long) qlScript.getMtime()));
 
-        holder.itemView.setOnClickListener(v -> scriptInterface.onEdit(qlScript));
+        holder.itemView.setOnClickListener(v -> itemActionListener.onEdit(qlScript));
 
         holder.itemView.setOnLongClickListener(v -> {
-            scriptInterface.onMulAction(qlScript);
+            itemActionListener.onMenu(v, qlScript);
             return true;
         });
     }
@@ -84,17 +84,17 @@ public class ScriptAdapter extends RecyclerView.Adapter<ScriptAdapter.MyViewHold
         notifyDataSetChanged();
     }
 
-    public void setScriptInterface(ItemActionListener scriptInterface) {
-        this.scriptInterface = scriptInterface;
+    public void setScriptInterface(ItemActionListener itemActionListener) {
+        this.itemActionListener = itemActionListener;
     }
 
     public interface ItemActionListener {
         void onEdit(QLScript QLScript);
 
-        void onMulAction(QLScript QLScript);
+        void onMenu(View view, QLScript QLScript);
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
+    static class MyViewHolder extends RecyclerView.ViewHolder {
         public ImageView ui_image;
         public TextView ui_title;
         public TextView ui_num;

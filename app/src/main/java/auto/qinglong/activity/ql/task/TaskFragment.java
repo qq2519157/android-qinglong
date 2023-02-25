@@ -53,13 +53,13 @@ import auto.qinglong.utils.TextUnit;
 import auto.qinglong.utils.TimeUnit;
 import auto.qinglong.utils.ToastUnit;
 import auto.qinglong.utils.WindowUnit;
-import auto.qinglong.views.popup.EditWindow;
-import auto.qinglong.views.popup.EditWindowItem;
-import auto.qinglong.views.popup.ListWindow;
-import auto.qinglong.views.popup.MiniMoreItem;
-import auto.qinglong.views.popup.MiniMoreWindow;
+import auto.qinglong.views.popup.PopEditItem;
+import auto.qinglong.views.popup.PopEditWindow;
+import auto.qinglong.views.popup.PopListWindow;
+import auto.qinglong.views.popup.PopMenuItem;
+import auto.qinglong.views.popup.PopMenuWindow;
+import auto.qinglong.views.popup.PopProgressWindow;
 import auto.qinglong.views.popup.PopupWindowBuilder;
-import auto.qinglong.views.popup.ProgressWindow;
 
 public class TaskFragment extends BaseFragment {
     public static String TAG = "TaskFragment";
@@ -95,8 +95,8 @@ public class TaskFragment extends BaseFragment {
     private RecyclerView ui_recycler;
     private SmartRefreshLayout ui_refresh;
 
-    private EditWindow ui_pop_edit;
-    private ProgressWindow ui_pop_progress;
+    private PopEditWindow ui_pop_edit;
+    private PopProgressWindow ui_pop_progress;
 
     private enum BarType {NAV, SEARCH, MUL_ACTION}
 
@@ -381,15 +381,13 @@ public class TaskFragment extends BaseFragment {
     }
 
     private void showPopWindowMenu(View view) {
-        MiniMoreWindow miniMoreWindow = new MiniMoreWindow();
-        miniMoreWindow.setTargetView(view);
-        miniMoreWindow.setGravity(Gravity.END);
-        miniMoreWindow.addItem(new MiniMoreItem("add", "新建任务", R.drawable.ic_gray_add));
-        miniMoreWindow.addItem(new MiniMoreItem("localAdd", "本地导入", R.drawable.ic_gray_file));
-        miniMoreWindow.addItem(new MiniMoreItem("backup", "任务备份", R.drawable.ic_gray_backup));
-        miniMoreWindow.addItem(new MiniMoreItem("deleteMul", "任务去重", R.drawable.ic_gray_delete));
-        miniMoreWindow.addItem(new MiniMoreItem("mulAction", "批量操作", R.drawable.ic_gray_mul_setting));
-        miniMoreWindow.setOnActionListener(key -> {
+        PopMenuWindow popMenuWindow = new PopMenuWindow(view, Gravity.END);
+        popMenuWindow.addItem(new PopMenuItem("add", "新建任务", R.drawable.ic_gray_add));
+        popMenuWindow.addItem(new PopMenuItem("localAdd", "本地导入", R.drawable.ic_gray_file));
+        popMenuWindow.addItem(new PopMenuItem("backup", "任务备份", R.drawable.ic_gray_backup));
+        popMenuWindow.addItem(new PopMenuItem("deleteMul", "任务去重", R.drawable.ic_gray_delete));
+        popMenuWindow.addItem(new PopMenuItem("mulAction", "批量操作", R.drawable.ic_gray_mul_setting));
+        popMenuWindow.setOnActionListener(key -> {
             switch (key) {
                 case "add":
                     showPopWindowEdit(null);
@@ -408,14 +406,14 @@ public class TaskFragment extends BaseFragment {
             }
             return true;
         });
-        PopupWindowBuilder.buildMenuWindow(requireActivity(), miniMoreWindow);
+        PopupWindowBuilder.buildMenuWindow(requireActivity(), popMenuWindow);
     }
 
     private void showPopWindowEdit(QLTask qlTask) {
-        ui_pop_edit = new EditWindow("新建任务", "取消", "确定");
-        EditWindowItem itemName = new EditWindowItem("name", null, "名称", "请输入任务名称");
-        EditWindowItem itemCommand = new EditWindowItem("command", null, "命令", "请输入要执行的命令");
-        EditWindowItem itemSchedule = new EditWindowItem("schedule", null, "定时规则", "秒(可选) 分 时 天 月 周");
+        ui_pop_edit = new PopEditWindow("新建任务", "取消", "确定");
+        PopEditItem itemName = new PopEditItem("name", null, "名称", "请输入任务名称");
+        PopEditItem itemCommand = new PopEditItem("command", null, "命令", "请输入要执行的命令");
+        PopEditItem itemSchedule = new PopEditItem("schedule", null, "定时规则", "秒(可选) 分 时 天 月 周");
 
         if (qlTask != null) {
             ui_pop_edit.setTitle("编辑任务");
@@ -427,7 +425,7 @@ public class TaskFragment extends BaseFragment {
         ui_pop_edit.addItem(itemName);
         ui_pop_edit.addItem(itemCommand);
         ui_pop_edit.addItem(itemSchedule);
-        ui_pop_edit.setActionListener(new EditWindow.OnActionListener() {
+        ui_pop_edit.setActionListener(new PopEditWindow.OnActionListener() {
             @Override
             public boolean onConfirm(Map<String, String> map) {
                 String name = map.get("name");
@@ -476,12 +474,12 @@ public class TaskFragment extends BaseFragment {
     }
 
     private void showPopWindowBackupEdit() {
-        ui_pop_edit = new EditWindow("任务备份", "取消", "确定");
-        EditWindowItem itemName = new EditWindowItem("file_name", null, "文件名", "选填");
+        ui_pop_edit = new PopEditWindow("任务备份", "取消", "确定");
+        PopEditItem itemName = new PopEditItem("file_name", null, "文件名", "选填");
 
         ui_pop_edit.addItem(itemName);
 
-        ui_pop_edit.setActionListener(new EditWindow.OnActionListener() {
+        ui_pop_edit.setActionListener(new PopEditWindow.OnActionListener() {
             @Override
             public boolean onConfirm(Map<String, String> map) {
                 String fileName = map.get("file_name");
@@ -555,7 +553,7 @@ public class TaskFragment extends BaseFragment {
             return;
         }
 
-        ListWindow<LocalFileAdapter> listWindow = new ListWindow<>("选择文件");
+        PopListWindow<LocalFileAdapter> listWindow = new PopListWindow<>("选择文件");
         LocalFileAdapter fileAdapter = new LocalFileAdapter(getContext());
         fileAdapter.setData(files);
         listWindow.setAdapter(fileAdapter);

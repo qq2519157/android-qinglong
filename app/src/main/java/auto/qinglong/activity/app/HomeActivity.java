@@ -36,7 +36,7 @@ import auto.qinglong.utils.TextUnit;
 import auto.qinglong.utils.ToastUnit;
 import auto.qinglong.utils.WebUnit;
 import auto.qinglong.utils.WindowUnit;
-import auto.qinglong.views.popup.ConfirmWindow;
+import auto.qinglong.views.popup.PopConfirmWindow;
 import auto.qinglong.views.popup.PopupWindowBuilder;
 
 public class HomeActivity extends BaseActivity {
@@ -245,10 +245,10 @@ public class HomeActivity extends BaseActivity {
         content += "更新时间：" + version.getUpdateTime() + "\n\n";
         content += TextUnit.join(version.getUpdateDetail(), "\n\n");
 
-        ConfirmWindow confirmWindow = new ConfirmWindow("版本更新", content, "取消", "更新");
-        confirmWindow.setMaxHeight(WindowUnit.getWindowHeightPix(getBaseContext()) / 3);
-        confirmWindow.setFocusable(false);
-        confirmWindow.setConfirmInterface(isConfirm -> {
+        PopConfirmWindow popConfirmWindow = new PopConfirmWindow("版本更新", content, "取消", "更新");
+        popConfirmWindow.setMaxHeight(WindowUnit.getWindowHeightPix(getBaseContext()) / 3);
+        popConfirmWindow.setFocusable(false);
+        popConfirmWindow.setConfirmInterface(isConfirm -> {
             if (isConfirm) {
                 WebUnit.open(this, version.getDownloadUrl());
                 return !version.isForce();
@@ -259,7 +259,7 @@ public class HomeActivity extends BaseActivity {
                 return true;
             }
         });
-        ui_pop_notice = PopupWindowBuilder.buildConfirmWindow(this, confirmWindow);
+        ui_pop_notice = PopupWindowBuilder.buildConfirmWindow(this, popConfirmWindow);
     }
 
     private void netGetVersion() {

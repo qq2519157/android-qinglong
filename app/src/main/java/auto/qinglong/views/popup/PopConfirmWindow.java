@@ -1,7 +1,7 @@
 package auto.qinglong.views.popup;
 
 
-public class ConfirmWindow {
+public class PopConfirmWindow {
     private String title;
     private String content;
     private String cancelTip = "取消";
@@ -11,16 +11,16 @@ public class ConfirmWindow {
 
     private OnConfirmListener onConfirmListener;
 
-    public ConfirmWindow() {
+    public PopConfirmWindow() {
 
     }
 
-    public ConfirmWindow(String title, String content) {
+    public PopConfirmWindow(String title, String content) {
         this.title = title;
         this.content = content;
     }
 
-    public ConfirmWindow(String title, String content, String cancelTip, String confirmTip) {
+    public PopConfirmWindow(String title, String content, String cancelTip, String confirmTip) {
         this.title = title;
         this.content = content;
         this.cancelTip = cancelTip;

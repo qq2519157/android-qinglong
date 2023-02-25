@@ -1,11 +1,11 @@
 package auto.qinglong.views.popup;
 
-public class MiniMoreItem {
+public class PopMenuItem {
     private String key;
     private String name;
     private int icon;
 
-    public MiniMoreItem(String key, String name, int icon) {
+    public PopMenuItem(String key, String name, int icon) {
         this.key = key;
         this.name = name;
         this.icon = icon;

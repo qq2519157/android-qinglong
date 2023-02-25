@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,9 @@ import auto.qinglong.database.db.StatisticsDBHelper;
 import auto.qinglong.network.http.NetManager;
 import auto.qinglong.network.http.QLApiController;
 import auto.qinglong.utils.ToastUnit;
+import auto.qinglong.views.popup.PopMenuItem;
+import auto.qinglong.views.popup.PopMenuWindow;
+import auto.qinglong.views.popup.PopupWindowBuilder;
 
 
 public class ScriptFragment extends BaseFragment {
@@ -36,12 +40,11 @@ public class ScriptFragment extends BaseFragment {
 
     private MenuClickListener menuClickListener;
     private ScriptAdapter scriptAdapter;
-    //根数据
-    private List<QLScript> oData;
-    //可返回操作
-    private boolean canBack = false;
+    private List<QLScript> oData;//根数据
+    private boolean canBack = false;//可返回操作
 
     private ImageView ui_menu;
+    private ImageView ui_more;
     private SmartRefreshLayout ui_refresh;
     private TextView ui_dir_tip;
     private RecyclerView ui_recycler;
@@ -50,8 +53,10 @@ public class ScriptFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_script, null, false);
 
-        ui_dir_tip = view.findViewById(R.id.script_dir_tip);
+
         ui_menu = view.findViewById(R.id.scrip_menu);
+        ui_more = view.findViewById(R.id.script_more);
+        ui_dir_tip = view.findViewById(R.id.script_dir_tip);
         ui_refresh = view.findViewById(R.id.refresh_layout);
         ui_recycler = view.findViewById(R.id.recycler_view);
 
@@ -98,12 +103,10 @@ public class ScriptFragment extends BaseFragment {
         Objects.requireNonNull(ui_recycler.getItemAnimator()).setChangeDuration(0);
         ui_recycler.setAdapter(scriptAdapter);
 
-        ui_menu.setOnClickListener(v -> menuClickListener.onMenuClick());
-
         scriptAdapter.setScriptInterface(new ScriptAdapter.ItemActionListener() {
             @Override
             public void onEdit(QLScript script) {
-                if (script.getChildren() != null) {
+                if (script.isDirectory()) {
                     canBack = true;
                     sortAndSetData(script.getChildren(), script.getTitle());
                 } else {
@@ -118,14 +121,16 @@ public class ScriptFragment extends BaseFragment {
             }
 
             @Override
-            public void onMulAction(QLScript QLScript) {
-                ClipboardManager clipboardManager = (ClipboardManager) requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
-                clipboardManager.setPrimaryClip(ClipData.newPlainText(null, QLScript.getKey()));
-                ToastUnit.showShort(getString(R.string.tip_copy_path_ready));
+            public void onMenu(View view, QLScript script) {
+                showPopMenu(view, script);
             }
         });
 
         ui_refresh.setOnRefreshListener(refreshLayout -> netGetScripts());
+
+        ui_menu.setOnClickListener(v -> menuClickListener.onMenuClick());
+
+        ui_more.setOnClickListener(this::showPopMenu);
     }
 
     private void initData() {
@@ -139,6 +144,38 @@ public class ScriptFragment extends BaseFragment {
             }
         }, 1000);
 
+    }
+
+    private void showPopMenu(View v, QLScript script) {
+        PopMenuWindow popMenuWindow = new PopMenuWindow(v, Gravity.END);
+        popMenuWindow.addItem(new PopMenuItem("copy", "复制路径", R.drawable.ic_gray_crop_free));
+        popMenuWindow.addItem(new PopMenuItem("backup", "备份脚本", R.drawable.ic_gray_backup));
+        if (script.isFile()) {
+            popMenuWindow.addItem(new PopMenuItem("delete", "删除脚本", R.drawable.ic_gray_delete));
+        }
+
+        popMenuWindow.setOnActionListener(key -> {
+            switch (key) {
+                case "copy":
+                    ClipboardManager clipboardManager = (ClipboardManager) requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                    clipboardManager.setPrimaryClip(ClipData.newPlainText(null, script.getKey()));
+                    ToastUnit.showShort(getString(R.string.tip_copy_path_ready));
+                    break;
+                case "backup":
+                    break;
+            }
+            return true;
+        });
+
+        PopupWindowBuilder.buildMenuWindow(requireActivity(), popMenuWindow);
+    }
+
+    private void showPopMenu(View v) {
+        PopMenuWindow popMenuWindow = new PopMenuWindow(v, Gravity.END);
+        popMenuWindow.addItem(new PopMenuItem("add", "新建脚本", R.drawable.ic_gray_add));
+        popMenuWindow.addItem(new PopMenuItem("backup", "备份脚本", R.drawable.ic_gray_backup));
+
+        PopupWindowBuilder.buildMenuWindow(requireActivity(), popMenuWindow);
     }
 
     private void sortAndSetData(List<QLScript> data, String dir) {

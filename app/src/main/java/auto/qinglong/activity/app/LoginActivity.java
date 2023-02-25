@@ -21,8 +21,8 @@ import auto.qinglong.utils.TextUnit;
 import auto.qinglong.utils.ToastUnit;
 import auto.qinglong.utils.WebUnit;
 import auto.qinglong.utils.WindowUnit;
+import auto.qinglong.views.popup.PopProgressWindow;
 import auto.qinglong.views.popup.PopupWindowBuilder;
-import auto.qinglong.views.popup.ProgressWindow;
 
 public class LoginActivity extends BaseActivity {
     public static final String TAG = "LoginActivity";
@@ -32,7 +32,7 @@ public class LoginActivity extends BaseActivity {
     private EditText ui_address;
     private EditText ui_username;
     private EditText ui_password;
-    private ProgressWindow ui_pop_progress;
+    private PopProgressWindow ui_pop_progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

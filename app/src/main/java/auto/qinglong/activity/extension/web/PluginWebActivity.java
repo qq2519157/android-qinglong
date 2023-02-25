@@ -35,9 +35,9 @@ import auto.qinglong.utils.ToastUnit;
 import auto.qinglong.utils.WebUnit;
 import auto.qinglong.utils.WindowUnit;
 import auto.qinglong.views.WebViewBuilder;
-import auto.qinglong.views.popup.ConfirmWindow;
-import auto.qinglong.views.popup.MiniMoreItem;
-import auto.qinglong.views.popup.MiniMoreWindow;
+import auto.qinglong.views.popup.PopConfirmWindow;
+import auto.qinglong.views.popup.PopMenuItem;
+import auto.qinglong.views.popup.PopMenuWindow;
 import auto.qinglong.views.popup.PopupWindowBuilder;
 
 public class PluginWebActivity extends BaseActivity {
@@ -89,7 +89,7 @@ public class PluginWebActivity extends BaseActivity {
         ui_options.setOnClickListener(v -> {
             ui_et_url.clearFocus();
             WindowUnit.hideKeyboard(ui_et_url);
-            showPopWindowMenu(v);
+            showPopMenu(v);
         });
 
         //加载网页操作 同时清除所有cookies
@@ -129,13 +129,13 @@ public class PluginWebActivity extends BaseActivity {
 
     private void showPopWindowConfirm(String content) {
         //配置pop窗体信息
-        ConfirmWindow confirmWindow = new ConfirmWindow();
-        confirmWindow.setMaxHeight(WindowUnit.getWindowHeightPix(getBaseContext()) / 3);//限制最大高度
-        confirmWindow.setConfirmTip("拷贝");
-        confirmWindow.setCancelTip("取消");
-        confirmWindow.setTitle("Cookies");
-        confirmWindow.setContent(content);
-        confirmWindow.setConfirmInterface(isConfirm -> {
+        PopConfirmWindow popConfirmWindow = new PopConfirmWindow();
+        popConfirmWindow.setMaxHeight(WindowUnit.getWindowHeightPix(getBaseContext()) / 3);//限制最大高度
+        popConfirmWindow.setConfirmTip("拷贝");
+        popConfirmWindow.setCancelTip("取消");
+        popConfirmWindow.setTitle("Cookies");
+        popConfirmWindow.setContent(content);
+        popConfirmWindow.setConfirmInterface(isConfirm -> {
             if (isConfirm) {
                 ClipboardManager clipboardManager = (ClipboardManager) getBaseContext().getSystemService(Context.CLIPBOARD_SERVICE);
                 clipboardManager.setPrimaryClip(ClipData.newPlainText(null, content));
@@ -144,19 +144,17 @@ public class PluginWebActivity extends BaseActivity {
             return true;
         });
         //构建并显示pop窗体
-        PopupWindowBuilder.buildConfirmWindow(this, confirmWindow);
+        PopupWindowBuilder.buildConfirmWindow(this, popConfirmWindow);
     }
 
-    private void showPopWindowMenu(View view) {
-        MiniMoreWindow miniMoreWindow = new MiniMoreWindow();
-        miniMoreWindow.setTargetView(view);
-        miniMoreWindow.setGravity(Gravity.END);
-        miniMoreWindow.addItem(new MiniMoreItem("rule", "规则配置", R.drawable.ic_gray_mul_setting));
-        miniMoreWindow.addItem(new MiniMoreItem("read_normal", "常规提取", R.drawable.ic_gray_crop_free));
-        miniMoreWindow.addItem(new MiniMoreItem("read_rule", "规则提取", R.drawable.ic_gray_rule));
-        miniMoreWindow.addItem(new MiniMoreItem("import", "导入变量", R.drawable.ic_gray_backup));
+    private void showPopMenu(View view) {
+        PopMenuWindow popMenuWindow = new PopMenuWindow(view,Gravity.END);
+        popMenuWindow.addItem(new PopMenuItem("rule", "规则配置", R.drawable.ic_gray_mul_setting));
+        popMenuWindow.addItem(new PopMenuItem("read_normal", "常规提取", R.drawable.ic_gray_crop_free));
+        popMenuWindow.addItem(new PopMenuItem("read_rule", "规则提取", R.drawable.ic_gray_rule));
+        popMenuWindow.addItem(new PopMenuItem("import", "导入变量", R.drawable.ic_gray_backup));
 
-        miniMoreWindow.setOnActionListener(key -> {
+        popMenuWindow.setOnActionListener(key -> {
             switch (key) {
                 case "rule":
                     Intent intent = new Intent(getBaseContext(), PluginWebRuleActivity.class);
@@ -174,7 +172,7 @@ public class PluginWebActivity extends BaseActivity {
             return true;
         });
 
-        PopupWindowBuilder.buildMenuWindow(this, miniMoreWindow);
+        PopupWindowBuilder.buildMenuWindow(this, popMenuWindow);
     }
 
     private void readNormal() {

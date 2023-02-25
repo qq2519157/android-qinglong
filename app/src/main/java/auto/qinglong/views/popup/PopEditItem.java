@@ -1,6 +1,6 @@
 package auto.qinglong.views.popup;
 
-public class EditWindowItem {
+public class PopEditItem {
     private String key;
     private String value;
     private String label;
@@ -8,18 +8,18 @@ public class EditWindowItem {
     private boolean focusable = true;
     private boolean editable = true;
 
-    public EditWindowItem() {
+    public PopEditItem() {
 
     }
 
-    public EditWindowItem(String key, String value, String label, String hint) {
+    public PopEditItem(String key, String value, String label, String hint) {
         this.key = key;
         this.value = value;
         this.label = label;
         this.hint = hint;
     }
 
-    public EditWindowItem(String key, String value, String label, String hint, boolean focusable, boolean editable) {
+    public PopEditItem(String key, String value, String label, String hint, boolean focusable, boolean editable) {
         this.key = key;
         this.value = value;
         this.label = label;

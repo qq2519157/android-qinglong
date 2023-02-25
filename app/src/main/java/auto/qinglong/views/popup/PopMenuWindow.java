@@ -5,21 +5,29 @@ import android.view.View;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MiniMoreWindow {
-    private List<MiniMoreItem> items = new ArrayList<>();
+public class PopMenuWindow {
+    private List<PopMenuItem> items = new ArrayList<>();
     private OnActionListener onActionListener;
     private View targetView;
     private int gravity;
 
-    public List<MiniMoreItem> getItems() {
+    public PopMenuWindow() {
+    }
+
+    public PopMenuWindow(View view, int gravity) {
+        this.targetView = view;
+        this.gravity = gravity;
+    }
+
+    public List<PopMenuItem> getItems() {
         return items;
     }
 
-    public void setItems(List<MiniMoreItem> items) {
+    public void addItems(List<PopMenuItem> items) {
         this.items = items;
     }
 
-    public void addItem(MiniMoreItem item) {
+    public void addItem(PopMenuItem item) {
         this.items.add(item);
     }
 

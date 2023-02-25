@@ -27,10 +27,10 @@ import auto.qinglong.network.http.QLApiController;
 import auto.qinglong.utils.TextUnit;
 import auto.qinglong.utils.ToastUnit;
 import auto.qinglong.utils.WindowUnit;
-import auto.qinglong.views.popup.EditWindow;
-import auto.qinglong.views.popup.EditWindowItem;
-import auto.qinglong.views.popup.MiniMoreItem;
-import auto.qinglong.views.popup.MiniMoreWindow;
+import auto.qinglong.views.popup.PopEditItem;
+import auto.qinglong.views.popup.PopEditWindow;
+import auto.qinglong.views.popup.PopMenuItem;
+import auto.qinglong.views.popup.PopMenuWindow;
 import auto.qinglong.views.popup.PopupWindowBuilder;
 
 
@@ -55,7 +55,7 @@ public class DepPagerFragment extends BaseFragment {
     private ViewPager2 ui_page;
     private TabLayout ui_page_tab;
 
-    private EditWindow ui_pop_edit;
+    private PopEditWindow ui_pop_edit;
 
     enum BarType {NAV, ACTION}
 
@@ -157,12 +157,12 @@ public class DepPagerFragment extends BaseFragment {
     }
 
     private void showPopWindowEdit() {
-        ui_pop_edit = new EditWindow("新建依赖", "取消", "确定");
+        ui_pop_edit = new PopEditWindow("新建依赖", "取消", "确定");
         ui_pop_edit.setMaxHeight(WindowUnit.getWindowHeightPix(requireContext()) / 3);
         String type = mPagerAdapter.getCurrentFragment(ui_page.getCurrentItem()).getType();
-        ui_pop_edit.addItem(new EditWindowItem("type", type, "类型", null, false, false));
-        ui_pop_edit.addItem(new EditWindowItem("name", null, "名称", "请输入依赖名称"));
-        ui_pop_edit.setActionListener(new EditWindow.OnActionListener() {
+        ui_pop_edit.addItem(new PopEditItem("type", type, "类型", null, false, false));
+        ui_pop_edit.addItem(new PopEditItem("name", null, "名称", "请输入依赖名称"));
+        ui_pop_edit.setActionListener(new PopEditWindow.OnActionListener() {
             @Override
             public boolean onConfirm(Map<String, String> map) {
                 String type = map.get("type");
@@ -198,12 +198,10 @@ public class DepPagerFragment extends BaseFragment {
     }
 
     private void showPopWindowMenu(View view) {
-        MiniMoreWindow miniMoreWindow = new MiniMoreWindow();
-        miniMoreWindow.setTargetView(view);
-        miniMoreWindow.setGravity(Gravity.END);
-        miniMoreWindow.addItem(new MiniMoreItem("add", "新建依赖", R.drawable.ic_gray_add));
-        miniMoreWindow.addItem(new MiniMoreItem("mulAction", "批量操作", R.drawable.ic_gray_mul_setting));
-        miniMoreWindow.setOnActionListener(key -> {
+        PopMenuWindow popMenuWindow = new PopMenuWindow(view, Gravity.END);
+        popMenuWindow.addItem(new PopMenuItem("add", "新建依赖", R.drawable.ic_gray_add));
+        popMenuWindow.addItem(new PopMenuItem("mulAction", "批量操作", R.drawable.ic_gray_mul_setting));
+        popMenuWindow.setOnActionListener(key -> {
             if (key.equals("add")) {
                 showPopWindowEdit();
             } else {
@@ -212,7 +210,7 @@ public class DepPagerFragment extends BaseFragment {
             return true;
         });
 
-        PopupWindowBuilder.buildMenuWindow(requireActivity(), miniMoreWindow);
+        PopupWindowBuilder.buildMenuWindow(requireActivity(), popMenuWindow);
     }
 
     private void showBar(BarType barType) {
