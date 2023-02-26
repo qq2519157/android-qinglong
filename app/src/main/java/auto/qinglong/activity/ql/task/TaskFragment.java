@@ -384,7 +384,7 @@ public class TaskFragment extends BaseFragment {
         PopMenuWindow popMenuWindow = new PopMenuWindow(view, Gravity.END);
         popMenuWindow.addItem(new PopMenuItem("add", "新建任务", R.drawable.ic_gray_add));
         popMenuWindow.addItem(new PopMenuItem("localAdd", "本地导入", R.drawable.ic_gray_file));
-        popMenuWindow.addItem(new PopMenuItem("backup", "任务备份", R.drawable.ic_gray_backup));
+        popMenuWindow.addItem(new PopMenuItem("backup", "任务备份", R.drawable.ic_gray_download));
         popMenuWindow.addItem(new PopMenuItem("deleteMul", "任务去重", R.drawable.ic_gray_delete));
         popMenuWindow.addItem(new PopMenuItem("mulAction", "批量操作", R.drawable.ic_gray_mul_setting));
         popMenuWindow.setOnActionListener(key -> {

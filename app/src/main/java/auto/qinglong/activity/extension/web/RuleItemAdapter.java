@@ -31,7 +31,7 @@ public class RuleItemAdapter extends RecyclerView.Adapter<RuleItemAdapter.MyView
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_plugin_web_rule, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.recycle_item_plugin_web_rule, parent, false);
         return new MyViewHolder(view);
     }
 

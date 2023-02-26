@@ -43,7 +43,7 @@
         android:layout_height="match_parent"
         app:srlAccentColor="@color/text_color_80"
         app:srlEnableOverScrollDrag="true"
-        app:srlPrimaryColor="@color/bg_gray">
+        app:srlPrimaryColor="@color/gray_background">
 
         <com.scwang.smart.refresh.header.ClassicsHeader
             android:id="@+id/refresh_header"

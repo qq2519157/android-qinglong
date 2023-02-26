@@ -29,7 +29,7 @@ public class LocalFileAdapter extends RecyclerView.Adapter<LocalFileAdapter.MyVi
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(this.context).inflate(R.layout.item_pop_common_local_file, parent, false);
+        View view = LayoutInflater.from(this.context).inflate(R.layout.pop_item_file, parent, false);
         return new MyViewHolder(view);
     }
 

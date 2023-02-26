@@ -12,7 +12,7 @@
         <item name="colorControlActivated">@color/theme_color_shadow</item>
         <item name="android:windowLightStatusBar">false</item>
         <!-- 背景颜色 -->
-        <item name="android:windowBackground">@color/bg_gray</item>
+        <item name="android:windowBackground">@color/gray_background</item>
     </style>
 
     <style name="Theme.App.Splash" parent="Theme.App">
@@ -24,9 +24,9 @@
 
     <style name="Theme.App.Login" parent="Theme.App">
         <item name="android:windowLightStatusBar">true</item>
-        <item name="colorPrimary">@color/bg_gray</item>
-        <item name="colorPrimaryVariant">@color/bg_gray</item>
-        <item name="android:windowBackground">@color/bg_gray</item>
+        <item name="colorPrimary">@color/gray_background</item>
+        <item name="colorPrimaryVariant">@color/gray_background</item>
+        <item name="android:windowBackground">@color/gray_background</item>
     </style>
 
 </resources>

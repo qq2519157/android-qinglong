@@ -2,10 +2,10 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_pressed="true">
         <shape android:shape="rectangle">
-            <solid android:color="@color/press_gray" />
+            <solid android:color="@color/gray_press" />
         </shape>
         <ripple android:color="#000000">
-            <item android:id="@android:id/mask" android:drawable="@color/press_gray" />
+            <item android:id="@android:id/mask" android:drawable="@color/gray_press" />
         </ripple>
     </item>
 </selector>

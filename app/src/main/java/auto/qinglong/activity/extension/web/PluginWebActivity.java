@@ -152,7 +152,7 @@ public class PluginWebActivity extends BaseActivity {
         popMenuWindow.addItem(new PopMenuItem("rule", "规则配置", R.drawable.ic_gray_mul_setting));
         popMenuWindow.addItem(new PopMenuItem("read_normal", "常规提取", R.drawable.ic_gray_crop_free));
         popMenuWindow.addItem(new PopMenuItem("read_rule", "规则提取", R.drawable.ic_gray_rule));
-        popMenuWindow.addItem(new PopMenuItem("import", "导入变量", R.drawable.ic_gray_backup));
+        popMenuWindow.addItem(new PopMenuItem("import", "导入变量", R.drawable.ic_gray_upload));
 
         popMenuWindow.setOnActionListener(key -> {
             switch (key) {

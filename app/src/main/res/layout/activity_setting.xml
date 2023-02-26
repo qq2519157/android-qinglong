@@ -79,7 +79,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginVertical="@dimen/app_setting_text_margin_vertical"
                             android:text="@string/app_setting_notify"
-                            android:textColor="@color/app_setting_text_color"
+                            android:textColor="@color/text_color_19"
                             android:textSize="@dimen/app_setting_text_size" />
 
                         <View
@@ -127,7 +127,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginVertical="@dimen/app_setting_text_margin_vertical"
                             android:text="@string/app_setting_document"
-                            android:textColor="@color/app_setting_text_color"
+                            android:textColor="@color/text_color_19"
                             android:textSize="@dimen/app_setting_text_size" />
 
                         <View
@@ -150,7 +150,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginVertical="@dimen/app_setting_text_margin_vertical"
                             android:text="@string/app_setting_issue"
-                            android:textColor="@color/app_setting_text_color"
+                            android:textColor="@color/text_color_19"
                             android:textSize="@dimen/app_setting_text_size" />
                     </LinearLayout>
 
@@ -186,7 +186,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginVertical="@dimen/app_setting_text_margin_vertical"
                             android:text="@string/app_setting_donate"
-                            android:textColor="@color/app_setting_text_color"
+                            android:textColor="@color/text_color_19"
                             android:textSize="@dimen/app_setting_text_size" />
 
                         <View
@@ -209,7 +209,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginVertical="@dimen/app_setting_text_margin_vertical"
                             android:text="@string/app_setting_share"
-                            android:textColor="@color/app_setting_text_color"
+                            android:textColor="@color/text_color_19"
                             android:textSize="@dimen/app_setting_text_size" />
                     </LinearLayout>
 

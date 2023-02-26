@@ -30,7 +30,7 @@ public class LogAdapter extends RecyclerView.Adapter<LogAdapter.MyViewHolder> {
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_file, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.recycle_item_file, parent, false);
         return new MyViewHolder(view);
     }
 

@@ -30,19 +30,18 @@ import auto.qinglong.utils.WindowUnit;
 import auto.qinglong.views.FixScrollView;
 
 public class PopupWindowBuilder {
-
     public static final String TAG = "PopupWindowManager";
 
     @SuppressLint("UseCompatLoadingForDrawables")
     public static void buildMenuWindow(Activity activity, PopMenuWindow popMenuWindow) {
-        View view = LayoutInflater.from(activity.getBaseContext()).inflate(R.layout.pop_common_mini_more, null, false);
+        View view = LayoutInflater.from(activity.getBaseContext()).inflate(R.layout.pop_window_menu, null, false);
         PopupWindow popWindow = build(activity.getBaseContext(), true);
         popWindow.setContentView(view);
 
         LinearLayout ui_ll_container = view.findViewById(R.id.pop_common_ll_container);
 
         for (PopMenuItem item : popMenuWindow.getItems()) {
-            View itemView = LayoutInflater.from(activity.getBaseContext()).inflate(R.layout.item_pop_common_mini_more, null, false);
+            View itemView = LayoutInflater.from(activity.getBaseContext()).inflate(R.layout.pop_item_menu, null, false);
             ImageView ui_icon = itemView.findViewById(R.id.pop_common_mini_more_icon);
             TextView ui_name = itemView.findViewById(R.id.pop_common_mini_more_name);
             ui_icon.setImageDrawable(activity.getDrawable(item.getIcon()));
@@ -66,7 +65,7 @@ public class PopupWindowBuilder {
     }
 
     public static void buildEditWindow(@NonNull Activity activity, PopEditWindow popEditWindow) {
-        View view = LayoutInflater.from(activity.getBaseContext()).inflate(R.layout.pop_common_edit, null, false);
+        View view = LayoutInflater.from(activity.getBaseContext()).inflate(R.layout.pop_window_edit, null, false);
         PopupWindow popWindow = build(activity.getBaseContext(), true);
         popWindow.setContentView(view);
         popEditWindow.setView(view);
@@ -87,7 +86,7 @@ public class PopupWindowBuilder {
         List<EditText> itemViews = new ArrayList<>();
         List<PopEditItem> items = popEditWindow.getItems();
         for (PopEditItem item : items) {
-            View itemView = LayoutInflater.from(activity.getBaseContext()).inflate(R.layout.item_pop_common_edit, null, false);
+            View itemView = LayoutInflater.from(activity.getBaseContext()).inflate(R.layout.pop_item_edit, null, false);
             TextView ui_item_label = itemView.findViewById(R.id.pop_common_tv_label);
             EditText ui_item_value = itemView.findViewById(R.id.pop_common_et_value);
             ui_item_label.setText(item.getLabel());
@@ -131,7 +130,7 @@ public class PopupWindowBuilder {
     }
 
     public static PopupWindow buildListWindow(Activity activity, PopListWindow listWindow) {
-        View view = LayoutInflater.from(activity.getBaseContext()).inflate(R.layout.pop_common_list, null, false);
+        View view = LayoutInflater.from(activity.getBaseContext()).inflate(R.layout.pop_window_list, null, false);
         PopupWindow popWindow = build(activity.getBaseContext(), true);
         popWindow.setContentView(view);
 
@@ -166,7 +165,7 @@ public class PopupWindowBuilder {
     }
 
     public static PopupWindow buildConfirmWindow(Activity activity, PopConfirmWindow popConfirmWindow) {
-        View view = LayoutInflater.from(activity.getBaseContext()).inflate(R.layout.pop_common_confirm, null, false);
+        View view = LayoutInflater.from(activity.getBaseContext()).inflate(R.layout.pop_window_confirm, null, false);
         PopupWindow popWindow = build(activity.getBaseContext(), popConfirmWindow.isFocusable());
         popWindow.setContentView(view);
 
@@ -208,7 +207,7 @@ public class PopupWindowBuilder {
     }
 
     public static PopProgressWindow buildProgressWindow(Activity activity, PopupWindow.OnDismissListener dismissListener) {
-        View view = LayoutInflater.from(activity.getBaseContext()).inflate(R.layout.pop_common_loading, null, false);
+        View view = LayoutInflater.from(activity.getBaseContext()).inflate(R.layout.pop_window_loading, null, false);
         PopupWindow popWindow = build(activity.getBaseContext(), false);
         popWindow.setContentView(view);
 

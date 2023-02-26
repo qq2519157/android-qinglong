@@ -285,8 +285,8 @@ public class EnvFragment extends BaseFragment {
         popMenuWindow.addItem(new PopMenuItem("add", "新建变量", R.drawable.ic_gray_add));
         popMenuWindow.addItem(new PopMenuItem("quickAdd", "快捷导入", R.drawable.ic_gray_flash_on));
         popMenuWindow.addItem(new PopMenuItem("localAdd", "本地导入", R.drawable.ic_gray_file));
-        popMenuWindow.addItem(new PopMenuItem("remoteAdd", "远程导入", R.drawable.ic_gray_download));
-        popMenuWindow.addItem(new PopMenuItem("backup", "变量备份", R.drawable.ic_gray_backup));
+        popMenuWindow.addItem(new PopMenuItem("remoteAdd", "远程导入", R.drawable.ic_gray_upload));
+        popMenuWindow.addItem(new PopMenuItem("backup", "变量备份", R.drawable.ic_gray_download));
         popMenuWindow.addItem(new PopMenuItem("deleteMul", "变量去重", R.drawable.ic_gray_delete));
         popMenuWindow.addItem(new PopMenuItem("mulAction", "批量操作", R.drawable.ic_gray_mul_setting));
         popMenuWindow.setOnActionListener(key -> {

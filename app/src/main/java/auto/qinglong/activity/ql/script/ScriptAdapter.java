@@ -33,7 +33,7 @@ public class ScriptAdapter extends RecyclerView.Adapter<ScriptAdapter.MyViewHold
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_file, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.recycle_item_file, parent, false);
         return new MyViewHolder(view);
     }
 
@@ -52,11 +52,11 @@ public class ScriptAdapter extends RecyclerView.Adapter<ScriptAdapter.MyViewHold
 
         if (qlScript.isDirectory()) {
             holder.ui_image.setImageResource(R.drawable.ic_blue_folder);
-        } else if (qlScript.getTitle().matches(".*\\.(js)|(JS)$")) {
+        } else if (qlScript.getType() == QLScript.Type.JavaScript) {
             holder.ui_image.setImageResource(R.mipmap.ic_file_js);
-        } else if (qlScript.getTitle().matches(".*\\.(py)|(PY)$")) {
+        } else if (qlScript.getType() == QLScript.Type.Python) {
             holder.ui_image.setImageResource(R.mipmap.ic_file_py);
-        } else if (qlScript.getTitle().matches(".*\\.(json)|(JSON)$")) {
+        } else if (qlScript.getType() == QLScript.Type.Json) {
             holder.ui_image.setImageResource(R.mipmap.ic_file_json);
         } else {
             holder.ui_image.setImageResource(R.mipmap.ic_file_unknow);

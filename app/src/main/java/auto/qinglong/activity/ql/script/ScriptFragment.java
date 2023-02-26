@@ -149,7 +149,7 @@ public class ScriptFragment extends BaseFragment {
     private void showPopMenu(View v, QLScript script) {
         PopMenuWindow popMenuWindow = new PopMenuWindow(v, Gravity.END);
         popMenuWindow.addItem(new PopMenuItem("copy", "复制路径", R.drawable.ic_gray_crop_free));
-        popMenuWindow.addItem(new PopMenuItem("backup", "备份脚本", R.drawable.ic_gray_backup));
+        popMenuWindow.addItem(new PopMenuItem("backup", "备份脚本", R.drawable.ic_gray_download));
         if (script.isFile()) {
             popMenuWindow.addItem(new PopMenuItem("delete", "删除脚本", R.drawable.ic_gray_delete));
         }
@@ -173,7 +173,7 @@ public class ScriptFragment extends BaseFragment {
     private void showPopMenu(View v) {
         PopMenuWindow popMenuWindow = new PopMenuWindow(v, Gravity.END);
         popMenuWindow.addItem(new PopMenuItem("add", "新建脚本", R.drawable.ic_gray_add));
-        popMenuWindow.addItem(new PopMenuItem("backup", "备份脚本", R.drawable.ic_gray_backup));
+        popMenuWindow.addItem(new PopMenuItem("backup", "备份脚本", R.drawable.ic_gray_upload));
 
         PopupWindowBuilder.buildMenuWindow(requireActivity(), popMenuWindow);
     }

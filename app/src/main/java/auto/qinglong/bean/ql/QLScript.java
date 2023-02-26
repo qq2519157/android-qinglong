@@ -13,6 +13,8 @@ public class QLScript implements Comparable<QLScript> {
     private String value;
     private boolean disabled;
     private List<QLScript> children;
+    /* 自定义属性 */
+    private Type mType;
 
     public float getMtime() {
         return mtime;
@@ -62,6 +64,23 @@ public class QLScript implements Comparable<QLScript> {
         return this.children != null;
     }
 
+    public Type getType() {
+        if (mType == null) {
+            if (this.title.matches(".*(?i)\\.js$")) {
+                mType = Type.JavaScript;
+            } else if (this.title.matches(".*(?i)\\.py$")) {
+                mType = Type.Python;
+            } else if (this.title.matches(".*(?i)\\.json$")) {
+                mType = Type.Json;
+            } else if (this.title.matches(".*(?i)\\.sh$")) {
+                mType = Type.Shell;
+            } else {
+                mType = Type.Other;
+            }
+        }
+        return mType;
+    }
+
     @Override
     public int compareTo(QLScript o) {
         if (this.children != null && o.getChildren() != null) {
@@ -73,5 +92,9 @@ public class QLScript implements Comparable<QLScript> {
         } else {
             return this.title.toLowerCase().compareTo(o.getTitle().toLowerCase());
         }
+    }
+
+    public enum Type {
+        Other, JavaScript, Python, Shell, Json
     }
 }
