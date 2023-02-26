@@ -20,7 +20,6 @@ import java.util.Objects;
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseActivity;
 import auto.qinglong.bean.app.WebRule;
-import auto.qinglong.database.db.StatisticsDBHelper;
 import auto.qinglong.database.db.WebRuleDBHelper;
 import auto.qinglong.network.http.ApiController;
 import auto.qinglong.network.http.NetManager;
@@ -51,7 +50,6 @@ public class PluginWebRuleActivity extends BaseActivity {
         ui_recycler = findViewById(R.id.plugin_web_rule_recycler);
 
         init();
-        StatisticsDBHelper.increase(TAG);
     }
 
     @Override

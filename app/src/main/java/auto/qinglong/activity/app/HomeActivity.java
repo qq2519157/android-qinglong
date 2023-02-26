@@ -24,10 +24,8 @@ import auto.qinglong.activity.ql.log.LogFragment;
 import auto.qinglong.activity.ql.script.ScriptFragment;
 import auto.qinglong.activity.ql.setting.SettingFragment;
 import auto.qinglong.activity.ql.task.TaskFragment;
-import auto.qinglong.bean.app.Statistic;
 import auto.qinglong.bean.app.Version;
 import auto.qinglong.bean.ql.QLSystem;
-import auto.qinglong.database.db.StatisticsDBHelper;
 import auto.qinglong.database.sp.AccountSP;
 import auto.qinglong.database.sp.SettingSP;
 import auto.qinglong.network.http.ApiController;
@@ -67,7 +65,6 @@ public class HomeActivity extends BaseActivity {
         ui_drawer_left = findViewById(R.id.drawer_left);
 
         init();
-        StatisticsDBHelper.increase(TAG);
     }
 
     @Override
@@ -248,7 +245,7 @@ public class HomeActivity extends BaseActivity {
         PopConfirmWindow popConfirmWindow = new PopConfirmWindow("版本更新", content, "取消", "更新");
         popConfirmWindow.setMaxHeight(WindowUnit.getWindowHeightPix(getBaseContext()) / 3);
         popConfirmWindow.setFocusable(false);
-        popConfirmWindow.setConfirmInterface(isConfirm -> {
+        popConfirmWindow.setOnActionListener(isConfirm -> {
             if (isConfirm) {
                 WebUnit.open(this, version.getDownloadUrl());
                 return !version.isForce();
@@ -273,12 +270,6 @@ public class HomeActivity extends BaseActivity {
                     if (version.getVersionCode() > versionCode && (version.isForce() || SettingSP.isNotify())) {
                         showVersionNotice(version);
                     }
-                    //统计上报
-                    if (TextUnit.isFull(version.getStatisticsUrl())) {
-                        StatisticsDBHelper.setReportUrl(version.getStatisticsUrl());
-                        StatisticsDBHelper.setCanReport(true);
-                    }
-                    netReport();
                 } catch (PackageManager.NameNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -289,11 +280,5 @@ public class HomeActivity extends BaseActivity {
                 LogUnit.log(TAG, msg);
             }
         });
-    }
-
-    private void netReport() {
-        for (Statistic statistic : StatisticsDBHelper.getAll()) {
-            LogUnit.log(statistic.getModule() + "：" + statistic.getNum());
-        }
     }
 }

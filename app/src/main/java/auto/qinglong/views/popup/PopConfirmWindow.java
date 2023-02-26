@@ -9,7 +9,7 @@ public class PopConfirmWindow {
     private boolean isFocusable = true;
     private int maxHeight = 0;
 
-    private OnConfirmListener onConfirmListener;
+    private OnActionListener onActionListener;
 
     public PopConfirmWindow() {
 
@@ -59,12 +59,12 @@ public class PopConfirmWindow {
         this.content = content;
     }
 
-    public OnConfirmListener getConfirmInterface() {
-        return onConfirmListener;
+    public OnActionListener getOnActionListener() {
+        return onActionListener;
     }
 
-    public void setConfirmInterface(OnConfirmListener onConfirmListener) {
-        this.onConfirmListener = onConfirmListener;
+    public void setOnActionListener(OnActionListener onActionListener) {
+        this.onActionListener = onActionListener;
     }
 
     public int getMaxHeight() {
@@ -83,7 +83,7 @@ public class PopConfirmWindow {
         isFocusable = focusable;
     }
 
-    public interface OnConfirmListener {
+    public interface OnActionListener {
         boolean onConfirm(boolean isConfirm);
     }
 }

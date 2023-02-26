@@ -13,7 +13,6 @@ import com.google.android.material.tabs.TabLayoutMediator;
 
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseFragment;
-import auto.qinglong.database.db.StatisticsDBHelper;
 
 public class SettingFragment extends BaseFragment {
     public static String TAG = "SettingFragment";
@@ -35,7 +34,6 @@ public class SettingFragment extends BaseFragment {
         ui_page = view.findViewById(R.id.view_page);
 
         init();
-        StatisticsDBHelper.increase(TAG);
         return view;
     }
 

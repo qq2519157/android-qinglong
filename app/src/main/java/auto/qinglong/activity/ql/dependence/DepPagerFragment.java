@@ -22,7 +22,6 @@ import java.util.Map;
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseFragment;
 import auto.qinglong.bean.ql.QLDependence;
-import auto.qinglong.database.db.StatisticsDBHelper;
 import auto.qinglong.network.http.QLApiController;
 import auto.qinglong.utils.TextUnit;
 import auto.qinglong.utils.ToastUnit;
@@ -77,7 +76,6 @@ public class DepPagerFragment extends BaseFragment {
         ui_more = view.findViewById(R.id.dep_nav_bar_more);
 
         init();
-        StatisticsDBHelper.increase(TAG);
 
         return view;
     }

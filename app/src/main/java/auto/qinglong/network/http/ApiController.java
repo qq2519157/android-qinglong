@@ -5,7 +5,6 @@ import androidx.annotation.NonNull;
 import java.util.List;
 
 import auto.qinglong.bean.app.Link;
-import auto.qinglong.bean.app.Statistic;
 import auto.qinglong.bean.app.Version;
 import auto.qinglong.bean.app.WebRule;
 import auto.qinglong.bean.app.network.BaseRes;
@@ -173,11 +172,6 @@ public class ApiController {
 
         NetManager.addCall(call, requestId);
     }
-
-    public static void report(@NonNull String requestId, @NonNull List<Statistic> statistics, @NonNull NetBaseCallback callback) {
-
-    }
-
 
     public interface VersionCallback {
         void onSuccess(Version version);

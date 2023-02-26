@@ -1,5 +1,6 @@
 package auto.qinglong.activity.ql.script;
 
+import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -26,7 +27,6 @@ import auto.qinglong.R;
 import auto.qinglong.activity.BaseFragment;
 import auto.qinglong.activity.ql.CodeWebActivity;
 import auto.qinglong.bean.ql.QLScript;
-import auto.qinglong.database.db.StatisticsDBHelper;
 import auto.qinglong.network.http.NetManager;
 import auto.qinglong.network.http.QLApiController;
 import auto.qinglong.utils.ToastUnit;
@@ -38,10 +38,11 @@ import auto.qinglong.views.popup.PopupWindowBuilder;
 public class ScriptFragment extends BaseFragment {
     public static String TAG = "ScriptFragment";
 
+    private List<QLScript> rootData;//根数据
+    private String curDir;//当前目录
+    private boolean canBack = false;//可返回操作
     private MenuClickListener menuClickListener;
     private ScriptAdapter scriptAdapter;
-    private List<QLScript> oData;//根数据
-    private boolean canBack = false;//可返回操作
 
     private ImageView ui_menu;
     private ImageView ui_more;
@@ -61,7 +62,6 @@ public class ScriptFragment extends BaseFragment {
         ui_recycler = view.findViewById(R.id.recycler_view);
 
         init();
-        StatisticsDBHelper.increase(TAG);
         return view;
     }
 
@@ -87,7 +87,7 @@ public class ScriptFragment extends BaseFragment {
     @Override
     public boolean onBackPressed() {
         if (canBack) {
-            scriptAdapter.setData(oData);
+            scriptAdapter.setData(rootData);
             ui_dir_tip.setText(getString(R.string.char_path_split));
             canBack = false;
             return true;
@@ -121,8 +121,8 @@ public class ScriptFragment extends BaseFragment {
             }
 
             @Override
-            public void onMenu(View view, QLScript script) {
-                showPopMenu(view, script);
+            public void onMenu(View view, QLScript script, int position) {
+                showPopMenu(view, script, position);
             }
         });
 
@@ -146,11 +146,12 @@ public class ScriptFragment extends BaseFragment {
 
     }
 
-    private void showPopMenu(View v, QLScript script) {
-        PopMenuWindow popMenuWindow = new PopMenuWindow(v, Gravity.END);
+    private void showPopMenu(View v, QLScript script, int position) {
+        PopMenuWindow popMenuWindow = new PopMenuWindow(v, Gravity.CENTER);
         popMenuWindow.addItem(new PopMenuItem("copy", "复制路径", R.drawable.ic_gray_crop_free));
-        popMenuWindow.addItem(new PopMenuItem("backup", "备份脚本", R.drawable.ic_gray_download));
+        popMenuWindow.addItem(new PopMenuItem("backup", "脚本备份", R.drawable.ic_gray_download));
         if (script.isFile()) {
+            popMenuWindow.addItem(new PopMenuItem("replace", "脚本替换", R.drawable.ic_gray_copy));
             popMenuWindow.addItem(new PopMenuItem("delete", "删除脚本", R.drawable.ic_gray_delete));
         }
 
@@ -163,6 +164,9 @@ public class ScriptFragment extends BaseFragment {
                     break;
                 case "backup":
                     break;
+                case "delete":
+                    netDeleteScript(script, position);
+                    break;
             }
             return true;
         });
@@ -173,16 +177,19 @@ public class ScriptFragment extends BaseFragment {
     private void showPopMenu(View v) {
         PopMenuWindow popMenuWindow = new PopMenuWindow(v, Gravity.END);
         popMenuWindow.addItem(new PopMenuItem("add", "新建脚本", R.drawable.ic_gray_add));
-        popMenuWindow.addItem(new PopMenuItem("backup", "备份脚本", R.drawable.ic_gray_upload));
+        popMenuWindow.addItem(new PopMenuItem("import", "本地导入", R.drawable.ic_gray_upload));
+        popMenuWindow.addItem(new PopMenuItem("backup", "脚本备份", R.drawable.ic_gray_download));
 
+        popMenuWindow.setOnActionListener(key -> true);
         PopupWindowBuilder.buildMenuWindow(requireActivity(), popMenuWindow);
     }
 
-    private void sortAndSetData(List<QLScript> data, String dir) {
-        Collections.sort(data);
-        scriptAdapter.setData(data);
-        String text = getString(R.string.char_path_split) + dir;
-        ui_dir_tip.setText(text);
+    @SuppressLint("SetTextI18n")
+    private void sortAndSetData(List<QLScript> scripts, String director) {
+        Collections.sort(scripts);
+        scriptAdapter.setData(scripts);
+        curDir = director;
+        ui_dir_tip.setText(getString(R.string.char_path_split) + director);
     }
 
     private void netGetScripts() {
@@ -190,7 +197,7 @@ public class ScriptFragment extends BaseFragment {
             @Override
             public void onSuccess(List<QLScript> scripts) {
                 sortAndSetData(scripts, "");
-                oData = scripts;
+                rootData = scripts;
                 canBack = false;
                 initDataFlag = true;
                 this.onEnd(true);
@@ -198,7 +205,7 @@ public class ScriptFragment extends BaseFragment {
 
             @Override
             public void onFailure(String msg) {
-                ToastUnit.showShort("加载失败：" + msg);
+                ToastUnit.showShort(getString(R.string.tip_load_failure_header) + msg);
                 this.onEnd(false);
             }
 
@@ -206,6 +213,21 @@ public class ScriptFragment extends BaseFragment {
                 if (ui_refresh.isRefreshing()) {
                     ui_refresh.finishRefresh(isSuccess);
                 }
+            }
+        });
+    }
+
+    private void netDeleteScript(QLScript script, int position) {
+        QLApiController.deleteScript(getNetRequestID(), script.getTitle(), script.getParent(), new QLApiController.NetBaseCallback() {
+            @Override
+            public void onSuccess() {
+                ToastUnit.showShort(getString(R.string.tip_delete_success));
+                scriptAdapter.removeItem(position);
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                ToastUnit.showShort(getString(R.string.tip_delete_failure_header) + msg);
             }
         });
     }

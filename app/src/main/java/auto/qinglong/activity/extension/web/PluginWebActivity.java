@@ -27,7 +27,6 @@ import auto.qinglong.R;
 import auto.qinglong.activity.BaseActivity;
 import auto.qinglong.bean.app.WebRule;
 import auto.qinglong.bean.ql.QLEnvironment;
-import auto.qinglong.database.db.StatisticsDBHelper;
 import auto.qinglong.database.db.WebRuleDBHelper;
 import auto.qinglong.network.http.QLApiController;
 import auto.qinglong.utils.TextUnit;
@@ -64,7 +63,6 @@ public class PluginWebActivity extends BaseActivity {
         cookieManager = CookieManager.getInstance();
 
         init();
-        StatisticsDBHelper.increase(TAG);
     }
 
     @Override
@@ -135,7 +133,7 @@ public class PluginWebActivity extends BaseActivity {
         popConfirmWindow.setCancelTip("取消");
         popConfirmWindow.setTitle("Cookies");
         popConfirmWindow.setContent(content);
-        popConfirmWindow.setConfirmInterface(isConfirm -> {
+        popConfirmWindow.setOnActionListener(isConfirm -> {
             if (isConfirm) {
                 ClipboardManager clipboardManager = (ClipboardManager) getBaseContext().getSystemService(Context.CLIPBOARD_SERVICE);
                 clipboardManager.setPrimaryClip(ClipData.newPlainText(null, content));

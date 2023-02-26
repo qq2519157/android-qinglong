@@ -12,7 +12,6 @@ import java.net.URLEncoder;
 
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseActivity;
-import auto.qinglong.database.db.StatisticsDBHelper;
 import auto.qinglong.database.sp.SettingSP;
 import auto.qinglong.utils.DeviceUnit;
 import auto.qinglong.utils.ToastUnit;
@@ -41,7 +40,6 @@ public class SettingActivity extends BaseActivity {
         ui_donate = findViewById(R.id.app_setting_donate);
 
         init();
-        StatisticsDBHelper.increase(TAG);
     }
 
     @Override

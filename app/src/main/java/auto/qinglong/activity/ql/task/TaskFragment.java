@@ -43,7 +43,6 @@ import auto.qinglong.activity.BaseFragment;
 import auto.qinglong.activity.ql.CodeWebActivity;
 import auto.qinglong.activity.ql.LocalFileAdapter;
 import auto.qinglong.bean.ql.QLTask;
-import auto.qinglong.database.db.StatisticsDBHelper;
 import auto.qinglong.network.http.NetManager;
 import auto.qinglong.network.http.QLApiController;
 import auto.qinglong.utils.CronUnit;
@@ -132,7 +131,6 @@ public class TaskFragment extends BaseFragment {
         ui_recycler = view.findViewById(R.id.recycler_view);
 
         init();
-        StatisticsDBHelper.increase(TAG);
         return view;
     }
 

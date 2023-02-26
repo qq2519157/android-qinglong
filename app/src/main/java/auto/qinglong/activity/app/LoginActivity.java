@@ -13,7 +13,6 @@ import auto.qinglong.R;
 import auto.qinglong.activity.BaseActivity;
 import auto.qinglong.bean.app.Account;
 import auto.qinglong.bean.ql.QLSystem;
-import auto.qinglong.database.db.StatisticsDBHelper;
 import auto.qinglong.database.sp.AccountSP;
 import auto.qinglong.network.http.NetManager;
 import auto.qinglong.network.http.QLApiController;
@@ -47,7 +46,6 @@ public class LoginActivity extends BaseActivity {
         ui_password = findViewById(R.id.et_password);
 
         init();
-        StatisticsDBHelper.increase(TAG);
     }
 
     @Override

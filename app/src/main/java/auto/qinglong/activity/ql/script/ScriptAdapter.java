@@ -22,7 +22,7 @@ public class ScriptAdapter extends RecyclerView.Adapter<ScriptAdapter.MyViewHold
     public static final String TAG = "ScriptAdapter";
 
     private final Context context;
-    private final List<QLScript> data;
+    private List<QLScript> data;
     private ItemActionListener itemActionListener;
 
     public ScriptAdapter(@NonNull Context context) {
@@ -67,7 +67,7 @@ public class ScriptAdapter extends RecyclerView.Adapter<ScriptAdapter.MyViewHold
         holder.itemView.setOnClickListener(v -> itemActionListener.onEdit(qlScript));
 
         holder.itemView.setOnLongClickListener(v -> {
-            itemActionListener.onMenu(v, qlScript);
+            itemActionListener.onMenu(v, qlScript, holder.getAbsoluteAdapterPosition());
             return true;
         });
     }
@@ -79,9 +79,13 @@ public class ScriptAdapter extends RecyclerView.Adapter<ScriptAdapter.MyViewHold
 
     @SuppressLint("NotifyDataSetChanged")
     public void setData(List<QLScript> data) {
-        this.data.clear();
-        this.data.addAll(data);
+        this.data = data;
         notifyDataSetChanged();
+    }
+
+    public void removeItem(int position) {
+        data.remove(position);
+        notifyItemRemoved(position);
     }
 
     public void setScriptInterface(ItemActionListener itemActionListener) {
@@ -91,7 +95,7 @@ public class ScriptAdapter extends RecyclerView.Adapter<ScriptAdapter.MyViewHold
     public interface ItemActionListener {
         void onEdit(QLScript QLScript);
 
-        void onMenu(View view, QLScript QLScript);
+        void onMenu(View view, QLScript QLScript, int position);
     }
 
     static class MyViewHolder extends RecyclerView.ViewHolder {

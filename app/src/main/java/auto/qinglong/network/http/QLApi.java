@@ -17,7 +17,6 @@ import auto.qinglong.bean.ql.network.QLTasksRes;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
-import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.HTTP;
 import retrofit2.http.Header;
@@ -272,7 +271,7 @@ public interface QLApi {
      * @param body          the body
      * @return the call
      */
-    @DELETE("api/scripts")
+    @HTTP(method = "DELETE", path = "api/scripts", hasBody = true)
     Call<QLBaseRes> deleteScript(@Header("Authorization") String authorization, @Body RequestBody body);
 
     /**

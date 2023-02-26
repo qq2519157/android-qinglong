@@ -181,15 +181,15 @@ public class PopupWindowBuilder {
         ui_bt_confirm.setText(popConfirmWindow.getConfirmTip());
         ui_bt_cancel.setText(popConfirmWindow.getCancelTip());
 
-        if (popConfirmWindow.getConfirmInterface() != null) {
+        if (popConfirmWindow.getOnActionListener() != null) {
             ui_bt_cancel.setOnClickListener(v -> {
-                if (popConfirmWindow.getConfirmInterface().onConfirm(false)) {
+                if (popConfirmWindow.getOnActionListener().onConfirm(false)) {
                     popWindow.dismiss();
                 }
             });
 
             ui_bt_confirm.setOnClickListener(v -> {
-                if (popConfirmWindow.getConfirmInterface().onConfirm(true)) {
+                if (popConfirmWindow.getOnActionListener().onConfirm(true)) {
                     popWindow.dismiss();
                 }
             });
@@ -197,7 +197,7 @@ public class PopupWindowBuilder {
 
         popWindow.setOnDismissListener(() -> {
             WindowUnit.setBackgroundAlpha(activity, 1.0f);
-            popConfirmWindow.setConfirmInterface(null);
+            popConfirmWindow.setOnActionListener(null);
             popWindow.setOnDismissListener(null);
         });
 

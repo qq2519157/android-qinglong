@@ -60,6 +60,8 @@
     <string name="tip_load_success_header">加载成功：</string>
     <string name="tip_load_failure">加载失败</string>
     <string name="tip_load_failure_header">加载失败：</string>
+    <string name="tip_delete_success">删除成功</string>
+    <string name="tip_delete_failure_header">删除失败：</string>
     <string name="tip_reinstall_failure_header">重装失败：</string>
     <string name="tip_searching">搜索中…</string>
     <string name="tip_pin_success">顶置成功</string>
