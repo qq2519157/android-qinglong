@@ -54,7 +54,6 @@ public class ScriptFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_script, null, false);
 
-
         ui_menu = view.findViewById(R.id.scrip_menu);
         ui_more = view.findViewById(R.id.script_more);
         ui_dir_tip = view.findViewById(R.id.script_dir_tip);

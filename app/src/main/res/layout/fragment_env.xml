@@ -78,7 +78,7 @@
                 android:layout_marginHorizontal="10dp"
                 android:layout_weight="1"
                 android:background="@drawable/style_input_gray"
-                android:hint="@string/str_input_hint_url"
+                android:hint="@string/str_input_hint_environment"
                 android:imeOptions="actionGo"
                 android:lines="1"
                 android:paddingHorizontal="5dp"

@@ -93,6 +93,8 @@
     <string name="str_created_time">创建时间</string>
     <string name="str_input_hint_ip">127.0.0.1:5700</string>
     <string name="str_input_hint_url">请输入网址</string>
+    <string name="str_input_hint_task">请输入名称或关键词</string>
+    <string name="str_input_hint_environment">请输入名称/值/备注</string>
 
     <!-- 格式化 -->
     <string name="format_tip_ip">本地：%1$s</string>

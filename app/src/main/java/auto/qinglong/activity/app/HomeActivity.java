@@ -29,6 +29,7 @@ import auto.qinglong.bean.ql.QLSystem;
 import auto.qinglong.database.sp.AccountSP;
 import auto.qinglong.database.sp.SettingSP;
 import auto.qinglong.network.http.ApiController;
+import auto.qinglong.utils.EncryptUtil;
 import auto.qinglong.utils.LogUnit;
 import auto.qinglong.utils.TextUnit;
 import auto.qinglong.utils.ToastUnit;
@@ -237,6 +238,18 @@ public class HomeActivity extends BaseActivity {
         }
     }
 
+    private void checkVersion(Version version){
+        try {
+            int versionCode = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
+            //若版本强制更新 即使停用更新推送仍会要求更新
+            if (version.getVersionCode() > versionCode && (version.isForce() || SettingSP.isNotify())) {
+                showVersionNotice(version);
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void showVersionNotice(Version version) {
         String content = "最新版本：" + version.getVersionName() + "\n\n";
         content += "更新时间：" + version.getUpdateTime() + "\n\n";
@@ -261,18 +274,11 @@ public class HomeActivity extends BaseActivity {
 
     private void netGetVersion() {
         ApiController.getProject(getNetRequestID());
-        ApiController.getVersion(getNetRequestID(), new ApiController.VersionCallback() {
+        String uid = EncryptUtil.md5(AccountSP.getAddress());
+        ApiController.getVersion(getNetRequestID(), uid, new ApiController.VersionCallback() {
             @Override
             public void onSuccess(Version version) {
-                try {
-                    int versionCode = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
-                    //若版本强制更新 即使停用更新推送仍会要求更新
-                    if (version.getVersionCode() > versionCode && (version.isForce() || SettingSP.isNotify())) {
-                        showVersionNotice(version);
-                    }
-                } catch (PackageManager.NameNotFoundException e) {
-                    e.printStackTrace();
-                }
+                checkVersion(version);
             }
 
             @Override

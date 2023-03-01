@@ -1,6 +1,7 @@
 package auto.qinglong.network.http;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.List;
 
@@ -24,13 +25,13 @@ public class ApiController {
     public static final String API_GET_REMOTE_ENVS = "ApiController_getRemoteEnvironments";
     public static final String API_GET_REMOTE_RULES = "ApiController_getRemoteWebRules";
 
-    public static void getVersion(@NonNull String requestId, @NonNull VersionCallback callback) {
+    public static void getVersion(@NonNull String requestId, @Nullable String uid, @NonNull VersionCallback callback) {
         Call<Version> call = new Retrofit.Builder()
-                .baseUrl(Api.URL_VERSION_BASE)
+                .baseUrl(Api.URL_BASE_TENCENT)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(Api.class)
-                .getVersion();
+                .getVersion(uid);
 
         call.enqueue(new Callback<Version>() {
             @Override
@@ -59,7 +60,7 @@ public class ApiController {
 
     public static void getProject(@NonNull String requestId) {
         Call<ResponseBody> call = new Retrofit.Builder()
-                .baseUrl(Api.URL_VERSION_BASE)
+                .baseUrl(Api.URL_BASE_GIT)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(Api.class)
