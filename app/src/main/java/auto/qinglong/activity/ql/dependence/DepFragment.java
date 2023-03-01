@@ -60,12 +60,6 @@ public class DepFragment extends BaseFragment {
 
         depItemAdapter.setItemInterface(new DepItemAdapter.ItemActionListener() {
             @Override
-            public void onMulAction() {
-                depItemAdapter.setCheckState(true);
-                pagerActionListener.onMulAction();
-            }
-
-            @Override
             public void onDetail(QLDependence dependence, int position) {
                 Intent intent = new Intent(getContext(), CodeWebActivity.class);
                 intent.putExtra(CodeWebActivity.EXTRA_TYPE, CodeWebActivity.TYPE_DEPENDENCE);

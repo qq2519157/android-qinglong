@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,12 +14,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import auto.qinglong.R;
 import auto.qinglong.bean.ql.QLEnvironment;
+import auto.qinglong.utils.LogUnit;
 
-public class EnvItemAdapter extends RecyclerView.Adapter<EnvItemAdapter.MyViewHolder> {
+public class EnvItemAdapter extends RecyclerView.Adapter<EnvItemAdapter.MyViewHolder> implements ItemMoveCallback {
     public static final String TAG = "EnvItemAdapter";
 
     private final Context context;
@@ -53,12 +56,6 @@ public class EnvItemAdapter extends RecyclerView.Adapter<EnvItemAdapter.MyViewHo
         holder.ui_name.setText(environment.getFormatName());
         holder.ui_value.setText(environment.getValue());
         holder.ui_createAt.setText(environment.getFormatCreated());
-        if (this.checkState) {
-            holder.ui_check.setChecked(this.dataCheckState[position]);
-            holder.ui_check.setVisibility(View.VISIBLE);
-        } else {
-            holder.ui_check.setVisibility(View.GONE);
-        }
 
         if (environment.getRemarks() == null || environment.getRemarks().isEmpty()) {
             holder.ui_remark.setText("--");
@@ -74,15 +71,23 @@ public class EnvItemAdapter extends RecyclerView.Adapter<EnvItemAdapter.MyViewHo
             holder.ui_status.setText("已禁用");
         }
 
-        holder.ui_name.setOnClickListener(v -> {
+        if (this.checkState) {
+            holder.ui_check.setChecked(this.dataCheckState[position]);
+            holder.ui_check.setOnCheckedChangeListener((buttonView, isChecked) -> dataCheckState[holder.getBindingAdapterPosition()] = isChecked);
+            holder.ui_check.setVisibility(View.VISIBLE);
+        } else {
+            holder.ui_check.setVisibility(View.GONE);
+        }
+
+        holder.ui_body.setOnClickListener(v -> {
             if (this.checkState) {
                 holder.ui_check.setChecked(!holder.ui_check.isChecked());
             }
         });
 
-        holder.ui_name.setOnLongClickListener(v -> {
+        holder.ui_body.setOnLongClickListener(v -> {
             if (!this.checkState) {
-                itemActionListener.onMulAction();
+                itemActionListener.onEdit(environment, holder.getBindingAdapterPosition());
             }
             return true;
         });
@@ -92,21 +97,24 @@ public class EnvItemAdapter extends RecyclerView.Adapter<EnvItemAdapter.MyViewHo
                 holder.ui_check.setChecked(!holder.ui_check.isChecked());
             }
         });
-
-        holder.itemView.setOnLongClickListener(v -> {
-            if (!this.checkState) {
-                itemActionListener.onEdit(environment, holder.getAdapterPosition());
-            }
-            return true;
-        });
-
-        holder.ui_check.setOnCheckedChangeListener((buttonView, isChecked) -> dataCheckState[holder.getAdapterPosition()] = isChecked);
     }
 
     @Override
     public int getItemCount() {
         return this.data == null ? 0 : this.data.size();
     }
+
+    @Override
+    public void onItemMove(int from, int to) {
+        Collections.swap(data, from, to);
+        notifyItemMoved(from, to);
+    }
+
+    @Override
+    public void onItemMoveEnd(int from, int to) {
+        LogUnit.log("onItemMoveEnd");
+    }
+
 
     @SuppressLint("NotifyDataSetChanged")
     public void setData(List<QLEnvironment> data) {
@@ -119,10 +127,6 @@ public class EnvItemAdapter extends RecyclerView.Adapter<EnvItemAdapter.MyViewHo
 
     public List<QLEnvironment> getData() {
         return this.data;
-    }
-
-    public boolean isCheckState() {
-        return checkState;
     }
 
     public void setCheckState(boolean checkState) {
@@ -154,13 +158,12 @@ public class EnvItemAdapter extends RecyclerView.Adapter<EnvItemAdapter.MyViewHo
 
     public interface ItemActionListener {
         void onEdit(QLEnvironment environment, int position);
-
-        void onMulAction();
     }
 
     static class MyViewHolder extends RecyclerView.ViewHolder {
         public CheckBox ui_check;
         public TextView ui_name;
+        public LinearLayout ui_body;
         public TextView ui_value;
         public TextView ui_remark;
         public TextView ui_status;
@@ -170,6 +173,7 @@ public class EnvItemAdapter extends RecyclerView.Adapter<EnvItemAdapter.MyViewHo
             super(itemView);
             ui_check = itemView.findViewById(R.id.env_check);
             ui_name = itemView.findViewById(R.id.env_name);
+            ui_body = itemView.findViewById(R.id.item_env_body);
             ui_value = itemView.findViewById(R.id.env_value);
             ui_status = itemView.findViewById(R.id.env_status);
             ui_remark = itemView.findViewById(R.id.env_remark);

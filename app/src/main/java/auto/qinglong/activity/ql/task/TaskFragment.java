@@ -180,30 +180,36 @@ public class TaskFragment extends BaseFragment {
             }
 
             @Override
-            public void onStop(QLTask QLTask) {
+            public void onStop(QLTask task) {
                 if (NetManager.isRequesting(getNetRequestID())) {
                     return;
                 }
                 List<String> ids = new ArrayList<>();
-                ids.add(QLTask.getId());
+                ids.add(task.getId());
                 netStopTasks(ids, false);
             }
 
             @Override
-            public void onRun(QLTask QLTask) {
+            public void onRun(QLTask task) {
                 List<String> ids = new ArrayList<>();
-                ids.add(QLTask.getId());
+                ids.add(task.getId());
                 netRunTasks(ids, false);
             }
 
             @Override
-            public void onEdit(QLTask QLTask) {
-                showPopWindowEdit(QLTask);
+            public void onEdit(QLTask task) {
+                showPopWindowEdit(task);
             }
 
             @Override
-            public void onMulAction() {
-                changeBar(BarType.MUL_ACTION);
+            public void onScript(String title, String parent, String fileName) {
+                Intent intent = new Intent(getContext(), CodeWebActivity.class);
+                intent.putExtra(CodeWebActivity.EXTRA_SCRIPT_NAME, fileName);
+                intent.putExtra(CodeWebActivity.EXTRA_SCRIPT_PARENT, parent);
+                intent.putExtra(CodeWebActivity.EXTRA_TITLE, title);
+                intent.putExtra(CodeWebActivity.EXTRA_TYPE, CodeWebActivity.TYPE_SCRIPT);
+                intent.putExtra(CodeWebActivity.EXTRA_CAN_EDIT, true);
+                startActivity(intent);
             }
         });
 

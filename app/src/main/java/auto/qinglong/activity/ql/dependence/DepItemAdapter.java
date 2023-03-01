@@ -85,12 +85,6 @@ public class DepItemAdapter extends RecyclerView.Adapter<DepItemAdapter.MyViewHo
             holder.ui_check.setVisibility(View.GONE);
         }
 
-        holder.itemView.setOnClickListener(v -> {
-            if (this.checkState) {
-                holder.ui_check.setChecked(!holder.ui_check.isChecked());
-            }
-        });
-
         holder.ui_title.setOnClickListener(v -> {
             if (this.checkState) {
                 holder.ui_check.setChecked(!holder.ui_check.isChecked());
@@ -99,17 +93,16 @@ public class DepItemAdapter extends RecyclerView.Adapter<DepItemAdapter.MyViewHo
             }
         });
 
-        holder.ui_title.setOnLongClickListener(v -> {
-            if (!this.checkState) {
-                itemActionListener.onMulAction();
-            }
-            return true;
-        });
-
         holder.ui_bug.setOnClickListener(v -> {
             if (!this.checkState) {
                 itemActionListener.onReinstall(dependence, holder.getAdapterPosition());
             } else {
+                holder.ui_check.setChecked(!holder.ui_check.isChecked());
+            }
+        });
+
+        holder.itemView.setOnClickListener(v -> {
+            if (this.checkState) {
                 holder.ui_check.setChecked(!holder.ui_check.isChecked());
             }
         });
@@ -173,8 +166,6 @@ public class DepItemAdapter extends RecyclerView.Adapter<DepItemAdapter.MyViewHo
     }
 
     public interface ItemActionListener {
-        void onMulAction();
-
         void onDetail(QLDependence dependence, int position);
 
         void onReinstall(QLDependence dependence, int position);

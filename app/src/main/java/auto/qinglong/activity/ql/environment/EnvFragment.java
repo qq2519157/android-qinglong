@@ -14,6 +14,7 @@ import android.widget.PopupWindow;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -148,19 +149,11 @@ public class EnvFragment extends BaseFragment {
         ui_recycler.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
         Objects.requireNonNull(ui_recycler.getItemAnimator()).setChangeDuration(0);
 
-        //列表操作接口
-        mAdapter.setItemInterface(new EnvItemAdapter.ItemActionListener() {
-            @Override
-            public void onEdit(QLEnvironment environment, int position) {
-                showPopWindowCommonEdit(environment);
-            }
+        ItemMoveHelper itemMoveHelper = new ItemMoveHelper(mAdapter);
+        new ItemTouchHelper(itemMoveHelper).attachToRecyclerView(ui_recycler);
 
-            @Override
-            public void onMulAction() {
-                mAdapter.setCheckState(true);
-                changeBar(BarType.MUL_ACTION);
-            }
-        });
+        //列表操作接口
+        mAdapter.setItemInterface((environment, position) -> showPopWindowCommonEdit(environment));
 
         //刷新
         ui_refresh.setOnRefreshListener(refreshLayout -> {
