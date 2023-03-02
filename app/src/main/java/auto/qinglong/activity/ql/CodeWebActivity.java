@@ -281,6 +281,12 @@ public class CodeWebActivity extends BaseActivity {
         QLApiController.getScriptDetail(getNetRequestID(), path, new QLApiController.NetSimpleCallBack() {
             @Override
             public void onSuccess(String content) {
+                //防止内容过大导致崩溃
+                if (content.length() > 1500000) {
+                    ToastUnit.showShort(getString(R.string.tip_text_too_long));
+                    ui_refresh.setVisibility(View.GONE);
+                    return;
+                }
                 mContent = content;
                 ui_edit.setVisibility(View.VISIBLE);
                 QLWebJsManager.setContent(ui_webView, content);

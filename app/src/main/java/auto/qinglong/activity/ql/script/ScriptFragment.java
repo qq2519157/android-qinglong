@@ -148,9 +148,9 @@ public class ScriptFragment extends BaseFragment {
     private void showPopMenu(View v, QLScript script, int position) {
         PopMenuWindow popMenuWindow = new PopMenuWindow(v, Gravity.CENTER);
         popMenuWindow.addItem(new PopMenuItem("copy", "复制路径", R.drawable.ic_gray_crop_free));
-        popMenuWindow.addItem(new PopMenuItem("backup", "脚本备份", R.drawable.ic_gray_download));
+//        popMenuWindow.addItem(new PopMenuItem("backup", "脚本备份", R.drawable.ic_gray_download));
         if (script.isFile()) {
-            popMenuWindow.addItem(new PopMenuItem("replace", "脚本替换", R.drawable.ic_gray_copy));
+//            popMenuWindow.addItem(new PopMenuItem("replace", "脚本替换", R.drawable.ic_gray_copy));
             popMenuWindow.addItem(new PopMenuItem("delete", "删除脚本", R.drawable.ic_gray_delete));
         }
 
