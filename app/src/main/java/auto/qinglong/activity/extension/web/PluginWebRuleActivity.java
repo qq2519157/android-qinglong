@@ -1,10 +1,7 @@
 package auto.qinglong.activity.extension.web;
 
 
-import android.content.Context;
 import android.os.Bundle;
-import android.os.VibrationEffect;
-import android.os.Vibrator;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
@@ -24,6 +21,7 @@ import auto.qinglong.database.db.WebRuleDBHelper;
 import auto.qinglong.network.http.ApiController;
 import auto.qinglong.network.http.NetManager;
 import auto.qinglong.utils.ToastUnit;
+import auto.qinglong.utils.VibratorUtil;
 import auto.qinglong.utils.WebUnit;
 import auto.qinglong.utils.WindowUnit;
 import auto.qinglong.views.popup.PopEditItem;
@@ -70,10 +68,7 @@ public class PluginWebRuleActivity extends BaseActivity {
             public void onAction(View view, int position, WebRule rule) {
                 WebRuleDBHelper.delete(rule.getId());
                 itemAdapter.removeItem(position);
-                //震动
-                Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                VibrationEffect effect = VibrationEffect.createOneShot(100L, VibrationEffect.DEFAULT_AMPLITUDE);
-                vibrator.vibrate(effect);
+                VibratorUtil.vibrate(mContext, VibratorUtil.VIBRATE_SHORT);
             }
         });
 

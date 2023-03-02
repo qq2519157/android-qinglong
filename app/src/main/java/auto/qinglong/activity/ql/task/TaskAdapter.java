@@ -105,9 +105,9 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
             if (!this.checkState && task.getCommand().startsWith("task ")) {
                 String[] path = task.getCommand().replace("task", "").split("/");
                 if (path.length == 1) {
-                    itemActionListener.onScript(task.getName(), "", path[0].trim());
+                    itemActionListener.onScript("", path[0].trim());
                 } else if (path.length == 2) {
-                    itemActionListener.onScript(task.getName(), path[0].trim(), path[1].trim());
+                    itemActionListener.onScript(path[0].trim(), path[1].trim());
                 }
             }
             return true;
@@ -197,7 +197,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
 
         void onEdit(QLTask task);
 
-        void onScript(String title, String parent, String fileName);
+        void onScript(String parent, String fileName);
     }
 
     static class MyViewHolder extends RecyclerView.ViewHolder {

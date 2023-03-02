@@ -1,6 +1,7 @@
 # 青龙面板APP
 
 ## 1.软件介绍
+
 本APP基于青龙面板***2.10.13***接口开发，支持面板大部分原生功能，同时提供拓展模块，帮助用户快捷管理。
 
 ## 2.使用环境
@@ -22,14 +23,14 @@
 6. 任务日志：支持查看日志列表；
 7. 系统设置：支持常规设置和日志查看；
 
->(1)部分编辑功能需要长按详细信息位置唤醒；  
->(2)变量快捷导入将从输入文本中提取'***export xx="xxxx"***'格式内容作为一个变量,支持同时提取多个变量；  
->(3)远程导入变量需要输入远程接口地址，具体查看[开发者文档](https://gitee.com/wsfsp4/QingLong/blob/master/developer.md)；  
->(4)变量去重将删除相同名称和值的变量；  
->(5)任务去重将删除相同命令的任务；  
->(6)本地备份文件将保存在外部存储**Android/data/auto.qinglong/files**文件夹下；  
->(7)本地导入将在**Android/data/auto.qinglong/files**文件夹下查找对应模块的文件，可自行参考备份文件的内容格式创建新文件，以json作为文件后缀即可；
-
+> (1)部分编辑功能需要长按详细信息位置唤醒；  
+> (2)变量快捷导入将从输入文本中提取'***export xx="xxxx"***'格式内容作为一个变量,支持同时提取多个变量；  
+> (3)远程导入变量需要输入远程接口地址，具体查看[开发者文档](https://gitee.com/wsfsp4/QingLong/blob/master/developer.md)；  
+> (4)变量去重将删除相同名称和值的变量；  
+> (5)任务去重将删除相同命令的任务；  
+> (6)本地备份文件将保存在外部存储**Android/data/auto.qinglong/files**文件夹下；  
+> (7)本地导入将在**Android/data/auto.qinglong/files**文件夹下查找对应模块的文件，可自行参考备份文件的内容格式创建新文件，以json作为文件后缀即可；
+> (8)应用默认按字母表对环境变量升序显示，因此使用排序功能时应对同名变量排序，对不同名变量排序对应用显示和脚本程序都是没必要的；
 
 ### 3.2.拓展模块
 
@@ -37,16 +38,19 @@
 
 提供网页ck提取和导入变量功能。
 
-
 ##### 3.2.1.1 ck提取
+
 ck提取有常规提取和规则提取两种模式。
+
 1. 常规提取：提取全部字段；
 2. 规则提取：根据预先设置的规则，可提取特定的字段并排序、拼接；
 
 ##### 3.2.1.2 导入变量
+
 支持一键提取ck并导入青龙面板环境变量，需要配置规则。
 
 ##### 3.2.1.3 规则配置
+
 支持手动添加和远程导入，远程导入规则需要输入远程接口地址，具体查看[开发者文档](https://gitee.com/wsfsp4/QingLong/blob/master/developer.md)。各字段说明如下：
 
 1. 规则名称：规则的名称，供用户识别用；
@@ -62,24 +66,26 @@ ck提取有常规提取和规则提取两种模式。
    | a=;b>>bb=     | 提取cookies中a键值和b键值，并将b键重命名为bb       | a=1;bb=2;      |
    | a;b           | 提取cookies中a值和b值                              | 1;2;           |
 
->(1)匹配时，遍历启用的所有规则，匹配成功则停止；  
->(2)如果规则中提取具体字段，只要一个字段不存在将匹配失败；  
->(3)规则中的网址只和原始加载的网址相比较，尽管加载后用户点击页面跳转到其他页面；
-
+> (1)匹配时，遍历启用的所有规则，匹配成功则停止；  
+> (2)如果规则中提取具体字段，只要一个字段不存在将匹配失败；  
+> (3)规则中的网址只和原始加载的网址相比较，尽管加载后用户点击页面跳转到其他页面；
 
 ## 4.界面预览
+
 <img src="https://gitee.com/wsfsp4/QingLong/raw/master/static/imgs/preview_1.jpg" alt="模块导航" width="30%">  
 <img src="https://gitee.com/wsfsp4/QingLong/raw/master/static/imgs/preview_2.jpg" alt="代码编辑" width="30%">  
 <img src="https://gitee.com/wsfsp4/QingLong/raw/master/static/imgs/preview_3.jpg" alt="系统设置" width="30%">  
 
-
 ## 5.下载地址
+
 [最新版本](https://gitee.com/wsfsp4/QingLong/releases/tag/V1.4)
 
 [历史版本](https://gitee.com/wsfsp4/QingLong/releases)
 
 ## 6.开发者文档
-为了增强应用拓展性，APP为用户提供自定义接口功能。如果你有网络编程基础，可根据这份[开发者文档](https://gitee.com/wsfsp4/QingLong/blob/master/developer.md) 来开发接口，然后发布给其他用户使用。
+
+为了增强应用拓展性，APP为用户提供自定义接口功能。如果你有网络编程基础，可根据这份[开发者文档](https://gitee.com/wsfsp4/QingLong/blob/master/developer.md)
+来开发接口，然后发布给其他用户使用。
 
 ## 7.意见反馈
 
@@ -88,6 +94,7 @@ APP还在开发，后续尝试加入更多拓展模块,提供更加强大的功�
 如果你有Android开发基础，并且有对该项目有自己的创意，欢迎加入！
 
 ## 8.支持项目
+
 开发不易，如果APP对你有所帮助，可以考虑支持下项目开发，非常感谢!  
 <img src="https://gitee.com/wsfsp4/QingLong/raw/master/static/imgs/donate_wx.png" alt="微信打赏" width="25%">
 <img src="https://gitee.com/wsfsp4/QingLong/raw/master/static/imgs/donate_zfb.jpg" alt="支付宝打赏" width="25%">  

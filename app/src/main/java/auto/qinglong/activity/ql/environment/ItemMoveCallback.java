@@ -7,5 +7,7 @@ package auto.qinglong.activity.ql.environment;
 public interface ItemMoveCallback {
     void onItemMove(int from, int to);
 
-    void onItemMoveEnd(int from, int to);
+    void onItemMoveStart();
+
+    void onItemMoveEnd(int start,int from, int to);
 }

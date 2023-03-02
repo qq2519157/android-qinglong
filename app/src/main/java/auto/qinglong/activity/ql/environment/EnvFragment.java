@@ -40,6 +40,7 @@ import java.util.Set;
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseFragment;
 import auto.qinglong.activity.ql.LocalFileAdapter;
+import auto.qinglong.bean.ql.MoveInfo;
 import auto.qinglong.bean.ql.QLEnvironment;
 import auto.qinglong.network.http.ApiController;
 import auto.qinglong.network.http.NetManager;
@@ -153,7 +154,17 @@ public class EnvFragment extends BaseFragment {
         new ItemTouchHelper(itemMoveHelper).attachToRecyclerView(ui_recycler);
 
         //列表操作接口
-        mAdapter.setItemInterface((environment, position) -> showPopWindowCommonEdit(environment));
+        mAdapter.setItemInterface(new EnvItemAdapter.ItemActionListener() {
+            @Override
+            public void onEdit(QLEnvironment environment) {
+                showPopWindowCommonEdit(environment);
+            }
+
+            @Override
+            public void onMove(MoveInfo info) {
+                netMoveEnvironment(info);
+            }
+        });
 
         //刷新
         ui_refresh.setOnRefreshListener(refreshLayout -> {
@@ -486,9 +497,12 @@ public class EnvFragment extends BaseFragment {
     }
 
     private void sortAndSetData(List<QLEnvironment> data) {
+        for (int k = 0; k < data.size(); k++) {
+            data.get(k).setRealIndex(k);
+        }
         if (data.size() != 0) {
             Collections.sort(data);
-            //设置序号
+            //设置同名序号
             int size = data.size();
             int current = 0;
             int index = 1;
@@ -763,4 +777,33 @@ public class EnvFragment extends BaseFragment {
         });
     }
 
+    private void netMoveEnvironment(MoveInfo info) {
+        QLEnvironment fromObject = info.getFromObejct();
+        QLEnvironment toObject = info.getToObject();
+        int realFrom = info.getFromObejct().getRealIndex();
+        int realTo = info.getToObject().getRealIndex();
+        QLApiController.moveEnvironment(getNetRequestID(), info.getFromObejct().getId(), realFrom, realTo, new QLApiController.NetBaseCallback() {
+            @Override
+            public void onSuccess() {
+                ToastUnit.showShort(getString(R.string.tip_move_success));
+                //交换真实序号
+                fromObject.setRealIndex(realTo);
+                toObject.setRealIndex(realFrom);
+                //同名变量交换同名序号 注：调用notifyItemChanged更新会显示异常
+                if (fromObject.getName().equals(toObject.getName())) {
+                    int index = fromObject.getIndex();
+                    fromObject.setIndex(toObject.getIndex());
+                    fromObject.resetFormatName();
+                    toObject.setIndex(index);
+                    toObject.resetFormatName();
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                ToastUnit.showShort(getString(R.string.tip_move_failure_header) + msg);
+                mAdapter.onItemMove(info.getToIndex(), info.getFromIndex());
+            }
+        });
+    }
 }

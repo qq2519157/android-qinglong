@@ -22,6 +22,7 @@ import retrofit2.http.HTTP;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.Url;
 
@@ -206,6 +207,9 @@ public interface QLApi {
     @PUT("api/envs/disable")
     Call<QLBaseRes> disableEnv(@Header("Authorization") String authorization, @Body RequestBody body);
 
+    @PUT("api/envs/{id}/move")
+    Call<QLBaseRes> moveEnv(@Header("Authorization") String authorization, @Path("id") String id, @Body RequestBody body);
+
     /**
      * 读取配置文件.
      *
@@ -324,7 +328,6 @@ public interface QLApi {
      */
     @PUT("api/dependencies/reinstall")
     Call<QLBaseRes> reinstallDependencies(@Header("Authorization") String authorization, @Body RequestBody body);
-
 
     /**
      * 获取日志列表.

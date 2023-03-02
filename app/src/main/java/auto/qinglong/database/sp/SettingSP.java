@@ -8,7 +8,7 @@ import auto.qinglong.MyApplication;
 public class SettingSP {
     private static final String TABLE = "SETTING";
     public static final String FIELD_NOTIFY = "notify";
-
+    public static final String FIELD_VIBRATE = "vibrate";
     private static final SharedPreferences sp;
 
     static {
@@ -17,6 +17,10 @@ public class SettingSP {
 
     public static boolean isNotify() {
         return sp.getBoolean(FIELD_NOTIFY, true);
+    }
+
+    public static boolean isVibrate() {
+        return sp.getBoolean(FIELD_VIBRATE, false);
     }
 
     public static void setBoolean(String field, boolean value) {

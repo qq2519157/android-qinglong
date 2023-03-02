@@ -51,6 +51,7 @@ import auto.qinglong.utils.LogUnit;
 import auto.qinglong.utils.TextUnit;
 import auto.qinglong.utils.TimeUnit;
 import auto.qinglong.utils.ToastUnit;
+import auto.qinglong.utils.VibratorUtil;
 import auto.qinglong.utils.WindowUnit;
 import auto.qinglong.views.popup.PopEditItem;
 import auto.qinglong.views.popup.PopEditWindow;
@@ -202,11 +203,12 @@ public class TaskFragment extends BaseFragment {
             }
 
             @Override
-            public void onScript(String title, String parent, String fileName) {
+            public void onScript(String parent, String fileName) {
+                VibratorUtil.vibrate(requireContext(), VibratorUtil.VIBRATE_SHORT);
                 Intent intent = new Intent(getContext(), CodeWebActivity.class);
                 intent.putExtra(CodeWebActivity.EXTRA_SCRIPT_NAME, fileName);
                 intent.putExtra(CodeWebActivity.EXTRA_SCRIPT_PARENT, parent);
-                intent.putExtra(CodeWebActivity.EXTRA_TITLE, title);
+                intent.putExtra(CodeWebActivity.EXTRA_TITLE, fileName);
                 intent.putExtra(CodeWebActivity.EXTRA_TYPE, CodeWebActivity.TYPE_SCRIPT);
                 intent.putExtra(CodeWebActivity.EXTRA_CAN_EDIT, true);
                 startActivity(intent);

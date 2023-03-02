@@ -32,6 +32,7 @@ import auto.qinglong.bean.ql.network.QLSystemRes;
 import auto.qinglong.bean.ql.network.QLTaskEditRes;
 import auto.qinglong.bean.ql.network.QLTasksRes;
 import auto.qinglong.database.sp.AccountSP;
+import auto.qinglong.utils.LogUnit;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -918,6 +919,55 @@ public class QLApiController {
             @Override
             public void onResponse(@NonNull Call<QLBaseRes> call, @NonNull Response<QLBaseRes> response) {
                 NetManager.finishCall(requestId);
+                QLBaseRes res = response.body();
+                if (res == null) {
+                    if (response.code() == 401) {
+                        callback.onFailure(ERROR_INVALID_AUTH);
+                    } else {
+                        callback.onFailure(ERROR_NO_BODY + response.code());
+                    }
+                } else {
+                    if (res.getCode() == 200) {
+                        callback.onSuccess();
+                    } else {
+                        callback.onFailure(res.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<QLBaseRes> call, @NonNull Throwable t) {
+                NetManager.finishCall(requestId);
+                if (call.isCanceled()) {
+                    return;
+                }
+                callback.onFailure(t.getLocalizedMessage());
+            }
+        });
+
+        NetManager.addCall(call, requestId);
+
+    }
+
+    public static void moveEnvironment(@NonNull String requestId, @NonNull String id, int from, int to, @NonNull NetBaseCallback callback) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("fromIndex", from);
+        jsonObject.addProperty("toIndex", to);
+
+        String json = jsonObject.toString();
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+        Call<QLBaseRes> call = new Retrofit.Builder()
+                .baseUrl(AccountSP.getBaseUrl())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(QLApi.class)
+                .moveEnv(AccountSP.getAuthorization(), id, body);
+
+        call.enqueue(new Callback<QLBaseRes>() {
+            @Override
+            public void onResponse(@NonNull Call<QLBaseRes> call, @NonNull Response<QLBaseRes> response) {
+                NetManager.finishCall(requestId);
+                LogUnit.log(call.request().url().toString());
                 QLBaseRes res = response.body();
                 if (res == null) {
                     if (response.code() == 401) {

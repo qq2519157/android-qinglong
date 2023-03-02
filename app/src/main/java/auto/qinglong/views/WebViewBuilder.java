@@ -37,10 +37,10 @@ public class WebViewBuilder {
 
     public static void destroy(WebView webView) {
         if (webView != null) {
-            webView.loadDataWithBaseURL(null, "", "text/html", "utf-8", null);
-            webView.clearCache(true);
-            webView.clearHistory();
             ((ViewGroup) webView.getParent()).removeView(webView);
+            webView.stopLoading();
+            webView.pauseTimers();
+            webView.clearCache(true);
             webView.destroy();
         }
     }

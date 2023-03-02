@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 public class ItemMoveHelper extends ItemTouchHelper.Callback {
     ItemMoveCallback callback;
     private boolean haveMove = false;
+    private boolean isStart = false;
+    private int startPosition = -1;
     private int fromPosition;
     private int toPosition;
 
@@ -30,6 +32,9 @@ public class ItemMoveHelper extends ItemTouchHelper.Callback {
         fromPosition = viewHolder.getBindingAdapterPosition();
         toPosition = target.getBindingAdapterPosition();
         callback.onItemMove(fromPosition, toPosition);
+        if (startPosition == -1) {
+            startPosition = fromPosition;
+        }
         haveMove = true;
         return true;
     }
@@ -41,9 +46,16 @@ public class ItemMoveHelper extends ItemTouchHelper.Callback {
 
     @Override
     public void onSelectedChanged(@Nullable RecyclerView.ViewHolder viewHolder, int actionState) {
-        if (haveMove) {
+        if (isStart) {
+            if (haveMove) {
+                callback.onItemMoveEnd(startPosition,fromPosition, toPosition);
+            }
+            startPosition = -1;
+            isStart = false;
             haveMove = false;
-            callback.onItemMoveEnd(fromPosition, toPosition);
+        } else {
+            isStart = true;
+            callback.onItemMoveStart();
         }
     }
 }

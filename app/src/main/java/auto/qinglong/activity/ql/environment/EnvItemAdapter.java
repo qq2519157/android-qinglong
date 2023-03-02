@@ -18,14 +18,15 @@ import java.util.Collections;
 import java.util.List;
 
 import auto.qinglong.R;
+import auto.qinglong.bean.ql.MoveInfo;
 import auto.qinglong.bean.ql.QLEnvironment;
-import auto.qinglong.utils.LogUnit;
+import auto.qinglong.utils.VibratorUtil;
 
 public class EnvItemAdapter extends RecyclerView.Adapter<EnvItemAdapter.MyViewHolder> implements ItemMoveCallback {
     public static final String TAG = "EnvItemAdapter";
 
     private final Context context;
-    private final List<QLEnvironment> data;
+    private List<QLEnvironment> data;
     private ItemActionListener itemActionListener;
     private boolean checkState;
     private Boolean[] dataCheckState;
@@ -87,7 +88,7 @@ public class EnvItemAdapter extends RecyclerView.Adapter<EnvItemAdapter.MyViewHo
 
         holder.ui_body.setOnLongClickListener(v -> {
             if (!this.checkState) {
-                itemActionListener.onEdit(environment, holder.getBindingAdapterPosition());
+                itemActionListener.onEdit(environment);
             }
             return true;
         });
@@ -111,17 +112,25 @@ public class EnvItemAdapter extends RecyclerView.Adapter<EnvItemAdapter.MyViewHo
     }
 
     @Override
-    public void onItemMoveEnd(int from, int to) {
-        LogUnit.log("onItemMoveEnd");
+    public void onItemMoveStart() {
+        VibratorUtil.vibrate(context, VibratorUtil.VIBRATE_SHORT);
     }
 
+    @Override
+    public void onItemMoveEnd(int start, int from, int to) {
+        if (start != to) {
+            MoveInfo moveInfo = new MoveInfo(data.get(to), from, data.get(from), to);
+            itemActionListener.onMove(moveInfo);
+        }
+    }
 
     @SuppressLint("NotifyDataSetChanged")
     public void setData(List<QLEnvironment> data) {
-        this.data.clear();
-        this.data.addAll(data);
-        this.dataCheckState = new Boolean[this.data.size()];
-        Arrays.fill(this.dataCheckState, false);
+        this.data = data;
+        if (data != null && data.size() > 0) {
+            this.dataCheckState = new Boolean[this.data.size()];
+            Arrays.fill(this.dataCheckState, false);
+        }
         notifyDataSetChanged();
     }
 
@@ -157,17 +166,19 @@ public class EnvItemAdapter extends RecyclerView.Adapter<EnvItemAdapter.MyViewHo
     }
 
     public interface ItemActionListener {
-        void onEdit(QLEnvironment environment, int position);
+        void onEdit(QLEnvironment environment);
+
+        void onMove(MoveInfo info);
     }
 
     static class MyViewHolder extends RecyclerView.ViewHolder {
-        public CheckBox ui_check;
-        public TextView ui_name;
-        public LinearLayout ui_body;
-        public TextView ui_value;
-        public TextView ui_remark;
-        public TextView ui_status;
-        public TextView ui_createAt;
+        CheckBox ui_check;
+        TextView ui_name;
+        LinearLayout ui_body;
+        TextView ui_value;
+        TextView ui_remark;
+        TextView ui_status;
+        TextView ui_createAt;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);

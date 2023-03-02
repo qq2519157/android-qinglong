@@ -176,6 +176,7 @@ public class CodeWebActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         WebViewBuilder.destroy(ui_webView);
+        ui_webView = null;
         super.onDestroy();
     }
 

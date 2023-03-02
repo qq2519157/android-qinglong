@@ -20,6 +20,7 @@ public class QLEnvironment implements Comparable<QLEnvironment> {
     private String value;
     /* 自定义字段 */
     private int index = -1;
+    private int realIndex;
     private String mFormatName;
     private String mFormatCreated;
 
@@ -68,8 +69,20 @@ public class QLEnvironment implements Comparable<QLEnvironment> {
         this._id = _id;
     }
 
+    public int getIndex() {
+        return index;
+    }
+
     public void setIndex(int index) {
         this.index = index;
+    }
+
+    public int getRealIndex() {
+        return realIndex;
+    }
+
+    public void setRealIndex(int realIndex) {
+        this.realIndex = realIndex;
     }
 
     public String getFormatName() {
@@ -77,6 +90,10 @@ public class QLEnvironment implements Comparable<QLEnvironment> {
             mFormatName = String.format(Locale.CHINA, "[%d] %s", index, name);
         }
         return mFormatName;
+    }
+
+    public void resetFormatName() {
+        this.mFormatName = null;
     }
 
     public String getFormatCreated() {
