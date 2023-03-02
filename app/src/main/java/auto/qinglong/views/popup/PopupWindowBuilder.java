@@ -143,13 +143,11 @@ public class PopupWindowBuilder {
         ui_recyclerView.setLayoutManager(new LinearLayoutManager(activity, RecyclerView.VERTICAL, false));
         ui_recyclerView.setAdapter((RecyclerView.Adapter) listWindow.getAdapter());
 
-        if (listWindow.getListener() != null) {
-            ui_cancel.setOnClickListener(v -> {
-                if (listWindow.getListener().onCancel()) {
-                    popWindow.dismiss();
-                }
-            });
-        }
+        ui_cancel.setOnClickListener(v -> {
+            if (listWindow.getListener() == null || listWindow.getListener().onCancel()) {
+                popWindow.dismiss();
+            }
+        });
 
         popWindow.setOnDismissListener(() -> {
             WindowUnit.setBackgroundAlpha(activity, 1.0f);
