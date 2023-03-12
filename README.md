@@ -108,5 +108,5 @@ APP还在开发，后续尝试加入更多拓展模块,提供更加强大的功�
 <img src="https://gitee.com/wsfsp4/QingLong/raw/master/static/imgs/donate_zfb.jpg" alt="支付宝打赏" width="25%">  
 
 ## 9.友情链接
-[QingLong](https://github.com/whyour/qinglong)  
-[iRobot机器人](https://gitee.com/wsfsp4/chatgpt-wechat)  
+1.[QingLong](https://github.com/whyour/qinglong)  
+2.[iRobot机器人](https://gitee.com/wsfsp4/chatgpt-wechat)  
