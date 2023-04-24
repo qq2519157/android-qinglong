@@ -109,4 +109,4 @@ APP还在开发，后续尝试加入更多拓展模块,提供更加强大的功�
 
 ## 9.友情链接
 1.[QingLong](https://github.com/whyour/qinglong)  
-2.[iRobot机器人](https://gitee.com/wsfsp4/chatgpt-wechat)  
+2.[ChatGPT-Web](https://newai-1308943175.cos-website.ap-shenzhen-fsi.myqcloud.com/)  
