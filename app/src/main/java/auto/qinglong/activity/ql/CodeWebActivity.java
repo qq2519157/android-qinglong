@@ -7,10 +7,6 @@ import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.blankj.utilcode.util.ToastUtils;
 
@@ -22,12 +18,13 @@ import auto.qinglong.R;
 import auto.qinglong.activity.BaseActivity;
 import auto.qinglong.bean.ql.QLDependence;
 import auto.qinglong.database.sp.AccountSP;
+import auto.qinglong.databinding.ActivityCodeWebBinding;
 import auto.qinglong.network.http.QLApiController;
 import auto.qinglong.network.web.QLWebJsManager;
 import auto.qinglong.utils.WindowUnit;
 import auto.qinglong.views.WebViewBuilder;
 
-public class CodeWebActivity extends BaseActivity {
+public class CodeWebActivity extends BaseActivity<ActivityCodeWebBinding> {
     public static final String TAG = "CodeWebActivity";
 
     public static final String EXTRA_TITLE = "title";
@@ -53,22 +50,12 @@ public class CodeWebActivity extends BaseActivity {
     private String mScriptParent;
     private String mLogPath;
     private String mDependenceId;
-
-    private LinearLayout ui_nav_bar;
-    private ImageView ui_back;
-    private TextView ui_tip;
-    private ImageView ui_edit;
-    private ImageView ui_refresh;
-    private LinearLayout ui_edit_bar;
-    private ImageView ui_edit_back;
-    private ImageView ui_edit_save;
-    private FrameLayout ui_web_container;
     private WebView ui_webView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_code_web);
+        setContentView(ActivityCodeWebBinding.class);
 
         mTitle = getIntent().getStringExtra(EXTRA_TITLE);
         mType = getIntent().getStringExtra(EXTRA_TYPE);
@@ -78,33 +65,22 @@ public class CodeWebActivity extends BaseActivity {
         mScriptParent = getIntent().getStringExtra(EXTRA_SCRIPT_PARENT);
         mLogPath = getIntent().getStringExtra(EXTRA_LOG_PATH);
         mDependenceId = getIntent().getStringExtra(EXTRA_DEPENDENCE_ID);
-
-        ui_nav_bar = findViewById(R.id.script_bar);
-        ui_back = findViewById(R.id.script_back);
-        ui_tip = findViewById(R.id.script_name);
-        ui_edit = findViewById(R.id.script_edit);
-        ui_refresh = findViewById(R.id.script_refresh);
-        ui_edit_bar = findViewById(R.id.code_bar_edit);
-        ui_edit_back = findViewById(R.id.code_bar_edit_back);
-        ui_edit_save = findViewById(R.id.code_bar_edit_save);
-        ui_web_container = findViewById(R.id.web_container);
-
         init();
     }
 
     @Override
     protected void init() {
         //设置标题
-        ui_tip.setText(mTitle);
+        binding.scriptName.setText(mTitle);
 
         //返回监听
-        ui_back.setOnClickListener(v -> finish());
+        binding.scriptBack.setOnClickListener(v -> finish());
 
         //刷新监听
         if (mCanRefresh) {
-            ui_refresh.setOnClickListener(v -> {
+            binding.scriptRefresh.setOnClickListener(v -> {
                 //禁用点击
-                ui_refresh.setEnabled(false);
+                binding.scriptRefresh.setEnabled(false);
                 //开启动画
                 Animation animation = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
                 animation.setAnimationListener(new Animation.AnimationListener() {
@@ -115,7 +91,7 @@ public class CodeWebActivity extends BaseActivity {
 
                     @Override
                     public void onAnimationEnd(Animation animation) {
-                        ui_refresh.setEnabled(true);
+                        binding.scriptRefresh.setEnabled(true);
                     }
 
                     @Override
@@ -125,24 +101,24 @@ public class CodeWebActivity extends BaseActivity {
                 });
                 animation.setRepeatCount(-1);
                 animation.setDuration(1000);
-                ui_refresh.startAnimation(animation);
+                binding.scriptRefresh.startAnimation(animation);
                 load(mType);
             });
         }
 
         //编辑
         if (mCanEdit) {
-            ui_edit.setOnClickListener(v -> {
-                ui_nav_bar.setVisibility(View.INVISIBLE);
-                ui_edit_bar.setVisibility(View.VISIBLE);
+            binding.scriptEdit.setOnClickListener(v -> {
+                binding.scriptBar.setVisibility(View.INVISIBLE);
+                binding.codeBarEdit.setVisibility(View.VISIBLE);
                 ui_webView.setFocusable(true);
                 ui_webView.setFocusableInTouchMode(true);
                 QLWebJsManager.setEditable(ui_webView, true);
             });
 
-            ui_edit_back.setOnClickListener(v -> {
-                ui_edit_bar.setVisibility(View.INVISIBLE);
-                ui_nav_bar.setVisibility(View.VISIBLE);
+            binding.codeBarEditBack.setOnClickListener(v -> {
+                binding.codeBarEdit.setVisibility(View.INVISIBLE);
+                binding.scriptBar.setVisibility(View.VISIBLE);
                 WindowUnit.hideKeyboard(ui_webView);
                 ui_webView.clearFocus();
                 ui_webView.setFocusable(false);
@@ -151,7 +127,7 @@ public class CodeWebActivity extends BaseActivity {
                 QLWebJsManager.setContent(ui_webView, mContent);
             });
 
-            ui_edit_save.setOnClickListener(v -> QLWebJsManager.getContent(ui_webView, value -> {
+            binding.codeBarEditSave.setOnClickListener(v -> QLWebJsManager.getContent(ui_webView, value -> {
                 try {
                     ui_webView.clearFocus();
                     WindowUnit.hideKeyboard(ui_webView);
@@ -185,10 +161,10 @@ public class CodeWebActivity extends BaseActivity {
 
     private void initWebView() {
         if (mCanRefresh) {
-            ui_refresh.setVisibility(View.VISIBLE);
+            binding.scriptRefresh.setVisibility(View.VISIBLE);
         }
 
-        ui_webView = WebViewBuilder.build(getBaseContext(), ui_web_container, new WebViewClient() {
+        ui_webView = WebViewBuilder.build(getBaseContext(), binding.webContainer, new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
                 load(mType);
@@ -240,8 +216,8 @@ public class CodeWebActivity extends BaseActivity {
      * 网络加载结束 关闭刷新动画
      */
     private void loadFinish() {
-        if (ui_refresh.getAnimation() != null) {
-            ui_refresh.getAnimation().cancel();
+        if (binding.scriptRefresh.getAnimation() != null) {
+            binding.scriptRefresh.getAnimation().cancel();
         }
     }
 
@@ -263,7 +239,7 @@ public class CodeWebActivity extends BaseActivity {
             @Override
             public void onSuccess(String content) {
                 mContent = content;
-                ui_edit.setVisibility(View.VISIBLE);
+                binding.scriptEdit.setVisibility(View.VISIBLE);
                 QLWebJsManager.setContent(ui_webView, content);
                 loadFinish();
                 ToastUtils.showShort(getString(R.string.tip_load_success));
@@ -271,7 +247,7 @@ public class CodeWebActivity extends BaseActivity {
 
             @Override
             public void onFailure(String msg) {
-                ui_edit.setVisibility(View.INVISIBLE);
+                binding.scriptEdit.setVisibility(View.INVISIBLE);
                 loadFinish();
                 ToastUtils.showShort(msg);
             }
@@ -300,11 +276,11 @@ public class CodeWebActivity extends BaseActivity {
                 //防止内容过大导致崩溃
                 if (content.length() > 1500000) {
                     ToastUtils.showShort(getString(R.string.tip_text_too_long));
-                    ui_refresh.setVisibility(View.GONE);
+                    binding.scriptRefresh.setVisibility(View.GONE);
                     return;
                 }
                 mContent = content;
-                ui_edit.setVisibility(View.VISIBLE);
+                binding.scriptEdit.setVisibility(View.VISIBLE);
                 QLWebJsManager.setContent(ui_webView, content);
                 loadFinish();
                 ToastUtils.showShort(getString(R.string.tip_load_success));
@@ -312,7 +288,7 @@ public class CodeWebActivity extends BaseActivity {
 
             @Override
             public void onFailure(String msg) {
-                ui_edit.setVisibility(View.INVISIBLE);
+                binding.scriptEdit.setVisibility(View.INVISIBLE);
                 loadFinish();
                 ToastUtils.showShort(msg);
             }

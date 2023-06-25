@@ -1,19 +1,10 @@
 package auto.qinglong.activity.ql.environment;
 
-import android.os.Bundle;
 import android.os.Handler;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,7 +15,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -43,6 +33,7 @@ import auto.qinglong.activity.BaseFragment;
 import auto.qinglong.activity.ql.LocalFileAdapter;
 import auto.qinglong.bean.ql.MoveInfo;
 import auto.qinglong.bean.ql.QLEnvironment;
+import auto.qinglong.databinding.FragmentEnvBinding;
 import auto.qinglong.network.http.ApiController;
 import auto.qinglong.network.http.NetManager;
 import auto.qinglong.network.http.QLApiController;
@@ -59,62 +50,15 @@ import auto.qinglong.views.popup.PopMenuWindow;
 import auto.qinglong.views.popup.PopProgressWindow;
 import auto.qinglong.views.popup.PopupWindowBuilder;
 
-public class EnvFragment extends BaseFragment {
+public class EnvFragment extends BaseFragment<FragmentEnvBinding> {
     public static String TAG = "EnvFragment";
     private String mCurrentSearchValue;
     private MenuClickListener mMenuClickListener;
     private EnvItemAdapter mAdapter;
-
-    private LinearLayout ui_bar_nav;
-    private ImageView ui_nav_menu;
-    private ImageView ui_nav_search;
-    private ImageView ui_nav_more;
-    private LinearLayout ui_bar_search;
-    private ImageView ui_search_back;
-    private EditText ui_search_value;
-    private ImageView ui_search_confirm;
-    private LinearLayout ui_bar_actions;
-    private ImageView ui_actions_back;
-    private CheckBox ui_actions_select;
-    private LinearLayout ui_actions_enable;
-    private LinearLayout ui_actions_disable;
-    private LinearLayout ui_actions_delete;
-
-    private RecyclerView ui_recycler;
-    private SmartRefreshLayout ui_refresh;
-
     private PopEditWindow ui_pop_edit;
     private PopProgressWindow ui_pop_progress;
-
     enum BarType {NAV, SEARCH, MUL_ACTION}
 
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_env, null);
-
-        ui_bar_nav = view.findViewById(R.id.env_bar_nav);
-        ui_nav_menu = view.findViewById(R.id.env_menu);
-        ui_nav_search = view.findViewById(R.id.env_search);
-        ui_nav_more = view.findViewById(R.id.env_more);
-        ui_bar_search = view.findViewById(R.id.env_bar_search);
-        ui_search_back = view.findViewById(R.id.env_bar_search_back);
-        ui_search_value = view.findViewById(R.id.env_bar_search_input);
-        ui_search_confirm = view.findViewById(R.id.env_bar_search_confirm);
-        ui_bar_actions = view.findViewById(R.id.env_bar_actions);
-        ui_actions_back = view.findViewById(R.id.env_bar_actions_back);
-        ui_actions_select = view.findViewById(R.id.env_bar_actions_select_all);
-        ui_actions_enable = view.findViewById(R.id.env_bar_actions_enable);
-        ui_actions_disable = view.findViewById(R.id.env_bar_actions_disable);
-        ui_actions_delete = view.findViewById(R.id.env_bar_actions_delete);
-
-        ui_refresh = view.findViewById(R.id.refresh_layout);
-        ui_recycler = view.findViewById(R.id.recycler_view);
-
-        init();
-
-        return view;
-    }
 
     @Override
     public void onResume() {
@@ -132,10 +76,10 @@ public class EnvFragment extends BaseFragment {
 
     @Override
     public boolean onBackPressed() {
-        if (ui_bar_search.getVisibility() == View.VISIBLE) {
+        if (binding.envBarSearch.getVisibility() == View.VISIBLE) {
             changeBar(BarType.NAV);
             return true;
-        } else if (ui_bar_actions.getVisibility() == View.VISIBLE) {
+        } else if (binding.envBarActions.getVisibility() == View.VISIBLE) {
             changeBar(BarType.NAV);
             return true;
         } else {
@@ -146,12 +90,12 @@ public class EnvFragment extends BaseFragment {
     @Override
     public void init() {
         mAdapter = new EnvItemAdapter(requireContext());
-        ui_recycler.setAdapter(mAdapter);
-        ui_recycler.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
-        Objects.requireNonNull(ui_recycler.getItemAnimator()).setChangeDuration(0);
+        binding.recyclerView.setAdapter(mAdapter);
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
+        Objects.requireNonNull(binding.recyclerView.getItemAnimator()).setChangeDuration(0);
 
         ItemMoveHelper itemMoveHelper = new ItemMoveHelper(mAdapter);
-        new ItemTouchHelper(itemMoveHelper).attachToRecyclerView(ui_recycler);
+        new ItemTouchHelper(itemMoveHelper).attachToRecyclerView(binding.recyclerView);
 
         //列表操作接口
         mAdapter.setItemInterface(new EnvItemAdapter.ItemActionListener() {
@@ -167,42 +111,42 @@ public class EnvFragment extends BaseFragment {
         });
 
         //刷新
-        ui_refresh.setOnRefreshListener(refreshLayout -> {
-            if (ui_bar_search.getVisibility() != View.VISIBLE) {
+        binding.refreshLayout.setOnRefreshListener(refreshLayout -> {
+            if (binding.envBarSearch.getVisibility() != View.VISIBLE) {
                 mCurrentSearchValue = null;
             }
             netGetEnvironments(mCurrentSearchValue, true);
         });
 
         //导航栏
-        ui_nav_menu.setOnClickListener(v -> mMenuClickListener.onMenuClick());
+        binding.envMenu.setOnClickListener(v -> mMenuClickListener.onMenuClick());
 
         //更多操作
-        ui_nav_more.setOnClickListener(this::showPopWindowMenu);
+        binding.envMore.setOnClickListener(this::showPopWindowMenu);
 
         //搜索栏进入
-        ui_nav_search.setOnClickListener(v -> {
+        binding.envSearch.setOnClickListener(v -> {
             changeBar(BarType.SEARCH);
         });
 
         //搜索栏返回
-        ui_search_back.setOnClickListener(v -> changeBar(BarType.NAV));
+        binding.envBarSearchBack.setOnClickListener(v -> changeBar(BarType.NAV));
 
         //搜索栏确定
-        ui_search_confirm.setOnClickListener(v -> {
-            mCurrentSearchValue = ui_search_value.getText().toString().trim();
-            WindowUnit.hideKeyboard(ui_search_value);
+        binding.envBarSearchConfirm.setOnClickListener(v -> {
+            mCurrentSearchValue = binding.envBarSearchInput.getText().toString().trim();
+            WindowUnit.hideKeyboard(binding.envBarSearchInput);
             netGetEnvironments(mCurrentSearchValue, true);
         });
 
         //操作栏返回
-        ui_actions_back.setOnClickListener(v -> changeBar(BarType.NAV));
+        binding.envBarActionsBack.setOnClickListener(v -> changeBar(BarType.NAV));
 
         //全选
-        ui_actions_select.setOnCheckedChangeListener((buttonView, isChecked) -> mAdapter.setAllChecked(isChecked));
+        binding.envBarActionsSelectAll.setOnCheckedChangeListener((buttonView, isChecked) -> mAdapter.setAllChecked(isChecked));
 
         //删除
-        ui_actions_delete.setOnClickListener(v -> {
+        binding.envBarActionsDelete.setOnClickListener(v -> {
             if (NetManager.isRequesting(getNetRequestID())) {
                 return;
             }
@@ -220,7 +164,7 @@ public class EnvFragment extends BaseFragment {
         });
 
         //禁用
-        ui_actions_disable.setOnClickListener(v -> {
+        binding.envBarActionsDisable.setOnClickListener(v -> {
             if (NetManager.isRequesting(getNetRequestID())) {
                 return;
             }
@@ -238,7 +182,7 @@ public class EnvFragment extends BaseFragment {
         });
 
         //启用
-        ui_actions_enable.setOnClickListener(v -> {
+        binding.envBarActionsEnable.setOnClickListener(v -> {
             if (NetManager.isRequesting(getNetRequestID())) {
                 return;
             }
@@ -274,7 +218,7 @@ public class EnvFragment extends BaseFragment {
         if (initDataFlag || NetManager.isRequesting(getNetRequestID())) {
             return;
         }
-        ui_refresh.autoRefreshAnimationOnly();
+        binding.refreshLayout.autoRefreshAnimationOnly();
         new Handler().postDelayed(() -> {
             if (isVisible()) {
                 netGetEnvironments(mCurrentSearchValue, true);
@@ -473,26 +417,26 @@ public class EnvFragment extends BaseFragment {
     }
 
     private void changeBar(BarType barType) {
-        if (ui_bar_search.getVisibility() == View.VISIBLE) {
-            WindowUnit.hideKeyboard(ui_search_value);
-            ui_bar_search.setVisibility(View.INVISIBLE);
-        } else if (ui_bar_actions.getVisibility() == View.VISIBLE) {
-            ui_bar_actions.setVisibility(View.INVISIBLE);
+        if (binding.envBarSearch.getVisibility() == View.VISIBLE) {
+            WindowUnit.hideKeyboard(binding.envBarSearchInput);
+            binding.envBarSearch.setVisibility(View.INVISIBLE);
+        } else if (binding.envBarActions.getVisibility() == View.VISIBLE) {
+            binding.envBarActions.setVisibility(View.INVISIBLE);
             mAdapter.setCheckState(false);
-            ui_actions_select.setChecked(false);
+            binding.envBarActionsSelectAll.setChecked(false);
         }
 
-        ui_bar_nav.setVisibility(View.INVISIBLE);
+        binding.envBarNav.setVisibility(View.INVISIBLE);
 
         if (barType == BarType.NAV) {
-            ui_bar_nav.setVisibility(View.VISIBLE);
+            binding.envBarNav.setVisibility(View.VISIBLE);
         } else if (barType == BarType.SEARCH) {
-            ui_search_value.setText(mCurrentSearchValue);
-            ui_bar_search.setVisibility(View.VISIBLE);
+            binding.envBarSearchInput.setText(mCurrentSearchValue);
+            binding.envBarSearch.setVisibility(View.VISIBLE);
         } else {
-            ui_actions_select.setChecked(false);
+            binding.envBarActionsSelectAll.setChecked(false);
             mAdapter.setCheckState(true);
-            ui_bar_actions.setVisibility(View.VISIBLE);
+            binding.envBarActions.setVisibility(View.VISIBLE);
         }
     }
 
@@ -643,13 +587,13 @@ public class EnvFragment extends BaseFragment {
                     ToastUtils.showShort("加载成功：" + environments.size());
                 }
                 sortAndSetData(environments);
-                ui_refresh.finishRefresh(true);
+                binding.refreshLayout.finishRefresh(true);
             }
 
             @Override
             public void onFailure(String msg) {
                 ToastUtils.showShort("加载失败：" + msg);
-                ui_refresh.finishRefresh(false);
+                binding.refreshLayout.finishRefresh(false);
             }
         });
     }
@@ -704,7 +648,7 @@ public class EnvFragment extends BaseFragment {
         QLApiController.deleteEnvironments(getNetRequestID(), ids, new QLApiController.NetBaseCallback() {
             @Override
             public void onSuccess() {
-                ui_actions_back.performClick();
+                binding.envBarActionsBack.performClick();
                 ToastUtils.showShort("删除成功：" + ids.size());
                 netGetEnvironments(mCurrentSearchValue, false);
             }
@@ -723,7 +667,7 @@ public class EnvFragment extends BaseFragment {
         QLApiController.enableEnvironments(getNetRequestID(), ids, new QLApiController.NetBaseCallback() {
             @Override
             public void onSuccess() {
-                ui_actions_back.performClick();
+                binding.envBarActionsBack.performClick();
                 ToastUtils.showShort("启用成功");
                 netGetEnvironments(mCurrentSearchValue, false);
             }
@@ -743,7 +687,7 @@ public class EnvFragment extends BaseFragment {
         QLApiController.disableEnvironments(getNetRequestID(), ids, new QLApiController.NetBaseCallback() {
             @Override
             public void onSuccess() {
-                ui_actions_back.performClick();
+                binding.envBarActionsBack.performClick();
                 ToastUtils.showShort("禁用成功");
                 netGetEnvironments(mCurrentSearchValue, false);
             }

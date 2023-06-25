@@ -4,10 +4,8 @@ package auto.qinglong.activity.extension.web;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.ImageView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.blankj.utilcode.util.ToastUtils;
 
@@ -20,6 +18,7 @@ import auto.qinglong.R;
 import auto.qinglong.activity.BaseActivity;
 import auto.qinglong.bean.app.WebRule;
 import auto.qinglong.database.db.WebRuleDBHelper;
+import auto.qinglong.databinding.ActivityPluginWebRuleBinding;
 import auto.qinglong.network.http.ApiController;
 import auto.qinglong.network.http.NetManager;
 import auto.qinglong.utils.VibratorUtil;
@@ -31,32 +30,24 @@ import auto.qinglong.views.popup.PopMenuItem;
 import auto.qinglong.views.popup.PopMenuWindow;
 import auto.qinglong.views.popup.PopupWindowBuilder;
 
-public class PluginWebRuleActivity extends BaseActivity {
+public class PluginWebRuleActivity extends BaseActivity<ActivityPluginWebRuleBinding> {
     public static final String TAG = "PluginWebRuleActivity";
 
     private RuleItemAdapter itemAdapter;
-    private ImageView ui_bar_back;
-    private ImageView ui_bar_more;
-    private RecyclerView ui_recycler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_plugin_web_rule);
-
-        ui_bar_back = findViewById(R.id.action_bar_back);
-        ui_bar_more = findViewById(R.id.bar_more);
-        ui_recycler = findViewById(R.id.plugin_web_rule_recycler);
-
+        setContentView(ActivityPluginWebRuleBinding.class);
         init();
     }
 
     @Override
     protected void init() {
         itemAdapter = new RuleItemAdapter(getBaseContext());
-        ui_recycler.setAdapter(itemAdapter);
-        ui_recycler.setLayoutManager(new LinearLayoutManager(getBaseContext(), LinearLayoutManager.VERTICAL, false));
-        Objects.requireNonNull(ui_recycler.getItemAnimator()).setChangeDuration(0);
+        binding.pluginWebRuleRecycler.setAdapter(itemAdapter);
+        binding.pluginWebRuleRecycler.setLayoutManager(new LinearLayoutManager(getBaseContext(), LinearLayoutManager.VERTICAL, false));
+        Objects.requireNonNull(binding.pluginWebRuleRecycler.getItemAnimator()).setChangeDuration(0);
 
         itemAdapter.setActionListener(new RuleItemAdapter.OnActionListener() {
 
@@ -73,9 +64,9 @@ public class PluginWebRuleActivity extends BaseActivity {
             }
         });
 
-        ui_bar_back.setOnClickListener(v -> finish());
+        binding.actionBarBack.setOnClickListener(v -> finish());
 
-        ui_bar_more.setOnClickListener(this::showPopMenu);
+        binding.barMore.setOnClickListener(this::showPopMenu);
 
         itemAdapter.setData(WebRuleDBHelper.getAll());
     }

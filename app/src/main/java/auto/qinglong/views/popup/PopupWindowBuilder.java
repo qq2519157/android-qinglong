@@ -6,15 +6,9 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -26,34 +20,35 @@ import java.util.List;
 import java.util.Map;
 
 import auto.qinglong.R;
+import auto.qinglong.databinding.PopItemEditBinding;
+import auto.qinglong.databinding.PopItemMenuBinding;
+import auto.qinglong.databinding.PopWindowConfirmBinding;
+import auto.qinglong.databinding.PopWindowEditBinding;
+import auto.qinglong.databinding.PopWindowListBinding;
+import auto.qinglong.databinding.PopWindowLoadingBinding;
+import auto.qinglong.databinding.PopWindowMenuBinding;
 import auto.qinglong.utils.WindowUnit;
-import auto.qinglong.views.FixScrollView;
 
 public class PopupWindowBuilder {
     public static final String TAG = "PopupWindowManager";
 
     @SuppressLint("UseCompatLoadingForDrawables")
     public static void buildMenuWindow(Activity activity, PopMenuWindow popMenuWindow) {
-        View view = LayoutInflater.from(activity.getBaseContext()).inflate(R.layout.pop_window_menu, null, false);
+        PopWindowMenuBinding binding = PopWindowMenuBinding.inflate(activity.getLayoutInflater(), null, false);
         PopupWindow popWindow = build(activity.getBaseContext(), true);
-        popWindow.setContentView(view);
-
-        LinearLayout ui_ll_container = view.findViewById(R.id.pop_common_ll_container);
-
+        popWindow.setContentView(binding.getRoot());
         for (PopMenuItem item : popMenuWindow.getItems()) {
-            View itemView = LayoutInflater.from(activity.getBaseContext()).inflate(R.layout.pop_item_menu, null, false);
-            ImageView ui_icon = itemView.findViewById(R.id.pop_common_mini_more_icon);
-            TextView ui_name = itemView.findViewById(R.id.pop_common_mini_more_name);
-            ui_icon.setImageDrawable(activity.getDrawable(item.getIcon()));
-            ui_name.setText(item.getName());
+            PopItemMenuBinding itemMenuBinding = PopItemMenuBinding.inflate(activity.getLayoutInflater(), null, false);
+            itemMenuBinding.popCommonMiniMoreIcon.setImageDrawable(activity.getDrawable(item.getIcon()));
+            itemMenuBinding.popCommonMiniMoreName.setText(item.getName());
             if (popMenuWindow.getOnActionListener() != null) {
-                itemView.setOnClickListener(v -> {
+                itemMenuBinding.getRoot().setOnClickListener(v -> {
                     if (popMenuWindow.getOnActionListener().onClick(item.getKey())) {
                         popWindow.dismiss();
                     }
                 });
             }
-            ui_ll_container.addView(itemView);
+            binding.popCommonLlContainer.addView(itemMenuBinding.getRoot());
         }
 
         popWindow.setOnDismissListener(() -> {
@@ -65,48 +60,39 @@ public class PopupWindowBuilder {
     }
 
     public static void buildEditWindow(@NonNull Activity activity, PopEditWindow popEditWindow) {
-        View view = LayoutInflater.from(activity.getBaseContext()).inflate(R.layout.pop_window_edit, null, false);
+        PopWindowEditBinding binding = PopWindowEditBinding.inflate(activity.getLayoutInflater(), null, false);
         PopupWindow popWindow = build(activity.getBaseContext(), true);
-        popWindow.setContentView(view);
-        popEditWindow.setView(view);
+        popWindow.setContentView(binding.getRoot());
+        popEditWindow.setView(binding.getRoot());
         popEditWindow.setPopupWindow(popWindow);
-
-        TextView ui_tv_title = view.findViewById(R.id.pop_common_tv_title);
-        Button ui_bt_cancel = view.findViewById(R.id.pop_common_bt_cancel);
-        Button ui_bt_confirm = view.findViewById(R.id.pop_common_bt_confirm);
-        LinearLayout ui_ll_container = view.findViewById(R.id.pop_common_ll_container);
-        FixScrollView ui_sl_container = view.findViewById(R.id.pop_common_sl_container);
-
-        ui_sl_container.setMaxHeight(popEditWindow.getMaxHeight());
-        ui_tv_title.setText(popEditWindow.getTitle());
-        ui_bt_cancel.setText(popEditWindow.getCancelTip());
-        ui_bt_confirm.setText(popEditWindow.getConfirmTip());
+        binding.popCommonSlContainer.setMaxHeight(popEditWindow.getMaxHeight());
+        binding.popCommonTvTitle.setText(popEditWindow.getTitle());
+        binding.popCommonBtCancel.setText(popEditWindow.getCancelTip());
+        binding.popCommonBtConfirm.setText(popEditWindow.getConfirmTip());
 
         //添加item
         List<EditText> itemViews = new ArrayList<>();
         List<PopEditItem> items = popEditWindow.getItems();
         for (PopEditItem item : items) {
-            View itemView = LayoutInflater.from(activity.getBaseContext()).inflate(R.layout.pop_item_edit, null, false);
-            TextView ui_item_label = itemView.findViewById(R.id.pop_common_tv_label);
-            EditText ui_item_value = itemView.findViewById(R.id.pop_common_et_value);
-            ui_item_label.setText(item.getLabel());
-            ui_item_value.setHint(item.getHint());
-            ui_item_value.setText(item.getValue());
-            ui_item_value.setFocusable(item.isFocusable());
-            ui_item_value.setEnabled(item.isEditable());
-            itemViews.add(ui_item_value);
-            ui_ll_container.addView(itemView);
+            PopItemEditBinding itemEditBinding = PopItemEditBinding.inflate(activity.getLayoutInflater(), null, false);
+            itemEditBinding.popCommonTvLabel.setText(item.getLabel());
+            itemEditBinding.popCommonEtValue.setHint(item.getHint());
+            itemEditBinding.popCommonEtValue.setText(item.getValue());
+            itemEditBinding.popCommonEtValue.setFocusable(item.isFocusable());
+            itemEditBinding.popCommonEtValue.setEnabled(item.isEditable());
+            itemViews.add(itemEditBinding.popCommonEtValue);
+            binding.popCommonLlContainer.addView(itemEditBinding.getRoot());
         }
 
         if (popEditWindow.getActionListener() != null) {
-            ui_bt_cancel.setOnClickListener(v -> {
+            binding.popCommonBtCancel.setOnClickListener(v -> {
                 boolean flag = popEditWindow.getActionListener().onCancel();
                 if (flag) {
                     popWindow.dismiss();
                 }
             });
 
-            ui_bt_confirm.setOnClickListener(v -> {
+            binding.popCommonBtConfirm.setOnClickListener(v -> {
                 Map<String, String> map = new HashMap<>();
                 for (int k = 0; k < itemViews.size(); k++) {
                     map.put(items.get(k).getKey(), itemViews.get(k).getText().toString().trim());
@@ -130,20 +116,15 @@ public class PopupWindowBuilder {
     }
 
     public static PopupWindow buildListWindow(Activity activity, PopListWindow listWindow) {
-        View view = LayoutInflater.from(activity.getBaseContext()).inflate(R.layout.pop_window_list, null, false);
+        PopWindowListBinding binding = PopWindowListBinding.inflate(activity.getLayoutInflater(), null, false);
         PopupWindow popWindow = build(activity.getBaseContext(), true);
-        popWindow.setContentView(view);
+        popWindow.setContentView(binding.getRoot());
+        binding.popCommonTvTitle.setText(listWindow.getTitle());
+        binding.popCommonBtCancel.setText(listWindow.getCancelTip());
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(activity, RecyclerView.VERTICAL, false));
+        binding.recyclerView.setAdapter((RecyclerView.Adapter) listWindow.getAdapter());
 
-        TextView ui_title = view.findViewById(R.id.pop_common_tv_title);
-        RecyclerView ui_recyclerView = view.findViewById(R.id.recycler_view);
-        Button ui_cancel = view.findViewById(R.id.pop_common_bt_cancel);
-
-        ui_title.setText(listWindow.getTitle());
-        ui_cancel.setText(listWindow.getCancelTip());
-        ui_recyclerView.setLayoutManager(new LinearLayoutManager(activity, RecyclerView.VERTICAL, false));
-        ui_recyclerView.setAdapter((RecyclerView.Adapter) listWindow.getAdapter());
-
-        ui_cancel.setOnClickListener(v -> {
+        binding.popCommonBtCancel.setOnClickListener(v -> {
             if (listWindow.getListener() == null || listWindow.getListener().onCancel()) {
                 popWindow.dismiss();
             }
@@ -151,7 +132,7 @@ public class PopupWindowBuilder {
 
         popWindow.setOnDismissListener(() -> {
             WindowUnit.setBackgroundAlpha(activity, 1.0f);
-            ui_recyclerView.setAdapter(null);
+            binding.recyclerView.setAdapter(null);
             listWindow.setListener(null);
             popWindow.setOnDismissListener(null);
         });
@@ -163,30 +144,22 @@ public class PopupWindowBuilder {
     }
 
     public static PopupWindow buildConfirmWindow(Activity activity, PopConfirmWindow popConfirmWindow) {
-        View view = LayoutInflater.from(activity.getBaseContext()).inflate(R.layout.pop_window_confirm, null, false);
+        PopWindowConfirmBinding binding = PopWindowConfirmBinding.inflate(activity.getLayoutInflater(), null, false);
         PopupWindow popWindow = build(activity.getBaseContext(), popConfirmWindow.isFocusable());
-        popWindow.setContentView(view);
-
-        TextView ui_tv_title = view.findViewById(R.id.pop_common_tv_title);
-        TextView ui_tv_content = view.findViewById(R.id.pop_common_tv_content);
-        Button ui_bt_cancel = view.findViewById(R.id.pop_common_bt_cancel);
-        Button ui_bt_confirm = view.findViewById(R.id.pop_common_bt_confirm);
-        FixScrollView ui_sl_container = view.findViewById(R.id.pop_common_sl_container);
-
-        ui_sl_container.setMaxHeight(popConfirmWindow.getMaxHeight());
-        ui_tv_title.setText(popConfirmWindow.getTitle());
-        ui_tv_content.setText(popConfirmWindow.getContent());
-        ui_bt_confirm.setText(popConfirmWindow.getConfirmTip());
-        ui_bt_cancel.setText(popConfirmWindow.getCancelTip());
-
+        popWindow.setContentView(binding.getRoot());
+        binding.popCommonSlContainer.setMaxHeight(popConfirmWindow.getMaxHeight());
+        binding.popCommonTvTitle.setText(popConfirmWindow.getTitle());
+        binding.popCommonTvContent.setText(popConfirmWindow.getContent());
+        binding.popCommonBtConfirm.setText(popConfirmWindow.getConfirmTip());
+        binding.popCommonBtCancel.setText(popConfirmWindow.getCancelTip());
         if (popConfirmWindow.getOnActionListener() != null) {
-            ui_bt_cancel.setOnClickListener(v -> {
+            binding.popCommonBtCancel.setOnClickListener(v -> {
                 if (popConfirmWindow.getOnActionListener().onConfirm(false)) {
                     popWindow.dismiss();
                 }
             });
 
-            ui_bt_confirm.setOnClickListener(v -> {
+            binding.popCommonBtConfirm.setOnClickListener(v -> {
                 if (popConfirmWindow.getOnActionListener().onConfirm(true)) {
                     popWindow.dismiss();
                 }
@@ -205,13 +178,10 @@ public class PopupWindowBuilder {
     }
 
     public static PopProgressWindow buildProgressWindow(Activity activity, PopupWindow.OnDismissListener dismissListener) {
-        View view = LayoutInflater.from(activity.getBaseContext()).inflate(R.layout.pop_window_loading, null, false);
+        PopWindowLoadingBinding binding = PopWindowLoadingBinding.inflate(activity.getLayoutInflater(), null, false);
         PopupWindow popWindow = build(activity.getBaseContext(), false);
-        popWindow.setContentView(view);
-
-        TextView ui_tip = view.findViewById(R.id.pop_common_progress_tip);
-
-        PopProgressWindow progressPopWindow = new PopProgressWindow(activity, popWindow, ui_tip);
+        popWindow.setContentView(binding.getRoot());
+        PopProgressWindow progressPopWindow = new PopProgressWindow(activity, popWindow, binding.popCommonProgressTip);
 
         popWindow.setOnDismissListener(() -> {
             if (dismissListener != null) {

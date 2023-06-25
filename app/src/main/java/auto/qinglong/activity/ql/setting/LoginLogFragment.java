@@ -1,46 +1,27 @@
 package auto.qinglong.activity.ql.setting;
 
-import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.blankj.utilcode.util.ToastUtils;
-import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
 import java.util.List;
 import java.util.Objects;
 
-import auto.qinglong.R;
 import auto.qinglong.activity.BaseFragment;
 import auto.qinglong.bean.ql.QLLoginLog;
 import auto.qinglong.database.sp.AccountSP;
+import auto.qinglong.databinding.FragmentSettingLoginLogBinding;
 import auto.qinglong.network.http.NetManager;
 import auto.qinglong.network.http.QLApiController;
 
 
-public class LoginLogFragment extends BaseFragment {
+public class LoginLogFragment extends BaseFragment<FragmentSettingLoginLogBinding> {
 
     private LoginLogItemAdapter itemAdapter;
-
-    private RecyclerView ui_recycler;
-    private SmartRefreshLayout ui_refresh;
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_setting_login_log, container, false);
-
-        ui_refresh = view.findViewById(R.id.refresh_layout);
-        ui_recycler = view.findViewById(R.id.recycler_view);
-
-        init();
-        return view;
-    }
 
     @Override
     public void onResume() {
@@ -52,11 +33,11 @@ public class LoginLogFragment extends BaseFragment {
     protected void init() {
         itemAdapter = new LoginLogItemAdapter(getContext());
 
-        Objects.requireNonNull(ui_recycler.getItemAnimator()).setChangeDuration(0);
-        ui_recycler.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
-        ui_recycler.setAdapter(itemAdapter);
+        Objects.requireNonNull(binding.recyclerView.getItemAnimator()).setChangeDuration(0);
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+        binding.recyclerView.setAdapter(itemAdapter);
 
-        ui_refresh.setOnRefreshListener(refreshLayout -> netGetLoginLogs());
+        binding.refreshLayout.setOnRefreshListener(refreshLayout -> netGetLoginLogs());
     }
 
     private void initData() {
@@ -72,7 +53,7 @@ public class LoginLogFragment extends BaseFragment {
             ToastUtils.showShort("ClientId方式登录不支持查看登录日志");
             return;
         }
-        ui_refresh.autoRefreshAnimationOnly();
+        binding.refreshLayout.autoRefreshAnimationOnly();
         new Handler().postDelayed(() -> {
             if (isVisible()) {
                 netGetLoginLogs();
@@ -96,8 +77,8 @@ public class LoginLogFragment extends BaseFragment {
             }
 
             private void onEnd(boolean isSuccess) {
-                if (ui_refresh.isRefreshing()) {
-                    ui_refresh.finishRefresh(isSuccess);
+                if (binding.refreshLayout.isRefreshing()) {
+                    binding.refreshLayout.finishRefresh(isSuccess);
                 }
             }
         });

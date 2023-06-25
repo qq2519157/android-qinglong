@@ -5,20 +5,13 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.Handler;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.blankj.utilcode.util.ToastUtils;
-import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
 import java.util.Collections;
 import java.util.List;
@@ -28,6 +21,7 @@ import auto.qinglong.R;
 import auto.qinglong.activity.BaseFragment;
 import auto.qinglong.activity.ql.CodeWebActivity;
 import auto.qinglong.bean.ql.QLScript;
+import auto.qinglong.databinding.FragmentScriptBinding;
 import auto.qinglong.network.http.NetManager;
 import auto.qinglong.network.http.QLApiController;
 import auto.qinglong.views.popup.PopMenuItem;
@@ -35,7 +29,7 @@ import auto.qinglong.views.popup.PopMenuWindow;
 import auto.qinglong.views.popup.PopupWindowBuilder;
 
 
-public class ScriptFragment extends BaseFragment {
+public class ScriptFragment extends BaseFragment<FragmentScriptBinding> {
     public static String TAG = "ScriptFragment";
 
     private List<QLScript> rootData;//根数据
@@ -44,25 +38,6 @@ public class ScriptFragment extends BaseFragment {
     private MenuClickListener menuClickListener;
     private ScriptAdapter scriptAdapter;
 
-    private ImageView ui_menu;
-    private ImageView ui_more;
-    private SmartRefreshLayout ui_refresh;
-    private TextView ui_dir_tip;
-    private RecyclerView ui_recycler;
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_script, null, false);
-
-        ui_menu = view.findViewById(R.id.scrip_menu);
-        ui_more = view.findViewById(R.id.script_more);
-        ui_dir_tip = view.findViewById(R.id.script_dir_tip);
-        ui_refresh = view.findViewById(R.id.refresh_layout);
-        ui_recycler = view.findViewById(R.id.recycler_view);
-
-        init();
-        return view;
-    }
 
     @Override
     public void onResume() {
@@ -87,7 +62,7 @@ public class ScriptFragment extends BaseFragment {
     public boolean onBackPressed() {
         if (canBack) {
             scriptAdapter.setData(rootData);
-            ui_dir_tip.setText(getString(R.string.char_path_split));
+            binding.scriptDirTip.setText(getString(R.string.char_path_split));
             canBack = false;
             return true;
         } else {
@@ -98,9 +73,9 @@ public class ScriptFragment extends BaseFragment {
     @Override
     public void init() {
         scriptAdapter = new ScriptAdapter(requireContext());
-        ui_recycler.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
-        Objects.requireNonNull(ui_recycler.getItemAnimator()).setChangeDuration(0);
-        ui_recycler.setAdapter(scriptAdapter);
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
+        Objects.requireNonNull(binding.recyclerView.getItemAnimator()).setChangeDuration(0);
+        binding.recyclerView.setAdapter(scriptAdapter);
 
         scriptAdapter.setScriptInterface(new ScriptAdapter.ItemActionListener() {
             @Override
@@ -125,18 +100,18 @@ public class ScriptFragment extends BaseFragment {
             }
         });
 
-        ui_refresh.setOnRefreshListener(refreshLayout -> netGetScripts());
+        binding.refreshLayout.setOnRefreshListener(refreshLayout -> netGetScripts());
 
-        ui_menu.setOnClickListener(v -> menuClickListener.onMenuClick());
+        binding.scripMenu.setOnClickListener(v -> menuClickListener.onMenuClick());
 
-        ui_more.setOnClickListener(this::showPopMenu);
+        binding.scriptMore.setOnClickListener(this::showPopMenu);
     }
 
     private void initData() {
         if (initDataFlag || NetManager.isRequesting(getNetRequestID())) {
             return;
         }
-        ui_refresh.autoRefreshAnimationOnly();
+        binding.refreshLayout.autoRefreshAnimationOnly();
         new Handler().postDelayed(() -> {
             if (isVisible()) {
                 netGetScripts();
@@ -188,7 +163,7 @@ public class ScriptFragment extends BaseFragment {
         Collections.sort(scripts);
         scriptAdapter.setData(scripts);
         curDir = director;
-        ui_dir_tip.setText(getString(R.string.char_path_split) + director);
+        binding.scriptDirTip.setText(getString(R.string.char_path_split) + director);
     }
 
     private void netGetScripts() {
@@ -209,8 +184,8 @@ public class ScriptFragment extends BaseFragment {
             }
 
             private void onEnd(boolean isSuccess) {
-                if (ui_refresh.isRefreshing()) {
-                    ui_refresh.finishRefresh(isSuccess);
+                if (binding.refreshLayout.isRefreshing()) {
+                    binding.refreshLayout.finishRefresh(isSuccess);
                 }
             }
         });

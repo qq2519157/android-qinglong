@@ -30,6 +30,7 @@ import auto.qinglong.activity.BaseActivity;
 import auto.qinglong.bean.app.WebRule;
 import auto.qinglong.bean.ql.QLEnvironment;
 import auto.qinglong.database.db.WebRuleDBHelper;
+import auto.qinglong.databinding.ActivityPluginWebBinding;
 import auto.qinglong.network.http.QLApiController;
 import auto.qinglong.utils.TextUnit;
 import auto.qinglong.utils.WebUnit;
@@ -40,29 +41,18 @@ import auto.qinglong.views.popup.PopMenuItem;
 import auto.qinglong.views.popup.PopMenuWindow;
 import auto.qinglong.views.popup.PopupWindowBuilder;
 
-public class PluginWebActivity extends BaseActivity {
+public class PluginWebActivity extends BaseActivity<ActivityPluginWebBinding> {
     public static final String TAG = "PluginWebActivity";
 
     private CookieManager cookieManager;
 
-    private ImageView ui_back;
-    private ImageView ui_options;
-    private EditText ui_et_url;
-    private FrameLayout ui_webView_container;
     private WebView ui_webView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_plugin_web);
-
-        ui_back = findViewById(R.id.action_bar_back);
-        ui_options = findViewById(R.id.action_bar_options);
-        ui_webView_container = findViewById(R.id.web_container);
-        ui_et_url = findViewById(R.id.et_url);
-
+        setContentView(ActivityPluginWebBinding.class);
         cookieManager = CookieManager.getInstance();
-
         init();
     }
 
@@ -83,26 +73,26 @@ public class PluginWebActivity extends BaseActivity {
 
     @Override
     protected void init() {
-        ui_back.setOnClickListener(v -> finish());
+        binding.actionBarBack.setOnClickListener(v -> finish());
 
-        ui_options.setOnClickListener(v -> {
-            ui_et_url.clearFocus();
-            WindowUnit.hideKeyboard(ui_et_url);
+        binding.actionBarOptions.setOnClickListener(v -> {
+            binding.etUrl.clearFocus();
+            WindowUnit.hideKeyboard(binding.etUrl);
             showPopMenu(v);
         });
 
         //加载网页操作 同时清除所有cookies
-        ui_et_url.setOnEditorActionListener((v, actionId, event) -> {
+        binding.etUrl.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId != EditorInfo.IME_ACTION_GO) {
                 return false;
             }
 
             cookieManager.removeAllCookies(null);
-            String url = ui_et_url.getText().toString().trim();
+            String url = binding.etUrl.getText().toString().trim();
 
             if (TextUnit.isFull(url)) {
-                ui_et_url.clearFocus();
-                WindowUnit.hideKeyboard(ui_et_url);
+                binding.etUrl.clearFocus();
+                WindowUnit.hideKeyboard(binding.etUrl);
                 ui_webView.loadUrl(url);
             } else {
                 ToastUtils.showShort("请输入网页地址");
@@ -111,7 +101,7 @@ public class PluginWebActivity extends BaseActivity {
         });
 
         //构建web控件
-        ui_webView = WebViewBuilder.build(getBaseContext(), ui_webView_container, new WebViewClient() {
+        ui_webView = WebViewBuilder.build(getBaseContext(), binding.webContainer, new WebViewClient() {
             @SuppressLint("WebViewClientOnReceivedSslError")
             @Override
             public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
@@ -175,7 +165,7 @@ public class PluginWebActivity extends BaseActivity {
     }
 
     private void readNormal() {
-        WindowUnit.hideKeyboard(ui_et_url);
+        WindowUnit.hideKeyboard(binding.etUrl);
         String cookies, url;
         url = ui_webView.getOriginalUrl();
 
@@ -189,7 +179,7 @@ public class PluginWebActivity extends BaseActivity {
     }
 
     private void readRule() {
-        WindowUnit.hideKeyboard(ui_et_url);
+        WindowUnit.hideKeyboard(binding.etUrl);
         String url = ui_webView.getOriginalUrl();
         if (TextUnit.isEmpty(url)) {
             ToastUtils.showShort("请先加载网页");
@@ -217,7 +207,7 @@ public class PluginWebActivity extends BaseActivity {
     }
 
     private void startImport() {
-        WindowUnit.hideKeyboard(ui_et_url);
+        WindowUnit.hideKeyboard(binding.etUrl);
         String url = ui_webView.getOriginalUrl();
         if (TextUnit.isEmpty(url)) {
             ToastUtils.showShort("请先加载网页");
