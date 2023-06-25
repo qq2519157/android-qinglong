@@ -5,11 +5,9 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.TextView;
 
-import androidx.drawerlayout.widget.DrawerLayout;
+import com.blankj.utilcode.util.ToastUtils;
 
 import java.util.Objects;
 
@@ -28,17 +26,17 @@ import auto.qinglong.bean.app.Version;
 import auto.qinglong.bean.ql.QLSystem;
 import auto.qinglong.database.sp.AccountSP;
 import auto.qinglong.database.sp.SettingSP;
+import auto.qinglong.databinding.ActivityHomeBinding;
 import auto.qinglong.network.http.ApiController;
 import auto.qinglong.utils.EncryptUtil;
 import auto.qinglong.utils.LogUnit;
 import auto.qinglong.utils.TextUnit;
-import auto.qinglong.utils.ToastUnit;
 import auto.qinglong.utils.WebUnit;
 import auto.qinglong.utils.WindowUnit;
 import auto.qinglong.views.popup.PopConfirmWindow;
 import auto.qinglong.views.popup.PopupWindowBuilder;
 
-public class HomeActivity extends BaseActivity {
+public class HomeActivity extends BaseActivity<ActivityHomeBinding> {
     public static final String TAG = "HomeActivity";
 
     private long mLastBackPressedTime = 0;//上次按下返回键时间
@@ -52,32 +50,25 @@ public class HomeActivity extends BaseActivity {
     private EnvFragment fg_environment;
     private DepPagerFragment fg_dependence;
     private SettingFragment fg_setting;
-    //布局变量
-    private DrawerLayout ui_drawer;
-    private LinearLayout ui_drawer_left;
     private PopupWindow ui_pop_notice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
-
-        ui_drawer = findViewById(R.id.drawer_layout);
-        ui_drawer_left = findViewById(R.id.drawer_left);
-
+        setContentView(ActivityHomeBinding.class);
         init();
     }
 
     @Override
     protected void init() {
         //变量初始化
-        mMenuClickListener = () -> ui_drawer.openDrawer(ui_drawer_left);
+        mMenuClickListener = () -> binding.drawerLayout.openDrawer(binding.drawerLeft);
         //导航栏初始化
         initDrawerBar();
         //初始化第一帧页面
         showFragment(TaskFragment.TAG);
         //版本检查
-        netGetVersion();
+//        netGetVersion();
     }
 
     @Override
@@ -88,7 +79,7 @@ public class HomeActivity extends BaseActivity {
                 finish();
             } else {
                 mLastBackPressedTime = current;
-                ToastUnit.showShort(getString(R.string.tip_exit_app));
+                ToastUtils.showShort(getString(R.string.tip_exit_app));
             }
         }
     }
@@ -108,35 +99,20 @@ public class HomeActivity extends BaseActivity {
 
 
     private void initDrawerBar() {
-        ui_drawer_left.setVisibility(View.INVISIBLE);
+        binding.drawerLeft.setVisibility(View.INVISIBLE);
         //用户名
-        TextView ui_username = ui_drawer_left.findViewById(R.id.menu_top_info_username);
-        ui_username.setText(Objects.requireNonNull(AccountSP.getCurrentAccount()).getUsername());
+        binding.menuTopInfoUsername.setText(Objects.requireNonNull(AccountSP.getCurrentAccount()).getUsername());
         //面板地址
-        TextView ui_address = ui_drawer_left.findViewById(R.id.menu_top_info_address);
-        ui_address.setText(AccountSP.getCurrentAccount().getAddress());
+        binding.menuTopInfoAddress.setText(AccountSP.getCurrentAccount().getAddress());
         //面板版本
-        TextView ui_version = ui_drawer_left.findViewById(R.id.menu_top_info_version);
-        ui_version.setText(String.format(getString(R.string.format_tip_version), QLSystem.getStaticVersion()));
-
-        //导航监听
-        LinearLayout menu_task = ui_drawer_left.findViewById(R.id.menu_task);
-        LinearLayout menu_log = ui_drawer_left.findViewById(R.id.menu_log);
-        LinearLayout menu_config = ui_drawer_left.findViewById(R.id.menu_config);
-        LinearLayout menu_script = ui_drawer_left.findViewById(R.id.menu_script);
-        LinearLayout menu_env = ui_drawer_left.findViewById(R.id.menu_env);
-        LinearLayout menu_setting = ui_drawer_left.findViewById(R.id.menu_setting);
-        LinearLayout menu_dep = ui_drawer_left.findViewById(R.id.menu_dep);
-        LinearLayout menu_extension_web = ui_drawer_left.findViewById(R.id.menu_extension_web);
-        LinearLayout menu_app_exit = ui_drawer_left.findViewById(R.id.menu_exit);
-        LinearLayout menu_app_setting = ui_drawer_left.findViewById(R.id.menu_app_setting);
+        binding.menuTopInfoVersion.setText(String.format(getString(R.string.format_tip_version), QLSystem.getStaticVersion()));
 
         //面板功能
-        menu_task.setOnClickListener(v -> showFragment(TaskFragment.TAG));
+        binding.menuTask.setOnClickListener(v -> showFragment(TaskFragment.TAG));
 
-        menu_log.setOnClickListener(v -> showFragment(LogFragment.TAG));
+        binding.menuLog.setOnClickListener(v -> showFragment(LogFragment.TAG));
 
-        menu_config.setOnClickListener(v -> {
+        binding.menuConfig.setOnClickListener(v -> {
             Intent intent = new Intent(this, CodeWebActivity.class);
             intent.putExtra(CodeWebActivity.EXTRA_TYPE, CodeWebActivity.TYPE_CONFIG);
             intent.putExtra(CodeWebActivity.EXTRA_TITLE, "config.sh");
@@ -144,29 +120,29 @@ public class HomeActivity extends BaseActivity {
             startActivity(intent);
         });
 
-        menu_script.setOnClickListener(v -> showFragment(ScriptFragment.TAG));
+        binding.menuScript.setOnClickListener(v -> showFragment(ScriptFragment.TAG));
 
-        menu_env.setOnClickListener(v -> showFragment(EnvFragment.TAG));
+        binding.menuEnv.setOnClickListener(v -> showFragment(EnvFragment.TAG));
 
-        menu_dep.setOnClickListener(v -> showFragment(DepPagerFragment.TAG));
+        binding.menuDep.setOnClickListener(v -> showFragment(DepPagerFragment.TAG));
 
-        menu_setting.setOnClickListener(v -> showFragment(SettingFragment.TAG));
+        binding.menuSetting.setOnClickListener(v -> showFragment(SettingFragment.TAG));
 
         //拓展模块
-        menu_extension_web.setOnClickListener(v -> {
+        binding.menuExtensionWeb.setOnClickListener(v -> {
             Intent intent = new Intent(getBaseContext(), PluginWebActivity.class);
             startActivity(intent);
         });
 
         //应用功能
-        menu_app_exit.setOnClickListener(v -> {
+        binding.menuExit.setOnClickListener(v -> {
             Intent intent = new Intent(getBaseContext(), LoginActivity.class);
             startActivity(intent);
             overridePendingTransition(R.anim.activity_alpha_enter, R.anim.activity_alpha_out);
             finish();
         });
 
-        menu_app_setting.setOnClickListener(v -> {
+        binding.menuAppSetting.setOnClickListener(v -> {
             Intent intent = new Intent(getBaseContext(), SettingActivity.class);
             startActivity(intent);
         });
@@ -233,12 +209,12 @@ public class HomeActivity extends BaseActivity {
         //显示新页面
         getSupportFragmentManager().beginTransaction().show(mCurrentFragment).commit();
         //关闭导航栏
-        if (ui_drawer.isDrawerOpen(ui_drawer_left)) {
-            ui_drawer.closeDrawer(ui_drawer_left);
+        if (binding.drawerLayout.isDrawerOpen(binding.drawerLeft)) {
+            binding.drawerLayout.closeDrawer(binding.drawerLeft);
         }
     }
 
-    private void checkVersion(Version version){
+    private void checkVersion(Version version) {
         try {
             int versionCode = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
             //若版本强制更新 即使停用更新推送仍会要求更新

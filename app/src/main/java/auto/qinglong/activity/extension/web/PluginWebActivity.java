@@ -19,6 +19,8 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import com.blankj.utilcode.util.ToastUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +32,6 @@ import auto.qinglong.bean.ql.QLEnvironment;
 import auto.qinglong.database.db.WebRuleDBHelper;
 import auto.qinglong.network.http.QLApiController;
 import auto.qinglong.utils.TextUnit;
-import auto.qinglong.utils.ToastUnit;
 import auto.qinglong.utils.WebUnit;
 import auto.qinglong.utils.WindowUnit;
 import auto.qinglong.views.WebViewBuilder;
@@ -104,7 +105,7 @@ public class PluginWebActivity extends BaseActivity {
                 WindowUnit.hideKeyboard(ui_et_url);
                 ui_webView.loadUrl(url);
             } else {
-                ToastUnit.showShort("请输入网页地址");
+                ToastUtils.showShort("请输入网页地址");
             }
             return true;
         });
@@ -137,7 +138,7 @@ public class PluginWebActivity extends BaseActivity {
             if (isConfirm) {
                 ClipboardManager clipboardManager = (ClipboardManager) getBaseContext().getSystemService(Context.CLIPBOARD_SERVICE);
                 clipboardManager.setPrimaryClip(ClipData.newPlainText(null, content));
-                ToastUnit.showShort("已复制到剪切板");
+                ToastUtils.showShort("已复制到剪切板");
             }
             return true;
         });
@@ -182,7 +183,7 @@ public class PluginWebActivity extends BaseActivity {
             cookies = cookieManager.getCookie(url);
             showPopWindowConfirm(cookies);
         } else {
-            ToastUnit.showShort("请先加载网页");
+            ToastUtils.showShort("请先加载网页");
         }
 
     }
@@ -191,7 +192,7 @@ public class PluginWebActivity extends BaseActivity {
         WindowUnit.hideKeyboard(ui_et_url);
         String url = ui_webView.getOriginalUrl();
         if (TextUnit.isEmpty(url)) {
-            ToastUnit.showShort("请先加载网页");
+            ToastUtils.showShort("请先加载网页");
             return;
         }
 
@@ -207,19 +208,19 @@ public class PluginWebActivity extends BaseActivity {
         //规则匹配 取第一个匹配成功规则
         for (WebRule rule : rules) {
             if (rule.match(url, cks)) {
-                ToastUnit.showShort("匹配成功：" + rule.getName());
+                ToastUtils.showShort("匹配成功：" + rule.getName());
                 showPopWindowConfirm(rule.getEnvValue());
                 return;
             }
         }
-        ToastUnit.showShort("无匹配规则");
+        ToastUtils.showShort("无匹配规则");
     }
 
     private void startImport() {
         WindowUnit.hideKeyboard(ui_et_url);
         String url = ui_webView.getOriginalUrl();
         if (TextUnit.isEmpty(url)) {
-            ToastUnit.showShort("请先加载网页");
+            ToastUtils.showShort("请先加载网页");
             return;
         }
 
@@ -232,12 +233,12 @@ public class PluginWebActivity extends BaseActivity {
         List<WebRule> rules = WebRuleDBHelper.getAll();
         for (WebRule rule : rules) {
             if (rule.match(url, cks)) {
-                ToastUnit.showShort("匹配规则成功：" + rule.getName());
+                ToastUtils.showShort("匹配规则成功：" + rule.getName());
                 netGetEnvironments(rule.buildObject());
                 return;
             }
         }
-        ToastUnit.showShort("匹配规则失败");
+        ToastUtils.showShort("匹配规则失败");
     }
 
     private void netGetEnvironments(QLEnvironment environment) {
@@ -258,7 +259,7 @@ public class PluginWebActivity extends BaseActivity {
 
             @Override
             public void onFailure(String msg) {
-                ToastUnit.showShort("获取变量列表失败：" + msg);
+                ToastUtils.showShort("获取变量列表失败：" + msg);
             }
         });
     }
@@ -267,12 +268,12 @@ public class PluginWebActivity extends BaseActivity {
         QLApiController.updateEnvironment(getNetRequestID(), environment, new QLApiController.NetEditEnvCallback() {
             @Override
             public void onSuccess(QLEnvironment environment) {
-                ToastUnit.showShort("导入成功");
+                ToastUtils.showShort("导入成功");
             }
 
             @Override
             public void onFailure(String msg) {
-                ToastUnit.showShort("导入失败：" + msg);
+                ToastUtils.showShort("导入失败：" + msg);
             }
         });
     }
@@ -281,12 +282,12 @@ public class PluginWebActivity extends BaseActivity {
         QLApiController.addEnvironment(getNetRequestID(), environments, new QLApiController.NetGetEnvironmentsCallback() {
             @Override
             public void onSuccess(List<QLEnvironment> qlEnvironments) {
-                ToastUnit.showShort("导入成功");
+                ToastUtils.showShort("导入成功");
             }
 
             @Override
             public void onFailure(String msg) {
-                ToastUnit.showShort("导入失败：" + msg);
+                ToastUtils.showShort("导入失败：" + msg);
             }
         });
     }

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingHorizontal="30dp"
     android:paddingTop="100dp"
     android:paddingBottom="60dp"
@@ -25,6 +26,16 @@
         android:orientation="vertical"
         android:paddingHorizontal="15dp"
         android:paddingVertical="20dp">
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switchcompat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/str_use_password"
+            android:paddingHorizontal="6dp"
+            android:paddingVertical="7dp"
+            android:layout_marginBottom="10dp"
+            />
+
 
         <EditText
             android:id="@+id/et_address"
@@ -50,7 +61,7 @@
             android:layout_marginBottom="12dp"
             android:background="@drawable/style_input"
             android:fontFamily="sans-serif-light"
-            android:hint="@string/str_username"
+            android:hint="@string/str_client_id"
             android:imeOptions="actionNext"
             android:inputType="textVisiblePassword"
             android:lines="1"
@@ -68,7 +79,7 @@
             android:layout_marginBottom="15dp"
             android:background="@drawable/style_input"
             android:fontFamily="sans-serif-light"
-            android:hint="@string/str_password"
+            android:hint="@string/str_client_secret"
             android:imeOptions="actionDone"
             android:inputType="textVisiblePassword"
             android:lines="1"

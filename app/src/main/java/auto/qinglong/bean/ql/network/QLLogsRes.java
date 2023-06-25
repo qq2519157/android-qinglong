@@ -5,15 +5,13 @@ import java.util.List;
 import auto.qinglong.bean.ql.QLLog;
 
 public class QLLogsRes extends QLBaseRes {
-    List<QLLog> dirs;
+    List<QLLog> data;
 
-    public List<QLLog> getDirs() {
-        return dirs;
+    public List<QLLog> getData() {
+        return data;
     }
 
-    public void setDirs(List<QLLog> dirs) {
-        this.dirs = dirs;
+    public void setData(List<QLLog> data) {
+        this.data = data;
     }
-
-
 }

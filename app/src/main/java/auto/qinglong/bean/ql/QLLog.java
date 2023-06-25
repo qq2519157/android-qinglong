@@ -7,65 +7,84 @@ import java.util.List;
 
 public class QLLog implements Comparable<QLLog> {
     /* 接口属性 */
-    private boolean isDir;
-    private String name;
-    private String parentName;
-    private List<String> files;
+    private String title;
+    private String key;
+    private String type;
+    private String parent;
+    private long mtime;
+    private boolean isLeaf;
+    private List<QLLog> children;
 
-    public void setParentName(String parentName) {
-        this.parentName = parentName;
+    public String getTitle() {
+        return title;
     }
 
-    public boolean isDir() {
-        return isDir;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public void setDir(boolean dir) {
-        isDir = dir;
+    public String getKey() {
+        return key;
     }
 
-    public String getName() {
-        return name;
+    public void setKey(String key) {
+        this.key = key;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getType() {
+        return type;
     }
 
-    public List<String> getFiles() {
-        return files;
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getParent() {
+        return parent;
+    }
+
+    public void setParent(String parent) {
+        this.parent = parent;
+    }
+
+    public long getMtime() {
+        return mtime;
+    }
+
+    public void setMtime(long mtime) {
+        this.mtime = mtime;
+    }
+
+    public boolean isLeaf() {
+        return isLeaf;
+    }
+
+    public void setLeaf(boolean leaf) {
+        isLeaf = leaf;
     }
 
     public List<QLLog> getChildren() {
-        List<QLLog> QLLogs = new ArrayList<>();
-        for (String name : this.files) {
-            QLLog QLLog = new QLLog();
-            QLLog.setDir(false);
-            QLLog.setName(name);
-            QLLog.setParentName(this.name);
-            QLLogs.add(QLLog);
-        }
-        return QLLogs;
+        return children;
     }
 
-    public String getLogPath() {
-        if (TextUtils.isEmpty(parentName)) {
-            return "api/logs/" + name;
-        } else {
-            return "api/logs/" + parentName + "/" + name;
-        }
+    public void setChildren(List<QLLog> children) {
+        this.children = children;
+    }
+
+    public boolean isDir(){
+       return !TextUtils.isEmpty(type) && type.equals("directory");
     }
 
     @Override
     public int compareTo(QLLog o) {
-        if (this.isDir && o.isDir()) {
-            return this.name.toLowerCase().compareTo(o.getName().toLowerCase());
-        } else if (this.isDir && !o.isDir()) {
+        if (this.isDir() && o.isDir()) {
+            return this.title.toLowerCase().compareTo(o.getTitle().toLowerCase());
+        } else if (this.isDir() && !o.isDir()) {
             return -1;
-        } else if (!this.isDir && o.isDir()) {
+        } else if (!this.isDir() && o.isDir()) {
             return 1;
         } else {
-            return this.name.toLowerCase().compareTo(o.getName().toLowerCase());
+            return this.title.toLowerCase().compareTo(o.getTitle().toLowerCase());
         }
     }
 }

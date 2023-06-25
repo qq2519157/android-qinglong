@@ -2,6 +2,7 @@ package auto.qinglong.activity.ql.setting;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
 import java.util.List;
@@ -17,9 +19,9 @@ import java.util.Objects;
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseFragment;
 import auto.qinglong.bean.ql.QLLoginLog;
+import auto.qinglong.database.sp.AccountSP;
 import auto.qinglong.network.http.NetManager;
 import auto.qinglong.network.http.QLApiController;
-import auto.qinglong.utils.ToastUnit;
 
 
 public class LoginLogFragment extends BaseFragment {
@@ -61,6 +63,15 @@ public class LoginLogFragment extends BaseFragment {
         if (initDataFlag || NetManager.isRequesting(this.getNetRequestID())) {
             return;
         }
+        String authorization = AccountSP.getAuthorization();
+        if (TextUtils.isEmpty(authorization)) {
+            ToastUtils.showShort("登录信息不存在");
+            return;
+        }
+        if (authorization.length() < 100) {
+            ToastUtils.showShort("ClientId方式登录不支持查看登录日志");
+            return;
+        }
         ui_refresh.autoRefreshAnimationOnly();
         new Handler().postDelayed(() -> {
             if (isVisible()) {
@@ -80,7 +91,7 @@ public class LoginLogFragment extends BaseFragment {
 
             @Override
             public void onFailure(String msg) {
-                ToastUnit.showShort(msg);
+                ToastUtils.showShort(msg);
                 this.onEnd(false);
             }
 

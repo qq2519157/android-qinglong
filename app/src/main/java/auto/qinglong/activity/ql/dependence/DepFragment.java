@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
 import java.util.ArrayList;
@@ -20,30 +21,16 @@ import auto.qinglong.R;
 import auto.qinglong.activity.BaseFragment;
 import auto.qinglong.activity.ql.CodeWebActivity;
 import auto.qinglong.bean.ql.QLDependence;
+import auto.qinglong.databinding.FragmentDepPagerBinding;
 import auto.qinglong.network.http.NetManager;
 import auto.qinglong.network.http.QLApiController;
-import auto.qinglong.utils.ToastUnit;
 
-public class DepFragment extends BaseFragment {
+public class DepFragment extends BaseFragment<FragmentDepPagerBinding> {
     private String type;
 
     private DepItemAdapter depItemAdapter;
     private PagerAdapter.PagerActionListener pagerActionListener;
 
-    private SmartRefreshLayout ui_refresh;
-    private RecyclerView ui_recycler;
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_dep_pager, container, false);
-
-        ui_refresh = view.findViewById(R.id.refresh_layout);
-        ui_recycler = view.findViewById(R.id.recycler_view);
-
-        init();
-
-        return view;
-    }
 
     @Override
     public void onResume() {
@@ -54,9 +41,9 @@ public class DepFragment extends BaseFragment {
     @Override
     protected void init() {
         depItemAdapter = new DepItemAdapter(requireContext());
-        ui_recycler.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
-        Objects.requireNonNull(ui_recycler.getItemAnimator()).setChangeDuration(0);
-        ui_recycler.setAdapter(depItemAdapter);
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
+        Objects.requireNonNull(binding.recyclerView.getItemAnimator()).setChangeDuration(0);
+        binding.recyclerView.setAdapter(depItemAdapter);
 
         depItemAdapter.setItemInterface(new DepItemAdapter.ItemActionListener() {
             @Override
@@ -77,14 +64,14 @@ public class DepFragment extends BaseFragment {
             }
         });
 
-        ui_refresh.setOnRefreshListener(refreshLayout -> netGetDependencies());
+        binding.refreshLayout.setOnRefreshListener(refreshLayout -> netGetDependencies());
     }
 
     private void initData() {
         if (initDataFlag || NetManager.isRequesting(getNetRequestID())) {
             return;
         }
-        ui_refresh.autoRefreshAnimationOnly();
+        binding.refreshLayout.autoRefreshAnimationOnly();
         new Handler().postDelayed(() -> {
             if (isVisible()) {
                 netGetDependencies();
@@ -132,19 +119,19 @@ public class DepFragment extends BaseFragment {
             public void onSuccess(List<QLDependence> dependencies) {
                 depItemAdapter.setData(dependencies);
                 initDataFlag = true;
-                ToastUnit.showShort(getString(R.string.tip_load_success_header) + dependencies.size());
+                ToastUtils.showShort(getString(R.string.tip_load_success_header) + dependencies.size());
                 this.onEnd(true);
             }
 
             @Override
             public void onFailure(String msg) {
-                ToastUnit.showShort(getString(R.string.tip_load_failure_header) + msg);
+                ToastUtils.showShort(getString(R.string.tip_load_failure_header) + msg);
                 this.onEnd(false);
             }
 
             private void onEnd(boolean isSuccess) {
-                if (ui_refresh.isRefreshing()) {
-                    ui_refresh.finishRefresh(isSuccess);
+                if (binding.refreshLayout.isRefreshing()) {
+                    binding.refreshLayout.finishRefresh(isSuccess);
                 }
             }
         });
@@ -159,7 +146,7 @@ public class DepFragment extends BaseFragment {
 
             @Override
             public void onFailure(String msg) {
-                ToastUnit.showShort(getString(R.string.tip_reinstall_failure_header) + msg);
+                ToastUtils.showShort(getString(R.string.tip_reinstall_failure_header) + msg);
                 netGetDependencies();
             }
         });

@@ -5,24 +5,26 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
+import com.blankj.utilcode.util.ToastUtils;
+
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseActivity;
 import auto.qinglong.bean.app.Account;
 import auto.qinglong.bean.ql.QLSystem;
 import auto.qinglong.database.sp.AccountSP;
+import auto.qinglong.databinding.ActivitySplashBinding;
 import auto.qinglong.network.http.QLApiController;
 import auto.qinglong.utils.NetUnit;
-import auto.qinglong.utils.ToastUnit;
 
 
 @SuppressLint("CustomSplashScreen")
-public class SplashActivity extends BaseActivity {
+public class SplashActivity extends BaseActivity<ActivitySplashBinding> {
     public static final String TAG = "SplashActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash);
+        setContentView(ActivitySplashBinding.class);
     }
 
     @Override
@@ -48,7 +50,7 @@ public class SplashActivity extends BaseActivity {
     private void start() {
         //网络状态
         if (!NetUnit.isConnected(this)) {
-            ToastUnit.showShort("请检查设备网络状态");
+            ToastUtils.showShort("请检查设备网络状态");
             enterActivity(false);
             return;
         }

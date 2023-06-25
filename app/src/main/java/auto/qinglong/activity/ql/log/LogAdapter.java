@@ -39,10 +39,10 @@ public class LogAdapter extends RecyclerView.Adapter<LogAdapter.MyViewHolder> {
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         QLLog QLLog = data.get(position);
 
-        holder.ui_title.setText(QLLog.getName());
+        holder.ui_title.setText(QLLog.getTitle());
 
         if (QLLog.isDir()) {
-            holder.ui_num.setText(QLLog.getFiles().size() + " 项");
+            holder.ui_num.setText(QLLog.getChildren().size() + " 项");
         } else {
             holder.ui_num.setText(null);
         }

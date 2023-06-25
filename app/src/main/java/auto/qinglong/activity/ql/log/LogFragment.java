@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
 import java.util.Collections;
@@ -27,7 +28,6 @@ import auto.qinglong.activity.ql.CodeWebActivity;
 import auto.qinglong.bean.ql.QLLog;
 import auto.qinglong.network.http.NetManager;
 import auto.qinglong.network.http.QLApiController;
-import auto.qinglong.utils.ToastUnit;
 
 
 public class LogFragment extends BaseFragment {
@@ -99,12 +99,14 @@ public class LogFragment extends BaseFragment {
         logAdapter.setItemActionListener(qlLog -> {
             if (qlLog.isDir()) {
                 canBack = true;
-                sortAndSetData(qlLog.getChildren(), qlLog.getName());
+                sortAndSetData(qlLog.getChildren(), qlLog.getTitle());
             } else {
                 Intent intent = new Intent(getContext(), CodeWebActivity.class);
                 intent.putExtra(CodeWebActivity.EXTRA_TYPE, CodeWebActivity.TYPE_LOG);
-                intent.putExtra(CodeWebActivity.EXTRA_TITLE, qlLog.getName());
-                intent.putExtra(CodeWebActivity.EXTRA_LOG_PATH, qlLog.getLogPath());
+                intent.putExtra(CodeWebActivity.EXTRA_TITLE, qlLog.getTitle());
+                intent.putExtra(CodeWebActivity.EXTRA_LOG_PATH, qlLog.getKey());
+                intent.putExtra(CodeWebActivity.EXTRA_SCRIPT_NAME, qlLog.getTitle());
+                intent.putExtra(CodeWebActivity.EXTRA_SCRIPT_PARENT, qlLog.getParent());
                 startActivity(intent);
             }
         });
@@ -126,7 +128,7 @@ public class LogFragment extends BaseFragment {
 
             @Override
             public void onFailure(String msg) {
-                ToastUnit.showShort("加载失败：" + msg);
+                ToastUtils.showShort("加载失败：" + msg);
                 this.onEnd(false);
             }
 

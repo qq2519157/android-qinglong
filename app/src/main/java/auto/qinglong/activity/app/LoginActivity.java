@@ -3,48 +3,36 @@ package auto.qinglong.activity.app;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
+
+import com.blankj.utilcode.util.NumberUtils;
+import com.blankj.utilcode.util.ToastUtils;
 
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseActivity;
 import auto.qinglong.bean.app.Account;
 import auto.qinglong.bean.ql.QLSystem;
 import auto.qinglong.database.sp.AccountSP;
+import auto.qinglong.databinding.ActivityLoginBinding;
 import auto.qinglong.network.http.NetManager;
 import auto.qinglong.network.http.QLApiController;
-import auto.qinglong.utils.TextUnit;
-import auto.qinglong.utils.ToastUnit;
 import auto.qinglong.utils.WebUnit;
 import auto.qinglong.utils.WindowUnit;
 import auto.qinglong.views.popup.PopProgressWindow;
 import auto.qinglong.views.popup.PopupWindowBuilder;
 
-public class LoginActivity extends BaseActivity {
+public class LoginActivity extends BaseActivity<ActivityLoginBinding> {
     public static final String TAG = "LoginActivity";
 
-    private ImageView ui_logo;
-    private Button ui_confirm;
-    private EditText ui_address;
-    private EditText ui_username;
-    private EditText ui_password;
     private PopProgressWindow ui_pop_progress;
+    private boolean isUsingPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_login);
-
-        ui_logo = findViewById(R.id.img_logo);
-        ui_confirm = findViewById(R.id.bt_confirm);
-        ui_address = findViewById(R.id.et_address);
-        ui_username = findViewById(R.id.et_username);
-        ui_password = findViewById(R.id.et_password);
-
+        setContentView(ActivityLoginBinding.class);
         init();
     }
 
@@ -76,44 +64,58 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     protected void init() {
-        ui_logo.setOnClickListener(v -> WebUnit.open(this, getString(R.string.url_project)));
-
-        ui_password.setOnEditorActionListener((v, actionId, event) -> {
+        binding.imgLogo.setOnClickListener(v -> WebUnit.open(this, getString(R.string.url_project)));
+        binding.switchcompat.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            isUsingPassword = isChecked;
+            if (isUsingPassword) {
+                binding.etUsername.setHint(R.string.str_username);
+                binding.etPassword.setHint(R.string.str_password);
+            } else {
+                binding.etUsername.setHint(R.string.str_client_id);
+                binding.etPassword.setHint(R.string.str_client_secret);
+            }
+        });
+        binding.etPassword.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                ui_password.clearFocus();
-                ui_confirm.performClick();
+                binding.etPassword.clearFocus();
+                binding.btConfirm.performClick();
                 return true;
             }
             return false;
         });
 
-        ui_confirm.setOnClickListener(v -> {
+        binding.btConfirm.setOnClickListener(v -> {
             if (ui_pop_progress != null && ui_pop_progress.isShowing()) {
                 return;
             }
 
-            String address = ui_address.getText().toString();
+            String address = binding.etAddress.getText().toString();
 
             if (!address.matches("(([0-9a-zA-Z])|([.:/_-]))+")) {
-                ToastUnit.showShort("地址格式错误");
+                ToastUtils.showShort("地址格式错误");
                 return;
             }
 
-            String username = ui_username.getText().toString().trim();
+            if (address.endsWith("/")) {
+                ToastUtils.showShort("请勿以'/'结尾");
+                return;
+            }
+
+            String username = binding.etUsername.getText().toString().trim();
             if (username.isEmpty()) {
-                ToastUnit.showShort("账号不能为空");
+                ToastUtils.showShort("账号不能为空");
                 return;
             }
 
-            String password = ui_password.getText().toString().trim();
+            String password = binding.etPassword.getText().toString().trim();
             if (password.isEmpty()) {
-                ToastUnit.showShort("密码不能为空");
+                ToastUtils.showShort("密码不能为空");
                 return;
             }
-            WindowUnit.hideKeyboard(ui_password);
+            WindowUnit.hideKeyboard(binding.etPassword);
 
-            ui_confirm.setEnabled(false);
-            ui_confirm.postDelayed(() -> ui_confirm.setEnabled(true), 300);
+            binding.btConfirm.setEnabled(false);
+            binding.btConfirm.postDelayed(() -> binding.btConfirm.setEnabled(true), 300);
 
             if (ui_pop_progress == null) {
                 ui_pop_progress = PopupWindowBuilder.buildProgressWindow(this, () -> NetManager.cancelAllCall(getNetRequestID()));
@@ -131,9 +133,9 @@ public class LoginActivity extends BaseActivity {
         //显示之前账号
         Account account = AccountSP.getCurrentAccount();
         if (account != null) {
-            ui_address.setText(account.getAddress());
-            ui_username.setText(account.getUsername());
-            ui_password.setText(account.getPassword());
+            binding.etAddress.setText(account.getAddress());
+            binding.etUsername.setText(account.getUsername());
+            binding.etPassword.setText(account.getPassword());
         }
     }
 
@@ -150,28 +152,37 @@ public class LoginActivity extends BaseActivity {
         QLApiController.getSystemInfo(this.getNetRequestID(), account, new QLApiController.NetSystemCallback() {
             @Override
             public void onSuccess(QLSystem system) {
-                QLSystem.setStaticVersion(system.getVersion());
-                if (!system.getVersion().startsWith("2.10")) {
-                    ToastUnit.showShort("仅支持2.10.x面板");
+                String version = system.getVersion();
+                String substring = version.substring(0, 4);
+                double versionNum;
+                try {
+                    versionNum = Double.parseDouble(substring);
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    versionNum = 2.09;
+                }
+                QLSystem.setStaticVersion(version);
+                if (versionNum < 2.10) {
+                    ToastUtils.showShort("仅支持2.10以上面板");
                     ui_pop_progress.dismiss();
                     return;
                 }
                 if (system.isInitialized()) {
-                    if (TextUnit.isFull(account.getToken())) {
+                    if (!TextUtils.isEmpty(account.getToken())) {
                         netCheckToken(account);
                     } else {
                         netLogin(account);
                     }
                 } else {
                     ui_pop_progress.dismiss();
-                    ToastUnit.showShort("系统未初始化，无法登录");
+                    ToastUtils.showShort("系统未初始化，无法登录");
                 }
             }
 
             @Override
             public void onFailure(String msg) {
                 ui_pop_progress.dismiss();
-                ToastUnit.showShort(msg);
+                ToastUtils.showShort(msg);
             }
         });
     }
@@ -191,18 +202,35 @@ public class LoginActivity extends BaseActivity {
     }
 
     protected void netLogin(Account account) {
-        QLApiController.login(this.getNetRequestID(), account, new QLApiController.NetLoginCallback() {
-            @Override
-            public void onSuccess(Account account) {
-                AccountSP.updateCurrentAccount(account);
-                enterHome();
-            }
+        if (isUsingPassword) {
+            QLApiController.login(this.getNetRequestID(), account, new QLApiController.NetLoginCallback() {
+                @Override
+                public void onSuccess(Account account) {
+                    AccountSP.updateCurrentAccount(account);
+                    enterHome();
+                }
 
-            @Override
-            public void onFailure(String msg) {
-                ui_pop_progress.dismiss();
-                ToastUnit.showShort(msg);
-            }
-        });
+                @Override
+                public void onFailure(String msg) {
+                    ui_pop_progress.dismiss();
+                    ToastUtils.showShort(msg);
+                }
+            });
+        } else {
+            QLApiController.loginByClientId(this.getNetRequestID(), account, new QLApiController.NetLoginCallback() {
+                @Override
+                public void onSuccess(Account account) {
+                    AccountSP.updateCurrentAccount(account);
+                    enterHome();
+                }
+
+                @Override
+                public void onFailure(String msg) {
+                    ui_pop_progress.dismiss();
+                    ToastUtils.showShort(msg);
+                }
+            });
+        }
+
     }
 }

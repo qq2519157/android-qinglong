@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.blankj.utilcode.util.ToastUtils;
+
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseFragment;
 import auto.qinglong.activity.app.LoginActivity;
@@ -16,7 +18,6 @@ import auto.qinglong.database.sp.AccountSP;
 import auto.qinglong.network.http.QLApiController;
 import auto.qinglong.utils.LogUnit;
 import auto.qinglong.utils.TextUnit;
-import auto.qinglong.utils.ToastUnit;
 import auto.qinglong.utils.WindowUnit;
 
 public class CommonFragment extends BaseFragment {
@@ -47,7 +48,7 @@ public class CommonFragment extends BaseFragment {
         ui_log_save.setOnClickListener(v -> {
             String value = ui_log.getText().toString();
             if (TextUnit.isEmpty(value)) {
-                ToastUnit.showShort("请输入正确数值");
+                ToastUtils.showShort("请输入正确数值");
                 return;
             }
             WindowUnit.hideKeyboard(ui_log);
@@ -59,11 +60,11 @@ public class CommonFragment extends BaseFragment {
             String password = ui_security_password.getText().toString();
 
             if (username.isEmpty()) {
-                ToastUnit.showShort("请输入用户名");
+                ToastUtils.showShort("请输入用户名");
                 return;
             }
             if (password.isEmpty()) {
-                ToastUnit.showShort("请输入密码");
+                ToastUtils.showShort("请输入密码");
                 return;
             }
 
@@ -84,7 +85,7 @@ public class CommonFragment extends BaseFragment {
 
             @Override
             public void onFailure(String msg) {
-                ToastUnit.showShort(msg);
+                ToastUtils.showShort(msg);
             }
         });
     }
@@ -95,7 +96,7 @@ public class CommonFragment extends BaseFragment {
             public void onSuccess() {
                 ui_log.clearFocus();
                 mOldFrequency = newFrequency;
-                ToastUnit.showShort("保存成功");
+                ToastUtils.showShort("保存成功");
             }
 
             @Override
@@ -107,7 +108,7 @@ public class CommonFragment extends BaseFragment {
                 } else {
                     ui_log.setText("");
                 }
-                ToastUnit.showShort(msg);
+                ToastUtils.showShort(msg);
             }
         });
     }
@@ -122,7 +123,7 @@ public class CommonFragment extends BaseFragment {
 
             @Override
             public void onFailure(String msg) {
-                ToastUnit.showShort(msg);
+                ToastUtils.showShort(msg);
             }
         });
     }
@@ -134,7 +135,7 @@ public class CommonFragment extends BaseFragment {
                 ui_security_username.setText(null);
                 ui_security_password.setText(null);
                 AccountSP.updateCurrentAccount(account);
-                ToastUnit.showShort("更新成功");
+                ToastUtils.showShort("更新成功");
             }
 
             @Override

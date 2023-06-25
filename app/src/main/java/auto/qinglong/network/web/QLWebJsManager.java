@@ -3,10 +3,10 @@ package auto.qinglong.network.web;
 import android.webkit.ValueCallback;
 import android.webkit.WebView;
 
+import com.blankj.utilcode.util.ToastUtils;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-
-import auto.qinglong.utils.ToastUnit;
 
 /**
  * WebView与JS交互辅助类 实现代码显示和编辑功能.
@@ -38,7 +38,7 @@ public class QLWebJsManager {
             String script = String.format("javascript:setCode('%1$s')", content);
             webView.evaluateJavascript(script, null);
         } catch (UnsupportedEncodingException e) {
-            ToastUnit.showShort(e.getMessage());
+            ToastUtils.showShort(e.getMessage());
         }
     }
 

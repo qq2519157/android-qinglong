@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">青龙面板</string>
     <!-- 链接区 -->
-    <string name="url_project">https://gitee.com/wsfsp4/QingLong</string>
-    <string name="url_readme">https://gitee.com/wsfsp4/QingLong/blob/master/README.md</string>
+    <string name="url_project">https://github.com/qq2519157/android-qinglong</string>
+    <string name="url_readme">https://github.com/qq2519157/android-qinglong/blob/master/README.md</string>
     <string name="url_issue">https://gitee.com/wsfsp4/QingLong/issues</string>
     <string name="url_version">https://gitee.com/wsfsp4/QingLong/raw/master/version.json</string>
     <string name="url_extension_link">http://service-m1nufffu-1306746806.gz.apigw.tencentcs.com/link</string>
@@ -86,7 +86,9 @@
     <!-- 字符串 -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="app_share_description">我正在使用这个APP来管理青龙面板，方便快捷，你也来试试吧！下载地址：https://gitee.com/wsfsp4/QingLong</string>
+    <string name="str_client_id">Client ID</string>
     <string name="str_username">账号</string>
+    <string name="str_client_secret">Client Secret</string>
     <string name="str_password">密码</string>
     <string name="setting_common_security">安全设置</string>
     <string name="setting_other">其他设置</string>
@@ -95,10 +97,11 @@
     <string name="str_status">状态</string>
     <string name="str_environment">变量</string>
     <string name="str_created_time">创建时间</string>
-    <string name="str_input_hint_ip">127.0.0.1:5700</string>
+    <string name="str_input_hint_ip">http://127.0.0.1:5700</string>
     <string name="str_input_hint_url">请输入网址</string>
     <string name="str_input_hint_task">请输入名称或关键词</string>
     <string name="str_input_hint_environment">请输入名称/值/备注</string>
+    <string name="str_use_password">使用账号密码登录</string>
 
     <!-- 格式化 -->
     <string name="format_tip_ip">本地：%1$s</string>

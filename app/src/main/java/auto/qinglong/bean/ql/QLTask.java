@@ -7,7 +7,7 @@ import auto.qinglong.utils.TimeUnit;
 
 public class QLTask implements Comparable<QLTask> {
     /* 接口属性 */
-    private String _id;
+    private String id;
     private String name;
     private String command;
     private String schedule;
@@ -33,11 +33,11 @@ public class QLTask implements Comparable<QLTask> {
     private String mLastLogPath;//最后的日志地址
 
     public String getId() {
-        return _id;
+        return id;
     }
 
-    public void setId(String _id) {
-        this._id = _id;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -87,7 +87,7 @@ public class QLTask implements Comparable<QLTask> {
      */
     public String getLastLogPath() {
         if (mLastLogPath == null) {
-            mLastLogPath = "api/crons/" + _id + "/log";
+            mLastLogPath = "open/crons/" + id + "/log";
         }
         return mLastLogPath;
     }

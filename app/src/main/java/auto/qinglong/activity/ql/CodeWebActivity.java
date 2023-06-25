@@ -1,6 +1,7 @@
 package auto.qinglong.activity.ql;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
@@ -11,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.ToastUtils;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Objects;
@@ -18,9 +21,9 @@ import java.util.Objects;
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseActivity;
 import auto.qinglong.bean.ql.QLDependence;
+import auto.qinglong.database.sp.AccountSP;
 import auto.qinglong.network.http.QLApiController;
 import auto.qinglong.network.web.QLWebJsManager;
-import auto.qinglong.utils.ToastUnit;
 import auto.qinglong.utils.WindowUnit;
 import auto.qinglong.views.WebViewBuilder;
 
@@ -159,7 +162,7 @@ public class CodeWebActivity extends BaseActivity {
                     }
                     save(stringBuilder.toString());
                 } catch (UnsupportedEncodingException e) {
-                    ToastUnit.showShort(e.getMessage());
+                    ToastUtils.showShort(e.getMessage());
                 }
             }));
         }
@@ -204,14 +207,27 @@ public class CodeWebActivity extends BaseActivity {
      * @param type 类型
      */
     private void load(String type) {
+        String authorization = AccountSP.getAuthorization();
+        if (TextUtils.isEmpty(authorization)) {
+            ToastUtils.showShort("登录信息不存在");
+            return;
+        }
         switch (type) {
             case TYPE_SCRIPT:
+                if (authorization.length() < 100) {
+                    ToastUtils.showShort("ClientId方式登录不支持查看脚本");
+                    return;
+                }
                 netGetScriptDetail("api/scripts/" + mScriptName + "?path=" + mScriptParent);
                 break;
             case TYPE_LOG:
-                netGetLogDetail(mLogPath);
+                netGetLogDetail("api/logs/" + mScriptName + "?path=" + mScriptParent);
                 break;
             case TYPE_DEPENDENCE:
+                if (authorization.length() < 100) {
+                    ToastUtils.showShort("ClientId方式登录不支持查看依赖");
+                    return;
+                }
                 netGetDependenceLog("api/dependencies/" + mDependenceId);
                 break;
             case TYPE_CONFIG:
@@ -250,14 +266,14 @@ public class CodeWebActivity extends BaseActivity {
                 ui_edit.setVisibility(View.VISIBLE);
                 QLWebJsManager.setContent(ui_webView, content);
                 loadFinish();
-                ToastUnit.showShort(getString(R.string.tip_load_success));
+                ToastUtils.showShort(getString(R.string.tip_load_success));
             }
 
             @Override
             public void onFailure(String msg) {
                 ui_edit.setVisibility(View.INVISIBLE);
                 loadFinish();
-                ToastUnit.showShort(msg);
+                ToastUtils.showShort(msg);
             }
         });
     }
@@ -267,12 +283,12 @@ public class CodeWebActivity extends BaseActivity {
             @Override
             public void onSuccess() {
                 mContent = content;
-                ToastUnit.showShort("保存成功");
+                ToastUtils.showShort("保存成功");
             }
 
             @Override
             public void onFailure(String msg) {
-                ToastUnit.showShort(msg);
+                ToastUtils.showShort(msg);
             }
         });
     }
@@ -283,7 +299,7 @@ public class CodeWebActivity extends BaseActivity {
             public void onSuccess(String content) {
                 //防止内容过大导致崩溃
                 if (content.length() > 1500000) {
-                    ToastUnit.showShort(getString(R.string.tip_text_too_long));
+                    ToastUtils.showShort(getString(R.string.tip_text_too_long));
                     ui_refresh.setVisibility(View.GONE);
                     return;
                 }
@@ -291,14 +307,14 @@ public class CodeWebActivity extends BaseActivity {
                 ui_edit.setVisibility(View.VISIBLE);
                 QLWebJsManager.setContent(ui_webView, content);
                 loadFinish();
-                ToastUnit.showShort(getString(R.string.tip_load_success));
+                ToastUtils.showShort(getString(R.string.tip_load_success));
             }
 
             @Override
             public void onFailure(String msg) {
                 ui_edit.setVisibility(View.INVISIBLE);
                 loadFinish();
-                ToastUnit.showShort(msg);
+                ToastUtils.showShort(msg);
             }
         });
     }
@@ -308,12 +324,12 @@ public class CodeWebActivity extends BaseActivity {
             @Override
             public void onSuccess() {
                 mContent = content;
-                ToastUnit.showShort("保存成功");
+                ToastUtils.showShort("保存成功");
             }
 
             @Override
             public void onFailure(String msg) {
-                ToastUnit.showShort(msg);
+                ToastUtils.showShort(msg);
             }
         });
     }
@@ -324,13 +340,13 @@ public class CodeWebActivity extends BaseActivity {
             public void onSuccess(String content) {
                 QLWebJsManager.setContent(ui_webView, content);
                 loadFinish();
-                ToastUnit.showShort(getString(R.string.tip_load_success));
+                ToastUtils.showShort(getString(R.string.tip_load_success));
             }
 
             @Override
             public void onFailure(String msg) {
                 loadFinish();
-                ToastUnit.showShort(msg);
+                ToastUtils.showShort(msg);
             }
         });
     }
@@ -341,13 +357,13 @@ public class CodeWebActivity extends BaseActivity {
             public void onSuccess(QLDependence dependence) {
                 QLWebJsManager.setContent(ui_webView, dependence.getLogStr());
                 loadFinish();
-                ToastUnit.showShort(getString(R.string.tip_load_success));
+                ToastUtils.showShort(getString(R.string.tip_load_success));
             }
 
             @Override
             public void onFailure(String msg) {
                 loadFinish();
-                ToastUnit.showShort(msg);
+                ToastUtils.showShort(msg);
             }
         });
     }

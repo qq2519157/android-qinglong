@@ -13,6 +13,7 @@ import auto.qinglong.bean.ql.network.QLScriptsRes;
 import auto.qinglong.bean.ql.network.QLSimpleRes;
 import auto.qinglong.bean.ql.network.QLSystemRes;
 import auto.qinglong.bean.ql.network.QLTaskEditRes;
+import auto.qinglong.bean.ql.network.QLTaskWrapper;
 import auto.qinglong.bean.ql.network.QLTasksRes;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -40,6 +41,15 @@ public interface QLApi {
     Call<QLLoginRes> login(@Body RequestBody body);
 
     /**
+     * 通过clientID登录
+     * @param clientId clientID
+     * @param clientSecret clientSecret
+     * @return
+     */
+    @GET("open/auth/token")
+    Call<QLLoginRes> loginByClientId(@Query("client_id") String clientId,@Query("client_secret") String clientSecret);
+
+    /**
      * 查询系统信息.
      *
      * @return the system info
@@ -54,8 +64,8 @@ public interface QLApi {
      * @param searchValue   the search value
      * @return the tasks
      */
-    @GET("api/crons")
-    Call<QLTasksRes> getTasks(@Header("Authorization") String authorization, @Query("searchValue") String searchValue);
+    @GET("open/crons")
+    Call<QLTaskWrapper> getTasks(@Header("Authorization") String authorization, @Query("searchValue") String searchValue);
 
     /**
      * 执行任务.
@@ -64,7 +74,7 @@ public interface QLApi {
      * @param body          the body
      * @return the call
      */
-    @PUT("api/crons/run")
+    @PUT("open/crons/run")
     Call<QLBaseRes> runTasks(@Header("Authorization") String authorization, @Body RequestBody body);
 
     /**
@@ -74,7 +84,7 @@ public interface QLApi {
      * @param body          the body
      * @return the call
      */
-    @PUT("api/crons/stop")
+    @PUT("open/crons/stop")
     Call<QLBaseRes> stopTasks(@Header("Authorization") String authorization, @Body RequestBody body);
 
     /**
@@ -84,7 +94,7 @@ public interface QLApi {
      * @param body          the body
      * @return the call
      */
-    @PUT("api/crons/enable")
+    @PUT("open/crons/enable")
     Call<QLBaseRes> enableTasks(@Header("Authorization") String authorization, @Body RequestBody body);
 
     /**
@@ -94,7 +104,7 @@ public interface QLApi {
      * @param body          the body
      * @return the call
      */
-    @PUT("api/crons/disable")
+    @PUT("open/crons/disable")
     Call<QLBaseRes> disableTasks(@Header("Authorization") String authorization, @Body RequestBody body);
 
     /**
@@ -104,7 +114,7 @@ public interface QLApi {
      * @param body          the body
      * @return the call
      */
-    @PUT("api/crons/pin")
+    @PUT("open/crons/pin")
     Call<QLBaseRes> pinTasks(@Header("Authorization") String authorization, @Body RequestBody body);
 
     /**
@@ -114,7 +124,7 @@ public interface QLApi {
      * @param body          the body
      * @return the call
      */
-    @PUT("api/crons/unpin")
+    @PUT("open/crons/unpin")
     Call<QLBaseRes> unpinTasks(@Header("Authorization") String authorization, @Body RequestBody body);
 
     /**
@@ -124,7 +134,7 @@ public interface QLApi {
      * @param body          the body
      * @return the call
      */
-    @HTTP(method = "DELETE", path = "api/crons", hasBody = true)
+    @HTTP(method = "DELETE", path = "open/crons", hasBody = true)
     Call<QLBaseRes> deleteTasks(@Header("Authorization") String authorization, @Body RequestBody body);
 
     /**
@@ -134,7 +144,7 @@ public interface QLApi {
      * @param body          the body
      * @return the call
      */
-    @PUT("api/crons")
+    @PUT("open/crons")
     Call<QLTaskEditRes> updateTask(@Header("Authorization") String authorization, @Body RequestBody body);
 
     /**
@@ -144,7 +154,7 @@ public interface QLApi {
      * @param body          the body
      * @return the call
      */
-    @POST("api/crons")
+    @POST("open/crons")
     Call<QLTaskEditRes> addTask(@Header("Authorization") String authorization, @Body RequestBody body);
 
     /**
@@ -154,7 +164,7 @@ public interface QLApi {
      * @param searchValue   the search value
      * @return the environments
      */
-    @GET("api/envs")
+    @GET("open/envs")
     Call<QLEnvironmentRes> getEnvironments(@Header("Authorization") String authorization, @Query("searchValue") String searchValue);
 
     /**
@@ -164,7 +174,7 @@ public interface QLApi {
      * @param body          the body
      * @return the call
      */
-    @PUT("api/envs")
+    @PUT("open/envs")
     Call<QLEnvEditRes> updateEnvironment(@Header("Authorization") String authorization, @Body RequestBody body);
 
     /**
@@ -174,7 +184,7 @@ public interface QLApi {
      * @param body          the body
      * @return the call
      */
-    @POST("api/envs")
+    @POST("open/envs")
     Call<QLEnvironmentRes> addEnvironments(@Header("Authorization") String authorization, @Body RequestBody body);
 
     /**
@@ -184,7 +194,7 @@ public interface QLApi {
      * @param body          the body
      * @return the call
      */
-    @HTTP(method = "DELETE", path = "api/envs", hasBody = true)
+    @HTTP(method = "DELETE", path = "open/envs", hasBody = true)
     Call<QLBaseRes> deleteEnvironments(@Header("Authorization") String authorization, @Body RequestBody body);
 
     /**
@@ -194,7 +204,7 @@ public interface QLApi {
      * @param body          the body
      * @return the call
      */
-    @PUT("api/envs/enable")
+    @PUT("open/envs/enable")
     Call<QLBaseRes> enableEnv(@Header("Authorization") String authorization, @Body RequestBody body);
 
     /**
@@ -204,10 +214,10 @@ public interface QLApi {
      * @param body          the body
      * @return the call
      */
-    @PUT("api/envs/disable")
+    @PUT("open/envs/disable")
     Call<QLBaseRes> disableEnv(@Header("Authorization") String authorization, @Body RequestBody body);
 
-    @PUT("api/envs/{id}/move")
+    @PUT("open/envs/{id}/move")
     Call<QLBaseRes> moveEnv(@Header("Authorization") String authorization, @Path("id") String id, @Body RequestBody body);
 
     /**
@@ -216,7 +226,7 @@ public interface QLApi {
      * @param authorization the authorization
      * @return the config
      */
-    @GET("api/configs/config.sh")
+    @GET("open/configs/config.sh")
     Call<QLSimpleRes> getConfig(@Header("Authorization") String authorization);
 
     /**
@@ -226,7 +236,7 @@ public interface QLApi {
      * @param body          the body
      * @return the call
      */
-    @POST("api/configs/save")
+    @POST("open/configs/save")
     Call<QLBaseRes> updateConfig(@Header("Authorization") String authorization, @Body RequestBody body);
 
     /**
@@ -235,7 +245,7 @@ public interface QLApi {
      * @param authorization the authorization
      * @return the scripts
      */
-    @GET("api/scripts/files")
+    @GET("open/scripts")
     Call<QLScriptsRes> getScripts(@Header("Authorization") String authorization);
 
     /**
@@ -255,7 +265,7 @@ public interface QLApi {
      * @param body          the body
      * @return the call
      */
-    @PUT("api/scripts")
+    @PUT("open/scripts")
     Call<QLBaseRes> updateScript(@Header("Authorization") String authorization, @Body RequestBody body);
 
     /**
@@ -265,7 +275,7 @@ public interface QLApi {
      * @param body          the body
      * @return the call
      */
-    @PUT("api/scripts")
+    @PUT("open/scripts")
     Call<QLBaseRes> createScript(@Header("Authorization") String authorization, @Body RequestBody body);
 
     /**
@@ -275,7 +285,7 @@ public interface QLApi {
      * @param body          the body
      * @return the call
      */
-    @HTTP(method = "DELETE", path = "api/scripts", hasBody = true)
+    @HTTP(method = "DELETE", path = "open/scripts", hasBody = true)
     Call<QLBaseRes> deleteScript(@Header("Authorization") String authorization, @Body RequestBody body);
 
     /**
@@ -286,7 +296,7 @@ public interface QLApi {
      * @param type          the type
      * @return the dependencies
      */
-    @GET("api/dependencies")
+    @GET("open/dependencies")
     Call<QLDependenciesRes> getDependencies(@Header("Authorization") String authorization, @Query("searchValue") String searchValue, @Query("type") String type);
 
     /**
@@ -306,7 +316,7 @@ public interface QLApi {
      * @param body          the body
      * @return the call
      */
-    @POST("api/dependencies")
+    @POST("open/dependencies")
     Call<QLBaseRes> addDependencies(@Header("Authorization") String authorization, @Body RequestBody body);
 
     /**
@@ -316,7 +326,7 @@ public interface QLApi {
      * @param body          the body
      * @return the call
      */
-    @HTTP(method = "DELETE", path = "api/dependencies", hasBody = true)
+    @HTTP(method = "DELETE", path = "open/dependencies", hasBody = true)
     Call<QLBaseRes> deleteDependencies(@Header("Authorization") String authorization, @Body RequestBody body);
 
     /**
@@ -326,7 +336,7 @@ public interface QLApi {
      * @param body          the body
      * @return the call
      */
-    @PUT("api/dependencies/reinstall")
+    @PUT("open/dependencies/reinstall")
     Call<QLBaseRes> reinstallDependencies(@Header("Authorization") String authorization, @Body RequestBody body);
 
     /**
@@ -335,7 +345,7 @@ public interface QLApi {
      * @param authorization the authorization
      * @return the logs
      */
-    @GET("api/logs")
+    @GET("open/logs")
     Call<QLLogsRes> getLogs(@Header("Authorization") String authorization);
 
     /**
@@ -354,7 +364,7 @@ public interface QLApi {
      * @param authorization the authorization
      * @return the login logs
      */
-    @GET("api/user/login-log")
+    @GET("open/user/login-log")
     Call<QLLoginLogsRes> getLoginLogs(@Header("Authorization") String authorization);
 
     /**
@@ -363,7 +373,7 @@ public interface QLApi {
      * @param authorization the authorization
      * @return the log remove
      */
-    @GET("api/system/log/remove")
+    @GET("open/system/log/remove")
     Call<QLLogRemoveRes> getLogRemove(@Header("Authorization") String authorization);
 
     /**
@@ -373,7 +383,7 @@ public interface QLApi {
      * @param body          the body
      * @return the call
      */
-    @PUT("api/system/log/remove")
+    @PUT("open/system/log/remove")
     Call<QLBaseRes> updateLogRemove(@Header("Authorization") String authorization, @Body RequestBody body);
 
     /**
@@ -383,6 +393,6 @@ public interface QLApi {
      * @param body          the body
      * @return the call
      */
-    @PUT("api/user")
+    @PUT("open/user")
     Call<QLBaseRes> updateUser(@Header("Authorization") String authorization, @Body RequestBody body);
 }

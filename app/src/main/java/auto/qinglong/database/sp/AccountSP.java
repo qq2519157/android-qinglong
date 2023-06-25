@@ -77,7 +77,7 @@ public class AccountSP {
      */
     public static String getBaseUrl() {
         if (mBaseUrl == null) {
-            mBaseUrl = "http://" + sp.getString(FIELD_ADDRESS, DEFAULT_VALUE) + "/";
+            mBaseUrl = sp.getString(FIELD_ADDRESS, DEFAULT_VALUE) + "/";
         }
         return mBaseUrl;
     }

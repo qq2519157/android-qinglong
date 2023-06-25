@@ -17,6 +17,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
 import java.util.Collections;
@@ -29,7 +30,6 @@ import auto.qinglong.activity.ql.CodeWebActivity;
 import auto.qinglong.bean.ql.QLScript;
 import auto.qinglong.network.http.NetManager;
 import auto.qinglong.network.http.QLApiController;
-import auto.qinglong.utils.ToastUnit;
 import auto.qinglong.views.popup.PopMenuItem;
 import auto.qinglong.views.popup.PopMenuWindow;
 import auto.qinglong.views.popup.PopupWindowBuilder;
@@ -159,7 +159,7 @@ public class ScriptFragment extends BaseFragment {
                 case "copy":
                     ClipboardManager clipboardManager = (ClipboardManager) requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
                     clipboardManager.setPrimaryClip(ClipData.newPlainText(null, script.getKey()));
-                    ToastUnit.showShort(getString(R.string.tip_copy_path_ready));
+                    ToastUtils.showShort(getString(R.string.tip_copy_path_ready));
                     break;
                 case "backup":
                     break;
@@ -204,7 +204,7 @@ public class ScriptFragment extends BaseFragment {
 
             @Override
             public void onFailure(String msg) {
-                ToastUnit.showShort(getString(R.string.tip_load_failure_header) + msg);
+                ToastUtils.showShort(getString(R.string.tip_load_failure_header) + msg);
                 this.onEnd(false);
             }
 
@@ -220,13 +220,13 @@ public class ScriptFragment extends BaseFragment {
         QLApiController.deleteScript(getNetRequestID(), script.getTitle(), script.getParent(), new QLApiController.NetBaseCallback() {
             @Override
             public void onSuccess() {
-                ToastUnit.showShort(getString(R.string.tip_delete_success));
+                ToastUtils.showShort(getString(R.string.tip_delete_success));
                 scriptAdapter.removeItem(position);
             }
 
             @Override
             public void onFailure(String msg) {
-                ToastUnit.showShort(getString(R.string.tip_delete_failure_header) + msg);
+                ToastUtils.showShort(getString(R.string.tip_delete_failure_header) + msg);
             }
         });
     }

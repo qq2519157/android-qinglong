@@ -2,15 +2,16 @@ package auto.qinglong.network.web;
 
 import android.webkit.JavascriptInterface;
 
+import com.blankj.utilcode.util.ToastUtils;
+
 import auto.qinglong.utils.LogUnit;
-import auto.qinglong.utils.ToastUnit;
 
 public class CommonJSInterface {
     public final static String TAG = "CommonJSInterface";
 
     @JavascriptInterface
     public void toast(String content) {
-        ToastUnit.showShort(content);
+        ToastUtils.showShort(content);
     }
 
     @JavascriptInterface

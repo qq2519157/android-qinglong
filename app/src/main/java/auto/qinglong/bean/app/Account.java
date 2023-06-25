@@ -63,7 +63,7 @@ public class Account {
      * @return 当前账号的URL
      */
     public String getBaseUrl() {
-        return String.format("http://%1$s/", address);
+        return address;
     }
 
     public int getState() {

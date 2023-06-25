@@ -9,6 +9,8 @@ import android.widget.ImageView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.blankj.utilcode.util.ToastUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +22,6 @@ import auto.qinglong.bean.app.WebRule;
 import auto.qinglong.database.db.WebRuleDBHelper;
 import auto.qinglong.network.http.ApiController;
 import auto.qinglong.network.http.NetManager;
-import auto.qinglong.utils.ToastUnit;
 import auto.qinglong.utils.VibratorUtil;
 import auto.qinglong.utils.WebUnit;
 import auto.qinglong.utils.WindowUnit;
@@ -108,7 +109,7 @@ public class PluginWebRuleActivity extends BaseActivity {
                 WebRule rule = new WebRule(0, envName, name, url, target, main, joinChar, true);
 
                 if (!rule.isValid()) {
-                    ToastUnit.showShort("非法配置,请参考使用手册");
+                    ToastUtils.showShort("非法配置,请参考使用手册");
                     return false;
                 }
 
@@ -138,7 +139,7 @@ public class PluginWebRuleActivity extends BaseActivity {
                 String url = map.get("url");
 
                 if (WebUnit.isInvalid(url)) {
-                    ToastUnit.showShort("地址不合法");
+                    ToastUtils.showShort("地址不合法");
                     return false;
                 }
 
@@ -186,7 +187,7 @@ public class PluginWebRuleActivity extends BaseActivity {
                 num += 1;
             }
         }
-        ToastUnit.showShort("新建成功：" + num);
+        ToastUtils.showShort("新建成功：" + num);
         if (num > 0) {
             itemAdapter.setData(WebRuleDBHelper.getAll());
         }
@@ -205,7 +206,7 @@ public class PluginWebRuleActivity extends BaseActivity {
 
             @Override
             public void onFailure(String msg) {
-                ToastUnit.showShort("加载失败：" + msg);
+                ToastUtils.showShort("加载失败：" + msg);
             }
         });
     }

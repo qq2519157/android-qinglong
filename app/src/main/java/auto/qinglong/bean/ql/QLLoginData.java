@@ -6,7 +6,9 @@ public class QLLoginData {
     private String lastip;
     private String lastaddr;
     private String platform;
+    private String token_type;
     private long lastlogon;
+    private long expiration;
     private int retries;
 
     public String getToken() {

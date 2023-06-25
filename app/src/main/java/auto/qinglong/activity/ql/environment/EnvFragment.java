@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -48,7 +49,6 @@ import auto.qinglong.network.http.QLApiController;
 import auto.qinglong.utils.FileUtil;
 import auto.qinglong.utils.TextUnit;
 import auto.qinglong.utils.TimeUnit;
-import auto.qinglong.utils.ToastUnit;
 import auto.qinglong.utils.WebUnit;
 import auto.qinglong.utils.WindowUnit;
 import auto.qinglong.views.popup.PopEditItem;
@@ -208,7 +208,7 @@ public class EnvFragment extends BaseFragment {
             }
             List<QLEnvironment> environments = mAdapter.getSelectedItems();
             if (environments.size() == 0) {
-                ToastUnit.showShort(getString(R.string.tip_empty_select));
+                ToastUtils.showShort(getString(R.string.tip_empty_select));
                 return;
             }
 
@@ -226,7 +226,7 @@ public class EnvFragment extends BaseFragment {
             }
             List<QLEnvironment> environments = mAdapter.getSelectedItems();
             if (environments.size() == 0) {
-                ToastUnit.showShort(getString(R.string.tip_empty_select));
+                ToastUtils.showShort(getString(R.string.tip_empty_select));
                 return;
             }
 
@@ -244,7 +244,7 @@ public class EnvFragment extends BaseFragment {
             }
             List<QLEnvironment> environments = mAdapter.getSelectedItems();
             if (environments.size() == 0) {
-                ToastUnit.showShort(getString(R.string.tip_empty_select));
+                ToastUtils.showShort(getString(R.string.tip_empty_select));
                 return;
             }
 
@@ -346,11 +346,11 @@ public class EnvFragment extends BaseFragment {
                 String remarks = map.get("remark");
 
                 if (TextUnit.isEmpty(name)) {
-                    ToastUnit.showShort("变量名称不能为空");
+                    ToastUtils.showShort("变量名称不能为空");
                     return false;
                 }
                 if (TextUnit.isEmpty(value)) {
-                    ToastUnit.showShort("变量值不能为空");
+                    ToastUtils.showShort("变量值不能为空");
                     return false;
                 }
 
@@ -396,7 +396,7 @@ public class EnvFragment extends BaseFragment {
                 String remarks = map.get("remark");
 
                 if (TextUnit.isEmpty(values)) {
-                    ToastUnit.showShort("文本不能为空");
+                    ToastUtils.showShort("文本不能为空");
                     return false;
                 }
 
@@ -404,7 +404,7 @@ public class EnvFragment extends BaseFragment {
 
                 List<QLEnvironment> environments = QLEnvironment.parse(values, remarks);
                 if (environments.size() == 0) {
-                    ToastUnit.showShort("提取变量失败");
+                    ToastUtils.showShort("提取变量失败");
                 } else {
                     netAddEnvironments(environments);
                 }
@@ -430,7 +430,7 @@ public class EnvFragment extends BaseFragment {
                 String url = map.get("url");
 
                 if (WebUnit.isInvalid(url)) {
-                    ToastUnit.showShort(getString(R.string.tip_invalid_url));
+                    ToastUtils.showShort(getString(R.string.tip_invalid_url));
                     return false;
                 }
                 WindowUnit.hideKeyboard(ui_pop_edit.getView());
@@ -536,7 +536,7 @@ public class EnvFragment extends BaseFragment {
             }
         }
         if (ids.size() == 0) {
-            ToastUnit.showShort("无重复变量");
+            ToastUtils.showShort("无重复变量");
         } else {
             netDeleteEnvironments(ids);
         }
@@ -544,14 +544,14 @@ public class EnvFragment extends BaseFragment {
 
     private void backupData(String fileName) {
         if (FileUtil.isNeedRequestPermission()) {
-            ToastUnit.showShort("请授予应用获取存储权限");
+            ToastUtils.showShort("请授予应用获取存储权限");
             FileUtil.requestPermission(requireActivity());
             return;
         }
 
         List<QLEnvironment> environments = mAdapter.getData();
         if (environments == null || environments.size() == 0) {
-            ToastUnit.showShort("数据为空,无需备份");
+            ToastUtils.showShort("数据为空,无需备份");
             return;
         }
 
@@ -576,26 +576,26 @@ public class EnvFragment extends BaseFragment {
         try {
             boolean result = FileUtil.save(FileUtil.getEnvPath(), fileName, content);
             if (result) {
-                ToastUnit.showShort("备份成功：" + fileName);
+                ToastUtils.showShort("备份成功：" + fileName);
             } else {
-                ToastUnit.showShort("备份失败");
+                ToastUtils.showShort("备份失败");
             }
         } catch (Exception e) {
-            ToastUnit.showShort("备份失败：" + e.getMessage());
+            ToastUtils.showShort("备份失败：" + e.getMessage());
         }
 
     }
 
     private void localAddData() {
         if (FileUtil.isNeedRequestPermission()) {
-            ToastUnit.showShort("请授予应用读写存储权限");
+            ToastUtils.showShort("请授予应用读写存储权限");
             FileUtil.requestPermission(requireActivity());
             return;
         }
 
         List<File> files = FileUtil.getFiles(FileUtil.getEnvPath(), (dir, name) -> name.endsWith(".json"));
         if (files.size() == 0) {
-            ToastUnit.showShort("无本地备份数据");
+            ToastUtils.showShort("无本地备份数据");
             return;
         }
 
@@ -626,7 +626,7 @@ public class EnvFragment extends BaseFragment {
                 ui_pop_progress.setTextAndShow("导入变量中...");
                 netAddEnvironments(environments);
             } catch (Exception e) {
-                ToastUnit.showShort("导入失败：" + e.getLocalizedMessage());
+                ToastUtils.showShort("导入失败：" + e.getLocalizedMessage());
             }
         });
     }
@@ -640,7 +640,7 @@ public class EnvFragment extends BaseFragment {
             public void onSuccess(List<QLEnvironment> environments) {
                 initDataFlag = true;
                 if (needTip) {
-                    ToastUnit.showShort("加载成功：" + environments.size());
+                    ToastUtils.showShort("加载成功：" + environments.size());
                 }
                 sortAndSetData(environments);
                 ui_refresh.finishRefresh(true);
@@ -648,7 +648,7 @@ public class EnvFragment extends BaseFragment {
 
             @Override
             public void onFailure(String msg) {
-                ToastUnit.showShort("加载失败：" + msg);
+                ToastUtils.showShort("加载失败：" + msg);
                 ui_refresh.finishRefresh(false);
             }
         });
@@ -662,13 +662,13 @@ public class EnvFragment extends BaseFragment {
             @Override
             public void onSuccess(QLEnvironment environment) {
                 ui_pop_edit.dismiss();
-                ToastUnit.showShort("更新成功");
+                ToastUtils.showShort("更新成功");
                 netGetEnvironments(mCurrentSearchValue, false);
             }
 
             @Override
             public void onFailure(String msg) {
-                ToastUnit.showShort("更新失败：" + msg);
+                ToastUtils.showShort("更新失败：" + msg);
             }
         });
     }
@@ -686,13 +686,13 @@ public class EnvFragment extends BaseFragment {
                 if (ui_pop_progress != null) {
                     ui_pop_progress.dismiss();
                 }
-                ToastUnit.showShort("新建成功：" + environments.size());
+                ToastUtils.showShort("新建成功：" + environments.size());
                 netGetEnvironments(mCurrentSearchValue, false);
             }
 
             @Override
             public void onFailure(String msg) {
-                ToastUnit.showShort("新建失败：" + msg);
+                ToastUtils.showShort("新建失败：" + msg);
             }
         });
     }
@@ -705,13 +705,13 @@ public class EnvFragment extends BaseFragment {
             @Override
             public void onSuccess() {
                 ui_actions_back.performClick();
-                ToastUnit.showShort("删除成功：" + ids.size());
+                ToastUtils.showShort("删除成功：" + ids.size());
                 netGetEnvironments(mCurrentSearchValue, false);
             }
 
             @Override
             public void onFailure(String msg) {
-                ToastUnit.showShort("删除失败：" + msg);
+                ToastUtils.showShort("删除失败：" + msg);
             }
         });
     }
@@ -724,13 +724,13 @@ public class EnvFragment extends BaseFragment {
             @Override
             public void onSuccess() {
                 ui_actions_back.performClick();
-                ToastUnit.showShort("启用成功");
+                ToastUtils.showShort("启用成功");
                 netGetEnvironments(mCurrentSearchValue, false);
             }
 
             @Override
             public void onFailure(String msg) {
-                ToastUnit.showShort("启用失败：" + msg);
+                ToastUtils.showShort("启用失败：" + msg);
             }
         });
 
@@ -744,13 +744,13 @@ public class EnvFragment extends BaseFragment {
             @Override
             public void onSuccess() {
                 ui_actions_back.performClick();
-                ToastUnit.showShort("禁用成功");
+                ToastUtils.showShort("禁用成功");
                 netGetEnvironments(mCurrentSearchValue, false);
             }
 
             @Override
             public void onFailure(String msg) {
-                ToastUnit.showShort("禁用失败：" + msg);
+                ToastUtils.showShort("禁用失败：" + msg);
             }
         });
     }
@@ -764,7 +764,7 @@ public class EnvFragment extends BaseFragment {
             @Override
             public void onSuccess(List<QLEnvironment> environments) {
                 if (environments.size() == 0) {
-                    ToastUnit.showShort("变量为空");
+                    ToastUtils.showShort("变量为空");
                 } else {
                     netAddEnvironments(environments);
                 }
@@ -772,7 +772,7 @@ public class EnvFragment extends BaseFragment {
 
             @Override
             public void onFailure(String msg) {
-                ToastUnit.showShort("加载失败：" + msg);
+                ToastUtils.showShort("加载失败：" + msg);
             }
         });
     }
@@ -785,7 +785,7 @@ public class EnvFragment extends BaseFragment {
         QLApiController.moveEnvironment(getNetRequestID(), info.getFromObejct().getId(), realFrom, realTo, new QLApiController.NetBaseCallback() {
             @Override
             public void onSuccess() {
-                ToastUnit.showShort(getString(R.string.tip_move_success));
+                ToastUtils.showShort(getString(R.string.tip_move_success));
                 //交换真实序号
                 fromObject.setRealIndex(realTo);
                 toObject.setRealIndex(realFrom);
@@ -801,7 +801,7 @@ public class EnvFragment extends BaseFragment {
 
             @Override
             public void onFailure(String msg) {
-                ToastUnit.showShort(getString(R.string.tip_move_failure_header) + msg);
+                ToastUtils.showShort(getString(R.string.tip_move_failure_header) + msg);
                 mAdapter.onItemMove(info.getToIndex(), info.getFromIndex());
             }
         });

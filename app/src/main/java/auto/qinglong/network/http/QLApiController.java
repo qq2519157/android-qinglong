@@ -13,6 +13,7 @@ import auto.qinglong.bean.app.Account;
 import auto.qinglong.bean.ql.QLDependence;
 import auto.qinglong.bean.ql.QLEnvironment;
 import auto.qinglong.bean.ql.QLLog;
+import auto.qinglong.bean.ql.QLLogRemove;
 import auto.qinglong.bean.ql.QLLoginLog;
 import auto.qinglong.bean.ql.QLScript;
 import auto.qinglong.bean.ql.QLSystem;
@@ -30,6 +31,7 @@ import auto.qinglong.bean.ql.network.QLScriptsRes;
 import auto.qinglong.bean.ql.network.QLSimpleRes;
 import auto.qinglong.bean.ql.network.QLSystemRes;
 import auto.qinglong.bean.ql.network.QLTaskEditRes;
+import auto.qinglong.bean.ql.network.QLTaskWrapper;
 import auto.qinglong.bean.ql.network.QLTasksRes;
 import auto.qinglong.database.sp.AccountSP;
 import auto.qinglong.utils.LogUnit;
@@ -178,18 +180,19 @@ public class QLApiController {
         NetManager.addCall(call, requestId);
     }
 
-    public static void getTasks(@NonNull String requestId, @Nullable String searchValue, @NonNull NetGetTasksCallback callback) {
-        Call<QLTasksRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getBaseUrl())
+    public static void loginByClientId(@NonNull String requestId, @NonNull Account account, @NonNull NetLoginCallback callback) {
+        Call<QLLoginRes> call = new Retrofit.Builder()
+                .baseUrl(account.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
-                .getTasks(AccountSP.getAuthorization(), searchValue);
-        call.enqueue(new Callback<QLTasksRes>() {
+                .loginByClientId(account.getUsername(),account.getPassword());
+
+        call.enqueue(new Callback<QLLoginRes>() {
             @Override
-            public void onResponse(@NonNull Call<QLTasksRes> call, @NonNull Response<QLTasksRes> response) {
+            public void onResponse(@NonNull Call<QLLoginRes> call, @NonNull Response<QLLoginRes> response) {
                 NetManager.finishCall(requestId);
-                QLTasksRes res = response.body();
+                QLLoginRes res = response.body();
                 if (res == null) {
                     if (response.code() == 401) {
                         callback.onFailure(ERROR_INVALID_AUTH);
@@ -198,7 +201,9 @@ public class QLApiController {
                     }
                 } else {
                     if (res.getCode() == 200) {
-                        callback.onSuccess(res.getData());
+                        //设置会话信息
+                        account.setToken(res.getData().getToken());
+                        callback.onSuccess(account);
                     } else {
                         callback.onFailure(res.getMessage());
                     }
@@ -206,7 +211,47 @@ public class QLApiController {
             }
 
             @Override
-            public void onFailure(@NonNull Call<QLTasksRes> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<QLLoginRes> call, @NonNull Throwable t) {
+                NetManager.finishCall(requestId);
+                if (call.isCanceled()) {
+                    return;
+                }
+                callback.onFailure(t.getLocalizedMessage());
+            }
+        });
+        NetManager.addCall(call, requestId);
+    }
+
+    public static void getTasks(@NonNull String requestId, @Nullable String searchValue, @NonNull NetGetTasksCallback callback) {
+        Call<QLTaskWrapper> call = new Retrofit.Builder()
+                .baseUrl(AccountSP.getBaseUrl())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(QLApi.class)
+                .getTasks(AccountSP.getAuthorization(), searchValue);
+        call.enqueue(new Callback<QLTaskWrapper>() {
+            @Override
+            public void onResponse(@NonNull Call<QLTaskWrapper> call, @NonNull Response<QLTaskWrapper> response) {
+                NetManager.finishCall(requestId);
+                QLTaskWrapper wrapper = response.body();
+                QLTasksRes res = wrapper.getData();
+                if (res == null) {
+                    if (response.code() == 401) {
+                        callback.onFailure(ERROR_INVALID_AUTH);
+                    } else {
+                        callback.onFailure(ERROR_NO_BODY);
+                    }
+                } else {
+                    if (response.code() == 200) {
+                        callback.onSuccess(res.getData());
+                    } else {
+                        callback.onFailure(response.message());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<QLTaskWrapper> call, @NonNull Throwable t) {
                 NetManager.finishCall(requestId);
                 if (call.isCanceled()) {
                     return;
@@ -1018,7 +1063,7 @@ public class QLApiController {
                     }
                 } else {
                     if (res.getCode() == 200) {
-                        callback.onSuccess(res.getDirs());
+                        callback.onSuccess(res.getData());
                     } else {
                         callback.onFailure(res.getMessage());
                     }
@@ -1681,7 +1726,7 @@ public class QLApiController {
                     }
                 } else {
                     if (res.getCode() == 200) {
-                        callback.onSuccess(res.getData().getFrequency());
+                        callback.onSuccess(res.getData().getInfo().getFrequency());
                     } else {
                         callback.onFailure(res.getMessage());
                     }

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -12,11 +13,14 @@ import android.widget.EditText;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewbinding.ViewBinding;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 import auto.qinglong.network.http.NetManager;
-import auto.qinglong.utils.ToastUnit;
 
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity<T extends ViewBinding> extends AppCompatActivity {
     public static final String TAG = "BaseActivity";
     protected Activity mSelf;
     protected Context mContext;
@@ -26,6 +30,27 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mContext = getBaseContext();
         mSelf = this;
+    }
+
+    protected T binding;
+
+    public T getBinding(){
+        return binding;
+    }
+    protected void setContentView(Class<T> clz){
+
+        try {
+            Method inflate = clz.getMethod("inflate", LayoutInflater.class);
+            binding = (T) inflate.invoke(clz,getLayoutInflater());
+            setContentView(binding.getRoot());
+            init();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -44,7 +69,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        ToastUnit.cancel();
     }
 
     @Override
